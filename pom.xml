@@ -10,7 +10,7 @@
     <packaging>jar</packaging>
 
     <name>MyDiscordButler</name>
-    <description>Discord bot for personal purposes written in Java.</description>
+    <description>Discord bot for personal use written in Java.</description>
     <url>https://github.com/niklas2810/my-discord-butler</url>
 
     <properties>

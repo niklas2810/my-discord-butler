@@ -1,0 +1,6 @@
+version: "3"
+services:
+  butler:
+    image: "niklas2810/my-discord-butler"
+    restart: always
+    env_file: .env
