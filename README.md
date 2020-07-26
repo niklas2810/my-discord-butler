@@ -1,4 +1,10 @@
+<div style="width:100%;padding:0px;margin:0px" align="center">
+    <img style="width: 80%;" src="https://raw.githubusercontent.com/niklas2810/my-discord-butler/main/res/social.svg" alt="Social Banner">
+</div>
+
 # My Discord Butler
+
+![Build using Docker](https://github.com/niklas2810/my-discord-butler/workflows/Build%20using%20Docker/badge.svg)
 
 A discord bot which for personal use.
 Feel free to fork and alter the code to create features
