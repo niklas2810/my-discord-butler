@@ -110,9 +110,9 @@ public class ResultBuilder {
         error(String.format(output, args));
     }
 
-    public void error(Exception e) {
+    public void error(Exception exception) {
         error("The command could not be executed. Reason: **%s** - %s",
-                e.getClass().getSimpleName(), e.getMessage());
+                exception.getClass().getSimpleName(), exception.getMessage());
     }
 
     public void notFound(String output) {

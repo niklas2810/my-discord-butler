@@ -8,8 +8,8 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Created by Niklas on 2020/07/25.
- * <p>
- * Using shortened getter method names to improve readability.
+ *
+ * <p>Using shortened getter method names to improve readability.</p>
  */
 public class ButlerContext {
 

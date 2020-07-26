@@ -52,6 +52,8 @@ public class Butler {
     }
 
     /**
+     * Sets up the JDA instance.
+     *
      * @return The completely initialized JDA instance.
      * @throws Exception Will cause a shutdown + sentry log.
      */

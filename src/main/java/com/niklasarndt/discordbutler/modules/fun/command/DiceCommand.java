@@ -3,7 +3,6 @@ package com.niklasarndt.discordbutler.modules.fun.command;
 import com.niklasarndt.discordbutler.modules.ButlerCommand;
 import com.niklasarndt.discordbutler.modules.ButlerContext;
 import com.niklasarndt.discordbutler.util.ButlerUtils;
-
 import java.security.SecureRandom;
 
 /**

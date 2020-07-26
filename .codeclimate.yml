@@ -7,3 +7,5 @@ engines:
       # I prefer to have the + sign in the same line
       com.puppycrawl.tools.checkstyle.checks.whitespace.OperatorWrapCheck:
         enabled: false
+      com.puppycrawl.tools.checkstyle.checks.imports.CustomImportOrderCheck:
+        enabled: false

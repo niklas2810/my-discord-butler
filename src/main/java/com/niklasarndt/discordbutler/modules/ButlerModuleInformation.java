@@ -1,7 +1,6 @@
 package com.niklasarndt.discordbutler.modules;
 
 import com.niklasarndt.discordbutler.util.Emojis;
-
 import java.util.Objects;
 
 /**
