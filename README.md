@@ -4,7 +4,7 @@
 
 # My Discord Butler
 
-![Build using Docker](https://github.com/niklas2810/my-discord-butler/workflows/Build%20using%20Docker/badge.svg)
+![Unit Testing](https://github.com/niklas2810/my-discord-butler/workflows/Unit%20Testing/badge.svg)
 
 A discord bot which for personal use.
 Feel free to fork and alter the code to create features
