@@ -15,10 +15,6 @@ public class ButlerCommandInformation {
 
     protected ButlerCommandInformation(String name, String[] aliases, int argsMin, int argsMax, String description) {
         Objects.requireNonNull(name);
-        if (argsMin < 0 || argsMax < argsMin) {
-            throw new IllegalArgumentException("Invalid argument limits for command \"" + name + "\". " +
-                    "(min: " + argsMin + ", max: " + argsMax + ")");
-        }
 
         this.name = name;
         this.aliases = aliases != null ? aliases : new String[0];
@@ -31,9 +27,14 @@ public class ButlerCommandInformation {
                     "The module name '%s' is too long (max: 16 characters, given: %d characters).",
                     name, this.name.length()));
         }
-        if (this.description.length() > 70) {
+        if (argsMin < 0 || argsMax < argsMin) {
+            throw new IllegalArgumentException(
+                    String.format("Invalid argument limits for command \"%s\". (min: %d, max: %d)",
+                            name, argsMin, argsMax));
+        }
+        if (this.description.length() > 128) {
             throw new IllegalArgumentException(String.format(
-                    "The description for the module '%s' is too long (max: 128 characters, given: %d characters).",
+                    "The description for the command '%s' is too long (max: 128 characters, given: %d characters).",
                     name, this.description.length()));
         }
     }
