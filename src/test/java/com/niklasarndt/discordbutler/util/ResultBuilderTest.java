@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * Created by Niklas on 2020/07/27
+ * Created by Niklas on 2020/07/27.
  */
 class ResultBuilderTest extends ButlerTest {
 

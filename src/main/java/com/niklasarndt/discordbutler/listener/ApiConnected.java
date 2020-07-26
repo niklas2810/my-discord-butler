@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
 import javax.annotation.Nonnull;
 
 /**
- * Created by Niklas on 2020/07/26
+ * Created by Niklas on 2020/07/26.
  */
 public class ApiConnected extends ListenerAdapter {
 

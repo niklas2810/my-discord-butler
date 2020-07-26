@@ -6,7 +6,7 @@ import java.lang.reflect.Modifier;
 import java.util.Properties;
 
 /**
- * Created by Niklas on 2020/07/25
+ * Created by Niklas on 2020/07/25.
  */
 public class BuildInfo {
 

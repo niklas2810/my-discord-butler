@@ -3,7 +3,7 @@ package com.niklasarndt.discordbutler.modules;
 import java.util.Objects;
 
 /**
- * Created by Niklas on 2020/07/25
+ * Created by Niklas on 2020/07/25.
  */
 public class ButlerCommandInformation {
 

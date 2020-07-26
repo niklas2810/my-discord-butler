@@ -4,7 +4,7 @@ import com.niklasarndt.discordbutler.modules.ButlerCommand;
 import com.niklasarndt.discordbutler.modules.ButlerContext;
 
 /**
- * Created by Niklas on 2020/07/26
+ * Created by Niklas on 2020/07/26.
  */
 public class ThrowCommand extends ButlerCommand {
     public ThrowCommand() {
