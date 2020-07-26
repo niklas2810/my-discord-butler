@@ -4,25 +4,26 @@ import com.niklasarndt.discordbutler.modules.ButlerCommand;
 import com.niklasarndt.discordbutler.modules.ButlerContext;
 
 /**
- * Created by Niklas on 2020/07/26
+ * Created by Niklas on 2020/07/27
  */
-public class ShutdownCommand extends ButlerCommand {
+public class RestartCommand extends ButlerCommand {
 
-    public ShutdownCommand() {
-        super("shutdown", "Closes the bot application.", "poweroff", "exit");
+    public RestartCommand() {
+        super("restart", "Closes the application with an error exit code. " +
+                "Docker might react with a restart of the container when configured accordingly.");
     }
 
     @Override
     public void execute(ButlerContext context) {
         context.resultBuilder().success("The application will terminate in 5 seconds.");
         new Thread(null, () -> {
-            logger.info("Shutdown in 5 seconds!");
+            logger.info("Restart in 5 seconds!");
             try {
                 Thread.sleep(5000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            context.instance().shutdown(0);
-        }, "terminator").start();
+            context.instance().shutdown(1);
+        }, "restarter").start();
     }
 }

@@ -73,11 +73,11 @@ public class Butler {
         return moduleManager;
     }
 
-    public void shutdown() {
+    public void shutdown(int exitCode) {
         logger.info("Initiating shutdown...");
         moduleManager.unloadAll();
         jda.shutdown();
         logger.info("The connection to the Discord API was shut down. Goodbye!");
-        System.exit(0);
+        System.exit(exitCode);
     }
 }

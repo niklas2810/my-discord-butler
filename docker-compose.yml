@@ -2,5 +2,5 @@ version: "3"
 services:
   butler:
     image: "niklas2810/my-discord-butler"
-    restart: always
+    restart: on-failure
     env_file: .env
