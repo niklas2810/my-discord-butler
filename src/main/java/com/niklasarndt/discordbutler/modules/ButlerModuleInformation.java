@@ -29,7 +29,8 @@ public class ButlerModuleInformation {
         this(null, name, null, description, version);
     }
 
-    protected ButlerModuleInformation(String emoji, String name, String displayName, String description, String version) {
+    protected ButlerModuleInformation(String emoji, String name, String displayName,
+                                      String description, String version) {
         Objects.requireNonNull(name);
 
         this.emoji = emoji != null ? emoji : DEFAULT_EMOJI;
@@ -52,6 +53,10 @@ public class ButlerModuleInformation {
             throw new IllegalArgumentException(String.format(
                     "The emoji for the module '%s' is invalid.", name));
         }
+        checkLengths();
+    }
+
+    private void checkLengths() {
         if (this.emoji.length() > 4) {
             throw new IllegalArgumentException(String.format(
                     "The emoji unicode for the module '%s' is too long (max: 4 characters, given: %d characters).",

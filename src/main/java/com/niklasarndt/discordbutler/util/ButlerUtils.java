@@ -13,14 +13,17 @@ public class ButlerUtils {
         StringBuilder builder = new StringBuilder();
 
         int days = (int) (ms / 86400000); //1.000 * 60 * 60 * 24
-        int hours = (int) (ms / 3600000) % 24; //1.000 * 60 * 60
-        int minutes = (int) (ms / 60000) % 60; //1.000 * 60;
-        int seconds = (int) (ms / 1000) % 60; //1.000 * 60;
-
         appendTime(builder, days, "day");
+
+        int hours = (int) (ms / 3600000) % 24; //1.000 * 60 * 60
         appendTime(builder, hours, "hour");
+
+        int minutes = (int) (ms / 60000) % 60; //1.000 * 60;
         appendTime(builder, minutes, "minute");
+
+        int seconds = (int) (ms / 1000) % 60; //1.000 * 60;
         appendTime(builder, seconds, "second");
+
         return builder.substring(0, builder.length() - 2);
     }
 
@@ -46,7 +49,8 @@ public class ButlerUtils {
     }
 
     public static String trimString(String input, int maxLength) {
-        if (maxLength < 1) throw new IllegalArgumentException("The maximum string length must be larger than zero.");
+        if (maxLength < 1) throw new IllegalArgumentException(
+                "The maximum string length must be larger than zero.");
 
         if (maxLength < 4) {
             return ".".repeat(maxLength);
@@ -57,7 +61,8 @@ public class ButlerUtils {
                 input;
     }
 
-    public static MessageEmbed.Field buildEmbedCommandInfo(ButlerCommandInformation info, int maxDescLength, boolean inline) {
+    public static MessageEmbed.Field buildEmbedCommandInfo(
+            ButlerCommandInformation info, int maxDescLength, boolean inline) {
         return new MessageEmbed.Field(info.getName(), trimString(info.getDescription(), maxDescLength), inline);
     }
 

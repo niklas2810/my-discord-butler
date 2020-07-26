@@ -29,22 +29,17 @@ public class BuildInfo {
             TIMESTAMP = properties.getProperty("build.timestamp");
             URL = properties.getProperty("build.url");
         } catch (IOException e) {
-            System.err.println("Can not load build.properties");
             e.printStackTrace();
         }
         //Set null fields to UNKNOWN
         for (Field field : BuildInfo.class.getDeclaredFields()) {
             try {
                 if (field.getType().isAssignableFrom(String.class)
-                        && field.getModifiers() == (Modifier.PUBLIC | Modifier.STATIC)) {
-
-                    if (field.get(null) == null) { //No value assigned
-                        System.out.format("%S has no value assigned to it, replacing with UNKNOWN\n", field.getName());
-                        field.set(null, "UNKNOWN");
-                    }
+                        && field.getModifiers() == (Modifier.PUBLIC | Modifier.STATIC)
+                        && field.get(null) == null) {
+                    field.set(null, "UNKNOWN");
                 }
             } catch (Exception e) {
-                System.err.println("Can not parse BuildInfo fields");
                 e.printStackTrace();
             }
         }
