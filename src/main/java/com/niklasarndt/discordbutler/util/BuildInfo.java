@@ -1,9 +1,8 @@
 package com.niklasarndt.discordbutler.util;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.io.IOException;
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.Properties;
 
 /**
@@ -11,16 +10,14 @@ import java.util.Properties;
  */
 public class BuildInfo {
 
-    public static String NAME = "UNKNOWN";
-    public static String DESCRIPTION = "UNKNOWN";
-    public static String VERSION = "UNKNOWN";
-    public static String TARGET_JDK = "UNKNOWN";
-    public static String TIMESTAMP = "UNKNOWN";
-    public static String URL = "UNKNOWN";
-
+    public static String NAME;
+    public static String DESCRIPTION;
+    public static String VERSION;
+    public static String TARGET_JDK;
+    public static String TIMESTAMP;
+    public static String URL;
 
     static {
-        Logger logger = LoggerFactory.getLogger(BuildInfo.class);
         try {
             Properties properties = new Properties();
             properties.load(BuildInfo.class.getClassLoader().getResourceAsStream("build.properties"));
@@ -32,7 +29,24 @@ public class BuildInfo {
             TIMESTAMP = properties.getProperty("build.timestamp");
             URL = properties.getProperty("build.url");
         } catch (IOException e) {
-            logger.error("Can not load build.properties", e);
+            System.err.println("Can not load build.properties");
+            e.printStackTrace();
+        }
+        //Set null fields to UNKNOWN
+        for (Field field : BuildInfo.class.getDeclaredFields()) {
+            try {
+                if (field.getType().isAssignableFrom(String.class)
+                        && field.getModifiers() == (Modifier.PUBLIC | Modifier.STATIC)) {
+
+                    if (field.get(null) == null) { //No value assigned
+                        System.out.format("%S has no value assigned to it, replacing with UNKNOWN\n", field.getName());
+                        field.set(null, "UNKNOWN");
+                    }
+                }
+            } catch (Exception e) {
+                System.err.println("Can not parse BuildInfo fields");
+                e.printStackTrace();
+            }
         }
     }
 }
