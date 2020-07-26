@@ -1,6 +1,8 @@
 package com.niklasarndt.discordbutler.listener;
 
 import com.niklasarndt.discordbutler.Butler;
+import com.niklasarndt.discordbutler.enums.ResultType;
+import com.niklasarndt.discordbutler.util.ResultBuilder;
 import net.dv8tion.jda.api.events.message.priv.PrivateMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.slf4j.Logger;
@@ -24,8 +26,19 @@ public class DirectMessageReceived extends ListenerAdapter {
     public void onPrivateMessageReceived(@Nonnull PrivateMessageReceivedEvent event) {
         if (event.getAuthor().getIdLong() != butler.getOwnerId()) return; //This message was not sent by the bot owner.
 
-        logger.info("Message text: {}", event.getMessage().getContentDisplay());
-        event.getMessage().addReaction("\u2705").queue();
-        event.getChannel().sendMessage("You are authorized to send messages.").queue();
+        ResultBuilder result = butler.getModuleManager().execute(event.getMessage());
+
+        if (result.hasOutput()) {
+            try {
+                result.produceIntoChannel(event.getChannel());
+            } catch (Exception e) {
+                logger.error("Unexpected exception while producing the command result of \"{}\"",
+                        event.getMessage().getContentRaw(), e);
+                event.getChannel().sendMessage(String.format("%s Could not produce a response: **%s** - %s",
+                        ResultType.ERROR.emoji, e.getClass().getSimpleName(), e.getMessage())).queue();
+            }
+        } else {
+            event.getMessage().addReaction(result.getType().emoji).queue();
+        }
     }
 }

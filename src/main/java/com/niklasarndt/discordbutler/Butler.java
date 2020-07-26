@@ -14,9 +14,12 @@ import org.slf4j.LoggerFactory;
  */
 public class Butler {
 
+    private final long startupTimestamp = System.currentTimeMillis();
     private final Logger logger = LoggerFactory.getLogger(getClass());
     private final JDA jda;
     private final long ownerId;
+
+    private final ModuleManager moduleManager;
 
     protected Butler() throws Exception {
         logger.info("Startup is in progress");
@@ -30,6 +33,10 @@ public class Butler {
 
         jda = setUpJda();
         logger.info("JDA has been set up!");
+
+        moduleManager = new ModuleManager(this);
+        moduleManager.loadAll();
+        logger.info("Module manager has been set up!");
 
         logger.info("SUCCESS: SETUP COMPLETE");
     }
@@ -53,5 +60,13 @@ public class Butler {
         builder.addEventListeners(new DirectMessageReceived(this));
         builder.disableCache(CacheFlag.ACTIVITY, CacheFlag.VOICE_STATE, CacheFlag.EMOTE, CacheFlag.CLIENT_STATUS);
         return builder.build().awaitReady();
+    }
+
+    public long getStartupTimestamp() {
+        return startupTimestamp;
+    }
+
+    public ModuleManager getModuleManager() {
+        return moduleManager;
     }
 }

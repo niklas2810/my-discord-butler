@@ -14,7 +14,7 @@ public class BuildInfo {
     public static String NAME = "UNKNOWN";
     public static String DESCRIPTION = "UNKNOWN";
     public static String VERSION = "UNKNOWN";
-    public static String TARGET_SDK = "UNKNOWN";
+    public static String TARGET_JDK = "UNKNOWN";
     public static String TIMESTAMP = "UNKNOWN";
     public static String URL = "UNKNOWN";
 
@@ -28,7 +28,7 @@ public class BuildInfo {
             NAME = properties.getProperty("build.name");
             DESCRIPTION = properties.getProperty("build.description");
             VERSION = properties.getProperty("build.version");
-            TARGET_SDK = properties.getProperty("build.targetSdk");
+            TARGET_JDK = properties.getProperty("build.targetJdk");
             TIMESTAMP = properties.getProperty("build.timestamp");
             URL = properties.getProperty("build.url");
         } catch (IOException e) {
