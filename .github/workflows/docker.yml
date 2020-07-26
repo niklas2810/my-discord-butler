@@ -7,6 +7,11 @@ on:
       - main
     tags:
       - v*
+    paths:
+      - src/*
+  pull_request:
+    paths:
+      - src/*
 
 env:
   IMAGE_NAME: my-discord-butler
