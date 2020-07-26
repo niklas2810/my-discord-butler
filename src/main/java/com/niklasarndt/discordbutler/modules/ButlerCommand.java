@@ -9,7 +9,11 @@ public abstract class ButlerCommand {
     private ButlerModule module;
 
     public ButlerCommand(String name) {
-        this(name, 0, 10);
+        this(name, 0, 0);
+    }
+
+    public ButlerCommand(String name, String description, String... aliases) {
+        this(name, 0, 0, description, aliases);
     }
 
     public ButlerCommand(String name, int argsMin, int argsMax) {
