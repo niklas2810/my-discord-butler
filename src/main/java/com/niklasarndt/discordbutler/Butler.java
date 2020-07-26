@@ -1,5 +1,6 @@
 package com.niklasarndt.discordbutler;
 
+import com.niklasarndt.discordbutler.listener.ApiConnected;
 import com.niklasarndt.discordbutler.listener.DirectMessageReceived;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
@@ -57,9 +58,9 @@ public class Butler {
         final JDABuilder builder = JDABuilder.create(System.getenv("TOKEN_DISCORD"),
                 GatewayIntent.DIRECT_MESSAGES, GatewayIntent.DIRECT_MESSAGE_REACTIONS);
         builder.setActivity(Activity.of(Activity.ActivityType.WATCHING, "via direct messages"));
-        builder.addEventListeners(new DirectMessageReceived(this));
+        builder.addEventListeners(new ApiConnected(this), new DirectMessageReceived(this));
         builder.disableCache(CacheFlag.ACTIVITY, CacheFlag.VOICE_STATE, CacheFlag.EMOTE, CacheFlag.CLIENT_STATUS);
-        return builder.build().awaitReady();
+        return builder.build();
     }
 
     public long getStartupTimestamp() {
@@ -68,5 +69,13 @@ public class Butler {
 
     public ModuleManager getModuleManager() {
         return moduleManager;
+    }
+
+    public void shutdown() {
+        logger.info("Initiating shutdown...");
+        moduleManager.unloadAll();
+        jda.shutdown();
+        logger.info("The connection to the Discord API was shut down. Goodbye!");
+        System.exit(0);
     }
 }

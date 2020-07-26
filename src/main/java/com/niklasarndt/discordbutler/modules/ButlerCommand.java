@@ -1,9 +1,14 @@
 package com.niklasarndt.discordbutler.modules;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * Created by Niklas on 2020/07/25
  */
 public abstract class ButlerCommand {
+
+    public static final Logger logger = LoggerFactory.getLogger(ButlerCommand.class);
 
     private final ButlerCommandInformation info;
     private ButlerModule module;

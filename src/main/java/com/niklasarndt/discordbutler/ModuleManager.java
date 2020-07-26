@@ -43,7 +43,10 @@ public class ModuleManager {
     }
 
     public void unloadAll() {
-        modules.forEach(this::unregisterModule);
+        for (ButlerModule module : modules) {
+            unregisterModule(module);
+        }
+        logger.info("Unloaded all modules.");
     }
 
     public void registerModule(ButlerModule module) {
