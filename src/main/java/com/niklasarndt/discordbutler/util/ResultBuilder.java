@@ -46,15 +46,6 @@ public class ResultBuilder {
         return output;
     }
 
-    public void setOutput(String output) {
-        this.output = output;
-    }
-
-    public void setOutput(ResultType type, String output) {
-        this.type = type;
-        this.output = output;
-    }
-
     public void invalidArgsLength(int min, int max, int actual) {
         type = ResultType.ERROR;
         if (min == max || min == 0) {
@@ -97,6 +88,11 @@ public class ResultBuilder {
         } else channel.sendMessage(produceString()).queue();
     }
 
+    public void success(String output) {
+        this.type = ResultType.SUCCESS;
+        this.output = output;
+    }
+
     public void error(String output) {
         type = ResultType.ERROR;
         this.output = output;
@@ -107,12 +103,8 @@ public class ResultBuilder {
                 e.getClass().getSimpleName(), e.getMessage()));
     }
 
-    public void notFound() {
-        type = ResultType.NOT_FOUND;
-    }
-
     public void notFound(String output) {
-        notFound();
-        setOutput(output);
+        this.type = ResultType.NOT_FOUND;
+        this.output = output;
     }
 }

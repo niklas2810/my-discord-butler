@@ -74,6 +74,6 @@ public class HelpCommand extends ButlerCommand {
 
             builder.append("\n");
         });
-        context.resultBuilder().setOutput(builder.toString().trim());
+        context.resultBuilder().success(builder.toString().trim());
     }
 }

@@ -1,6 +1,5 @@
 package com.niklasarndt.discordbutler.modules.core.command;
 
-import com.niklasarndt.discordbutler.enums.ResultType;
 import com.niklasarndt.discordbutler.modules.ButlerCommand;
 import com.niklasarndt.discordbutler.modules.ButlerContext;
 import com.niklasarndt.discordbutler.modules.ButlerModule;
@@ -29,7 +28,7 @@ public class ModulesCommand extends ButlerCommand {
 
             context.instance().getModuleManager().getModule(moduleName)
                     .ifPresentOrElse(module -> buildModuleOverview(context, module),
-                            () -> context.resultBuilder().setOutput(ResultType.NOT_FOUND,
+                            () -> context.resultBuilder().notFound(
                                     String.format("Could not find module with name `%s`.", moduleName))
                     );
         }
