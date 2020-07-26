@@ -39,7 +39,7 @@ public class ModuleManager {
             }
         });
         logger.info("{} modules loaded.", modules.size());
-        logger.info("{} commands registered.", modules.stream().mapToInt(ButlerModule::getCommandCount).sum());
+        logger.info("{} commands registered.", getCommandCount());
     }
 
     public void unloadAll() {
@@ -113,6 +113,10 @@ public class ModuleManager {
         return modules.stream()
                 .map(m -> m.getCommand(name)).flatMap(Optional::stream)
                 .findFirst();
+    }
+
+    private int getCommandCount() {
+        return modules.stream().mapToInt(ButlerModule::getCommandCount).sum();
     }
 
     public Optional<ButlerModule> getModule(String name) {
