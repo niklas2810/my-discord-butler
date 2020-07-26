@@ -10,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 /**
  * Created by Niklas on 2020/07/26
  */
-public class TestEmojis extends ButlerTest {
+public class EmojisTest extends ButlerTest {
 
     @Test
     public void testEmoji() {
