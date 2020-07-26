@@ -16,6 +16,7 @@ public class Emojis {
     public static final String TOOLS = getUnicode("hammer_and_pick");
     public static final String QUESTION_MARK = getUnicode("question");
     public static final String PARTYING_FACE = getUnicode("partying_face");
+    public static final String TABLE_TENNIS = getUnicode("table_tennis");
 
     public static String getUnicode(String alias) {
         Emoji em = EmojiManager.getForAlias(alias);
