@@ -4,3 +4,6 @@ engines:
     checks:
       com.puppycrawl.tools.checkstyle.checks.blocks.NeedBracesCheck:
         enabled: false
+      # I prefer to have the + sign in the same line
+      com.puppycrawl.tools.checkstyle.checks.whitespace.OperatorWrapCheck:
+        enabled: false
