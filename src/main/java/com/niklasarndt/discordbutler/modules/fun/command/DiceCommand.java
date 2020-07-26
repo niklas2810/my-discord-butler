@@ -20,7 +20,8 @@ public class DiceCommand extends ButlerCommand {
     @Override
     public void execute(ButlerContext context) {
 
-        int faceCount = context.args().length == 0 ? 6 : ButlerUtils.parseInt(context.args()[0], -1);
+        int faceCount = context.args().length == 0 ? 6 :
+                ButlerUtils.parseInt(context.args()[0], -1);
 
         if (faceCount <= 0) {
             context.resultBuilder().error("Please make sure that you entered a positive number.");

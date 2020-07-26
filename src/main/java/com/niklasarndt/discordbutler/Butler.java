@@ -28,7 +28,8 @@ public class Butler {
         try {
             ownerId = Long.parseLong(System.getenv("OWNER_ID"));
         } catch (Exception e) {
-            throw new IllegalArgumentException("You must provide the owner's Discord ID via OWNER_ID.");
+            throw new IllegalArgumentException(
+                    "You must provide the owner's Discord ID via OWNER_ID.");
         }
         logger.info("Owner ID has been stored.");
 
@@ -59,7 +60,8 @@ public class Butler {
                 GatewayIntent.DIRECT_MESSAGES, GatewayIntent.DIRECT_MESSAGE_REACTIONS);
         builder.setActivity(Activity.of(Activity.ActivityType.WATCHING, "via direct messages"));
         builder.addEventListeners(new ApiConnected(this), new DirectMessageReceived(this));
-        builder.disableCache(CacheFlag.ACTIVITY, CacheFlag.VOICE_STATE, CacheFlag.EMOTE, CacheFlag.CLIENT_STATUS);
+        builder.disableCache(CacheFlag.ACTIVITY, CacheFlag.VOICE_STATE,
+                CacheFlag.EMOTE, CacheFlag.CLIENT_STATUS);
         return builder.build();
     }
 

@@ -31,7 +31,8 @@ public class HelpCommand extends ButlerCommand {
     }
 
     private void buildDetails(ButlerContext context) {
-        Optional<ButlerCommand> command = context.instance().getModuleManager().findCommand(context.args()[0]);
+        Optional<ButlerCommand> command = context.instance()
+                .getModuleManager().findCommand(context.args()[0]);
 
         if (command.isEmpty()) {
             context.resultBuilder().notFound("Could not find a command matching `%s`.",
@@ -69,7 +70,7 @@ public class HelpCommand extends ButlerCommand {
                 builder.append("This module does not contain any commands.\n");
             } else module.getCommands().forEach(cmd -> {
                 ButlerCommandInformation cmdInfo = cmd.info();
-                builder.append(ButlerUtils.buildShortCommandInfo(cmdInfo));
+                builder.append(ButlerUtils.buildShortCommandInfo(cmdInfo)).append("\n");
             });
 
             builder.append("\n");

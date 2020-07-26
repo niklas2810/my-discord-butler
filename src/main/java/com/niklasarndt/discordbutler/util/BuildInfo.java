@@ -1,9 +1,8 @@
 package com.niklasarndt.discordbutler.util;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.io.IOException;
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.Properties;
 
 /**
@@ -11,19 +10,18 @@ import java.util.Properties;
  */
 public class BuildInfo {
 
-    public static String NAME = "UNKNOWN";
-    public static String DESCRIPTION = "UNKNOWN";
-    public static String VERSION = "UNKNOWN";
-    public static String TARGET_JDK = "UNKNOWN";
-    public static String TIMESTAMP = "UNKNOWN";
-    public static String URL = "UNKNOWN";
-
+    public static String NAME;
+    public static String DESCRIPTION;
+    public static String VERSION;
+    public static String TARGET_JDK;
+    public static String TIMESTAMP;
+    public static String URL;
 
     static {
-        Logger logger = LoggerFactory.getLogger(BuildInfo.class);
         try {
             Properties properties = new Properties();
-            properties.load(BuildInfo.class.getClassLoader().getResourceAsStream("build.properties"));
+            properties.load(BuildInfo.class.getClassLoader()
+                    .getResourceAsStream("build.properties"));
 
             NAME = properties.getProperty("build.name");
             DESCRIPTION = properties.getProperty("build.description");
@@ -32,7 +30,19 @@ public class BuildInfo {
             TIMESTAMP = properties.getProperty("build.timestamp");
             URL = properties.getProperty("build.url");
         } catch (IOException e) {
-            logger.error("Can not load build.properties", e);
+            e.printStackTrace();
+        }
+        //Set null fields to UNKNOWN
+        for (Field field : BuildInfo.class.getDeclaredFields()) {
+            try {
+                if (field.getType().isAssignableFrom(String.class)
+                        && field.getModifiers() == (Modifier.PUBLIC | Modifier.STATIC)
+                        && field.get(null) == null) {
+                    field.set(null, "UNKNOWN");
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 }

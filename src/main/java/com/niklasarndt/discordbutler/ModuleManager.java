@@ -27,8 +27,9 @@ public class ModuleManager {
 
     public void loadAll() {
         unloadAll();
-        final Set<Class<? extends ButlerModule>> classes = new Reflections("com.niklasarndt.discordbutler.modules")
-                .getSubTypesOf(ButlerModule.class);
+        final Set<Class<? extends ButlerModule>> classes =
+                new Reflections("com.niklasarndt.discordbutler.modules")
+                        .getSubTypesOf(ButlerModule.class);
 
         classes.forEach(item -> {
             try {
@@ -51,14 +52,16 @@ public class ModuleManager {
 
     public void registerModule(ButlerModule module) {
         if (hasModule(module.info().getName())) {
-            throw new IllegalStateException("There's already a module claiming the name \"" + module.info().getName() + "\".");
+            throw new IllegalStateException(String.format("There's already a module " +
+                    "claiming the name \"%s\".", module.info().getName()));
         }
         modules.add(module);
         module.onStartup();
     }
 
     public void unregisterModule(String name) {
-        unregisterModule(modules.stream().filter(item -> item.info().getName().equals(name)).findFirst().orElse(null));
+        unregisterModule(modules.stream()
+                .filter(item -> item.info().getName().equals(name)).findFirst().orElse(null));
     }
 
     public void unregisterModule(ButlerModule module) {
@@ -91,12 +94,15 @@ public class ModuleManager {
                     new ResultBuilder(command.get().module().info()));
 
             if (args.length < cmd.info().getArgsMin() || args.length > cmd.info().getArgsMax()) {
-                context.resultBuilder().invalidArgsLength(cmd.info().getArgsMin(), cmd.info().getArgsMax(), args.length);
+
+                context.resultBuilder().invalidArgsLength(
+                        cmd.info().getArgsMin(), cmd.info().getArgsMax(), args.length);
             } else {
                 try {
                     cmd.execute(context);
                 } catch (Exception e) {
-                    logger.error("Could not execute command '{}' (module: {})", name, cmd.module().info().getName(), e);
+                    logger.error("Could not execute command '{}' (module: {})",
+                            name, cmd.module().info().getName(), e);
                     context.resultBuilder().error(e);
                 }
             }

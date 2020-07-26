@@ -24,7 +24,8 @@ public class DirectMessageReceived extends ListenerAdapter {
 
     @Override
     public void onPrivateMessageReceived(@Nonnull PrivateMessageReceivedEvent event) {
-        if (event.getAuthor().getIdLong() != butler.getOwnerId()) return; //This message was not sent by the bot owner.
+        //This message was not sent by the bot owner.
+        if (event.getAuthor().getIdLong() != butler.getOwnerId()) return;
 
         ResultBuilder result = butler.getModuleManager().execute(event.getMessage());
 
@@ -34,8 +35,9 @@ public class DirectMessageReceived extends ListenerAdapter {
             } catch (Exception e) {
                 logger.error("Unexpected exception while producing the command result of \"{}\"",
                         event.getMessage().getContentRaw(), e);
-                event.getChannel().sendMessage(String.format("%s Could not produce a response: **%s** - %s",
-                        ResultType.ERROR.emoji, e.getClass().getSimpleName(), e.getMessage())).queue();
+                event.getChannel().sendMessage(String.format("%s Could not produce a response: " +
+                                "**%s** - %s", ResultType.ERROR.emoji,
+                        e.getClass().getSimpleName(), e.getMessage())).queue();
             }
         } else {
             event.getMessage().addReaction(result.getType().emoji).queue();

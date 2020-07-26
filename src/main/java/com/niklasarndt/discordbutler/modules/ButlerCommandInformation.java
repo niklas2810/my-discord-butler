@@ -7,13 +7,25 @@ import java.util.Objects;
  */
 public class ButlerCommandInformation {
 
+    public static final int MAX_CMD_LENGTH = 16;
+    public static final int MAX_DESC_LENGTH = 128;
+
     private final String name;
     private final String[] aliases;
     private final int argsMin;
     private final int argsMax;
     private final String description;
 
-    protected ButlerCommandInformation(String name, String[] aliases, int argsMin, int argsMax, String description) {
+    protected ButlerCommandInformation(String name, String description) {
+        this(name, 0, 0, description);
+    }
+
+    protected ButlerCommandInformation(String name, int argsMin, int argsMax, String description) {
+        this(name, new String[0], argsMin, argsMax, description);
+    }
+
+    protected ButlerCommandInformation(String name, String[] aliases,
+                                       int argsMin, int argsMax, String description) {
         Objects.requireNonNull(name);
 
         this.name = name;
@@ -22,20 +34,29 @@ public class ButlerCommandInformation {
         this.argsMax = argsMax;
         this.description = description != null ? description : "n/a";
 
-        if (this.name.length() > 16) {
+        applyLimits();
+    }
+
+    private void applyLimits() {
+        if (this.name.length() == 0 || this.description.length() == 0) {
+            throw new IllegalArgumentException("Both your command name and description " +
+                    "must not be empty.");
+        }
+        if (this.name.length() > MAX_CMD_LENGTH) {
             throw new IllegalArgumentException(String.format(
-                    "The module name '%s' is too long (max: 16 characters, given: %d characters).",
-                    name, this.name.length()));
+                    "The module name '%s' is too long (max: %d characters, given: %d characters).",
+                    name, MAX_CMD_LENGTH, this.name.length()));
         }
         if (argsMin < 0 || argsMax < argsMin) {
             throw new IllegalArgumentException(
                     String.format("Invalid argument limits for command \"%s\". (min: %d, max: %d)",
                             name, argsMin, argsMax));
         }
-        if (this.description.length() > 128) {
+        if (this.description.length() > MAX_DESC_LENGTH) {
             throw new IllegalArgumentException(String.format(
-                    "The description for the command '%s' is too long (max: 128 characters, given: %d characters).",
-                    name, this.description.length()));
+                    "The description for the command '%s' is too long (max: %d characters, " +
+                            "given: %d characters).",
+                    name, MAX_DESC_LENGTH, this.description.length()));
         }
     }
 

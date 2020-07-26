@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 /**
  * Created by Niklas on 2020/07/25
  */
-public class TestBuildInformation extends ButlerTest {
+public class BuildInformationTest extends ButlerTest {
 
     @Test
     public void isSet() {

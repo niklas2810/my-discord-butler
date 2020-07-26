@@ -7,6 +7,8 @@ on:
       - main
     tags:
       - v*
+    paths:
+      - src/*
 
 env:
   IMAGE_NAME: my-discord-butler
