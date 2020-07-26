@@ -1,8 +1,3 @@
-exclude_patterns:
-- **/*.md
-- **/*.svg
-- **/*.yml
-- **/*.xml
 engines:
   checkstyle:
     enabled: true
