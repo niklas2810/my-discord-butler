@@ -62,3 +62,9 @@ Dependencies:
 
 - [JDA by DV8FromTheWorld](https://github.com/DV8FromTheWorld/JDA)
 - [sentry-logback by Sentry.io](https://github.com/getsentry/sentry-java/tree/master/sentry-logback)
+- [Reflections by ronmamo](https://github.com/ronmamo/reflections)
+- [emoji-java by Vincent Durmont](https://github.com/vdurmont/emoji-java)
+
+Dependencies (Testing only):
+
+- [JUnit5](https://github.com/junit-team/junit5)
