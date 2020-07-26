@@ -79,7 +79,7 @@ public class ResultBuilder {
     }
 
     public String produceString() {
-        return produceString(true);
+        return produceString(type != ResultType.SUCCESS);
     }
 
     public MessageEmbed produceEmbed() {
