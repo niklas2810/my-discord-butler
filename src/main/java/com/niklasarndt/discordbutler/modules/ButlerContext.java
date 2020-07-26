@@ -22,7 +22,8 @@ public class ButlerContext {
 
     private final ResultBuilder result;
 
-    public ButlerContext(Butler instance, Message message, String command, String[] args, ResultBuilder result) {
+    public ButlerContext(Butler instance, Message message, String command,
+                         String[] args, ResultBuilder result) {
         this.instance = instance;
         this.message = message;
         this.command = command;

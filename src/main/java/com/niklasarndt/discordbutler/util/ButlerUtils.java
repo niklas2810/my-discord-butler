@@ -35,7 +35,8 @@ public class ButlerUtils {
         return String.format("%02d %s, ", num, num == 1 ? singular : singular + "s");
     }
 
-    public static String buildShortCommandInfo(ButlerCommandInformation info, int maxCommandLength, int maxDescLength) {
+    public static String buildShortCommandInfo(ButlerCommandInformation info, int maxCommandLength,
+                                               int maxDescLength) {
 
         String desc = trimString(info.getDescription(), maxDescLength);
 
@@ -63,7 +64,8 @@ public class ButlerUtils {
 
     public static MessageEmbed.Field buildEmbedCommandInfo(
             ButlerCommandInformation info, int maxDescLength, boolean inline) {
-        return new MessageEmbed.Field(info.getName(), trimString(info.getDescription(), maxDescLength), inline);
+        return new MessageEmbed.Field(info.getName(),
+                trimString(info.getDescription(), maxDescLength), inline);
     }
 
     public static MessageEmbed.Field buildEmbedCommandInfo(ButlerCommandInformation info) {

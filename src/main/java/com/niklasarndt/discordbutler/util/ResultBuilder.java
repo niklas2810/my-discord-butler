@@ -11,7 +11,8 @@ import net.dv8tion.jda.api.entities.MessageEmbed;
  */
 public class ResultBuilder {
 
-    public static final ResultBuilder NOT_FOUND = new ResultBuilder(null, ResultType.NOT_FOUND, null);
+    public static final ResultBuilder NOT_FOUND =
+            new ResultBuilder(null, ResultType.NOT_FOUND, null);
     private final ButlerModuleInformation currentModule;
 
     private ResultType type = ResultType.SUCCESS;
@@ -49,9 +50,11 @@ public class ResultBuilder {
     public void invalidArgsLength(int min, int max, int actual) {
         type = ResultType.ERROR;
         if (min == max || min == 0) {
-            output = String.format("This command does not accept parameters (your provided %d).", actual);
+            output = String.format("This command does not accept parameters (your provided %d).",
+                    actual);
         } else {
-            output = String.format("This command only accepts %d-%d parameters (you provided %d).", min, max, actual);
+            output = String.format("This command only accepts %d-%d parameters (you provided %d).",
+                    min, max, actual);
         }
     }
 
@@ -82,7 +85,8 @@ public class ResultBuilder {
             MessageEmbed result = produceEmbed();
             if (!result.isSendable()) {
                 throw new RuntimeException(
-                        String.format("The produced result is too long to be sent (length: %s, max allowed: %s).",
+                        String.format("The produced result is too long to be sent " +
+                                        "(length: %s, max allowed: %s).",
                                 result.getLength(), MessageEmbed.EMBED_MAX_LENGTH_BOT));
             } else channel.sendMessage(produceEmbed()).queue();
         } else channel.sendMessage(produceString()).queue();

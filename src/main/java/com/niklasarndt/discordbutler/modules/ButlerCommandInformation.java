@@ -24,7 +24,8 @@ public class ButlerCommandInformation {
         this(name, new String[0], argsMin, argsMax, description);
     }
 
-    protected ButlerCommandInformation(String name, String[] aliases, int argsMin, int argsMax, String description) {
+    protected ButlerCommandInformation(String name, String[] aliases,
+                                       int argsMin, int argsMax, String description) {
         Objects.requireNonNull(name);
 
         this.name = name;
@@ -38,7 +39,8 @@ public class ButlerCommandInformation {
 
     private void applyLimits() {
         if (this.name.length() == 0 || this.description.length() == 0) {
-            throw new IllegalArgumentException("Both your command name and description must not be empty.");
+            throw new IllegalArgumentException("Both your command name and description " +
+                    "must not be empty.");
         }
         if (this.name.length() > MAX_CMD_LENGTH) {
             throw new IllegalArgumentException(String.format(
@@ -52,7 +54,8 @@ public class ButlerCommandInformation {
         }
         if (this.description.length() > MAX_DESC_LENGTH) {
             throw new IllegalArgumentException(String.format(
-                    "The description for the command '%s' is too long (max: %d characters, given: %d characters).",
+                    "The description for the command '%s' is too long (max: %d characters, " +
+                            "given: %d characters).",
                     name, MAX_DESC_LENGTH, this.description.length()));
         }
     }

@@ -16,7 +16,8 @@ public abstract class ButlerModule {
     private final ButlerModuleInformation info;
     private final List<ButlerCommand> commands = new ArrayList<>();
 
-    public ButlerModule(String emoji, String name, String displayName, String description, String version) {
+    public ButlerModule(String emoji, String name, String displayName,
+                        String description, String version) {
         this.info = new ButlerModuleInformation(emoji, name, displayName, description, version);
     }
 
@@ -62,6 +63,7 @@ public abstract class ButlerModule {
     }
 
     public final Optional<ButlerCommand> getCommand(String name) {
-        return getCommands().stream().filter(cmd -> cmd.info().getName().equals(name) || cmd.info().hasAlias(name)).findFirst();
+        return getCommands().stream().filter(
+                cmd -> cmd.info().getName().equals(name) || cmd.info().hasAlias(name)).findFirst();
     }
 }

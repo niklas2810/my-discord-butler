@@ -31,7 +31,8 @@ public class HelpCommand extends ButlerCommand {
     }
 
     private void buildDetails(ButlerContext context) {
-        Optional<ButlerCommand> command = context.instance().getModuleManager().findCommand(context.args()[0]);
+        Optional<ButlerCommand> command = context.instance()
+                .getModuleManager().findCommand(context.args()[0]);
 
         if (command.isEmpty()) {
             context.resultBuilder().notFound("Could not find a command matching `%s`.",

@@ -43,7 +43,8 @@ public class ModulesCommand extends ButlerCommand {
         embed.addField("Version", info.getVersion(), true);
         embed.addBlankField(false);
 
-        module.getCommands().forEach(cmd -> embed.addField(ButlerUtils.buildEmbedCommandInfo(cmd.info())));
+        module.getCommands().forEach(cmd ->
+                embed.addField(ButlerUtils.buildEmbedCommandInfo(cmd.info())));
     }
 
     private void buildOverview(ButlerContext context) {

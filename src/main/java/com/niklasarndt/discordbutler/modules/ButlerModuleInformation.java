@@ -44,7 +44,8 @@ public class ButlerModuleInformation {
 
     private void applyLimits() {
         if (this.name.length() == 0 || this.displayName.length() == 0) {
-            throw new IllegalArgumentException("Both module name and display name must not be null.");
+            throw new IllegalArgumentException("Both module name and display name must " +
+                    "not be null.");
         }
         if (this.description.length() == 0) {
             throw new IllegalArgumentException("The module description must not be null.");
@@ -59,27 +60,32 @@ public class ButlerModuleInformation {
     private void checkLengths() {
         if (this.emoji.length() > 4) {
             throw new IllegalArgumentException(String.format(
-                    "The emoji unicode for the module '%s' is too long (max: 4 characters, given: %d characters).",
+                    "The emoji unicode for the module '%s' is too long " +
+                            "(max: 4 characters, given: %d characters).",
                     name, this.emoji.length()));
         }
         if (this.name.length() > 16) {
             throw new IllegalArgumentException(String.format(
-                    "The module name '%s' is too long (max: 16 characters, given: %d characters).",
+                    "The module name '%s' is too long " +
+                            "(max: 16 characters, given: %d characters).",
                     name, this.name.length()));
         }
         if (this.displayName.length() > 32) {
             throw new IllegalArgumentException(String.format(
-                    "The display name for the module '%s' is too long (max: 32 characters, given: %d characters).",
+                    "The display name for the module '%s' is too long " +
+                            "(max: 32 characters, given: %d characters).",
                     name, this.displayName.length()));
         }
         if (this.description.length() > 128) {
             throw new IllegalArgumentException(String.format(
-                    "The description for the module '%s' is too long (max: 128 characters, given: %d characters).",
+                    "The description for the module '%s' is too long " +
+                            "(max: 128 characters, given: %d characters).",
                     name, this.description.length()));
         }
         if (this.version.length() > 8) {
             throw new IllegalArgumentException(String.format(
-                    "The version code for the module '%s' is too long (max: 8 characters, given: %d characters).",
+                    "The version code for the module '%s' is too long " +
+                            "(max: 8 characters, given: %d characters).",
                     name, this.version.length()));
         }
     }

@@ -20,7 +20,8 @@ public class BuildInfo {
     static {
         try {
             Properties properties = new Properties();
-            properties.load(BuildInfo.class.getClassLoader().getResourceAsStream("build.properties"));
+            properties.load(BuildInfo.class.getClassLoader()
+                    .getResourceAsStream("build.properties"));
 
             NAME = properties.getProperty("build.name");
             DESCRIPTION = properties.getProperty("build.description");

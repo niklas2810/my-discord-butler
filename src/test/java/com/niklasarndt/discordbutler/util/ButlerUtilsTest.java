@@ -19,7 +19,8 @@ class ButlerUtilsTest extends ButlerTest {
         assertEquals("01 minute, 01 second", ButlerUtils.prettyPrintTime(61_000));
         assertEquals("01 minute, 02 seconds", ButlerUtils.prettyPrintTime(62_000));
         assertEquals("02 minutes, 01 second", ButlerUtils.prettyPrintTime(121_000));
-        assertEquals("01 day, 05 hours, 35 minutes, 12 seconds", ButlerUtils.prettyPrintTime(106_512_000));
+        assertEquals("01 day, 05 hours, 35 minutes, 12 seconds",
+                ButlerUtils.prettyPrintTime(106_512_000));
     }
 
     @Test
