@@ -1,6 +1,6 @@
 <svg fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 640">
-  <path fill="#fff0" d="M0 0h1280v640H0z"/>
-  <path fill="#fff0" d="M840 170h300v300H840z"/>
+  <path fill="#fff" d="M0 0h1280v640H0z"/>
+  <path fill="#fff" d="M840 170h300v300H840z"/>
   <path d="M942 202l47.5 21.5L1037 202v43l-47.5-21.5L942 245v-43z" fill="#111"/>
   <g clip-path="url(#clip0)" fill="#111">
     <circle cx="990" cy="331.4" r="8"/>
