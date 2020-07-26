@@ -1,5 +1,5 @@
 <div style="width:100%;padding:0px;margin:0px" align="center">
-    <img style="width: 80%;" src="https://raw.githubusercontent.com/niklas2810/my-discord-butler/main/res/social.svg" alt="Social Banner">
+    <img style="width: 80%;" src="https://raw.githubusercontent.com/niklas2810/my-discord-butler/main/res/social-inverted.svg" alt="Social Banner">
 </div>
 
 # My Discord Butler
