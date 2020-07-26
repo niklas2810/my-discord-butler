@@ -2,7 +2,6 @@ package com.niklasarndt.discordbutler.util;
 
 import com.vdurmont.emoji.Emoji;
 import com.vdurmont.emoji.EmojiManager;
-
 import java.util.Optional;
 
 /**

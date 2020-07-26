@@ -6,7 +6,6 @@ import com.niklasarndt.discordbutler.modules.ButlerModule;
 import com.niklasarndt.discordbutler.modules.ButlerModuleInformation;
 import com.niklasarndt.discordbutler.util.ButlerUtils;
 import net.dv8tion.jda.api.EmbedBuilder;
-
 import java.util.List;
 
 /**
