@@ -69,7 +69,7 @@ public class HelpCommand extends ButlerCommand {
                 builder.append("This module does not contain any commands.\n");
             } else module.getCommands().forEach(cmd -> {
                 ButlerCommandInformation cmdInfo = cmd.info();
-                builder.append(ButlerUtils.buildShortCommandInfo(cmdInfo));
+                builder.append(ButlerUtils.buildShortCommandInfo(cmdInfo)).append("\n");
             });
 
             builder.append("\n");

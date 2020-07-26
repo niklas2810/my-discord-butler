@@ -9,34 +9,34 @@ import net.dv8tion.jda.api.entities.MessageEmbed;
 public class ButlerUtils {
 
 
-    public static String prettyPrintTime(long duration) {
+    public static String prettyPrintTime(long ms) {
         StringBuilder builder = new StringBuilder();
 
-        int days = (int) (duration / 86400000); //1.000 * 60 * 60 * 24
-        int hours = (int) (duration / 3600000) % 24; //1.000 * 60 * 60
-        int minutes = (int) (duration / 60000) % 60; //1.000 * 60;
-        int seconds = (int) (duration / 1000) % 60; //1.000 * 60;
+        int days = (int) (ms / 86400000); //1.000 * 60 * 60 * 24
+        int hours = (int) (ms / 3600000) % 24; //1.000 * 60 * 60
+        int minutes = (int) (ms / 60000) % 60; //1.000 * 60;
+        int seconds = (int) (ms / 1000) % 60; //1.000 * 60;
 
-        if (days > 0) {
-            builder.append(String.format("%02d %s, ", days, days == 1 ? "day" : "days"));
-        }
-        if (hours > 0) {
-            builder.append(String.format("%02d %s, ", hours, hours == 1 ? "hour" : "hours"));
-        }
-        if (minutes > 0) {
-            builder.append(String.format("%02d %s, ", minutes, minutes == 1 ? "minute" : "minutes"));
-        }
-        if (seconds > 0) {
-            builder.append(String.format("%02d %s, ", seconds, seconds == 1 ? "second" : "seconds"));
-        }
+        appendTime(builder, days, "day");
+        appendTime(builder, hours, "hour");
+        appendTime(builder, minutes, "minute");
+        appendTime(builder, seconds, "second");
         return builder.substring(0, builder.length() - 2);
+    }
+
+    private static void appendTime(StringBuilder builder, int num, String singular) {
+        if (num > 0) builder.append(timeDisplay(num, singular));
+    }
+
+    private static String timeDisplay(int num, String singular) {
+        return String.format("%02d %s, ", num, num == 1 ? singular : singular + "s");
     }
 
     public static String buildShortCommandInfo(ButlerCommandInformation info, int maxCommandLength, int maxDescLength) {
 
         String desc = trimString(info.getDescription(), maxDescLength);
 
-        return String.format(String.format("`%%-%ds`: `%%-%ds`\n", maxCommandLength, maxDescLength),
+        return String.format(String.format("`%%-%ds`: `%%-%ds`", maxCommandLength, maxDescLength),
                 info.getName(),
                 desc);
     }
@@ -46,8 +46,14 @@ public class ButlerUtils {
     }
 
     public static String trimString(String input, int maxLength) {
+        if (maxLength < 1) throw new IllegalArgumentException("The maximum string length must be larger than zero.");
+
+        if (maxLength < 4) {
+            return ".".repeat(maxLength);
+        }
+
         return input.length() > maxLength ?
-                input.substring(0, maxLength - 4) + " ..." :
+                input.substring(0, maxLength - 3) + "..." :
                 input;
     }
 
