@@ -68,12 +68,6 @@ public class ResultBuilder {
         return (output != null && output.length() > 0) || usesEmbed && !embedBuilder.isEmpty();
     }
 
-    public void error(Exception e) {
-        type = ResultType.ERROR;
-        output = String.format("The command could not be executed. Reason: **%s** - %s",
-                e.getClass().getSimpleName(), e.getMessage());
-    }
-
     public EmbedBuilder useEmbed() {
         usesEmbed = true;
         if (embedBuilder == null) embedBuilder = new EmbedBuilder();
@@ -101,6 +95,16 @@ public class ResultBuilder {
                                 result.getLength(), MessageEmbed.EMBED_MAX_LENGTH_BOT));
             } else channel.sendMessage(produceEmbed()).queue();
         } else channel.sendMessage(produceString()).queue();
+    }
+
+    public void error(String output) {
+        type = ResultType.ERROR;
+        this.output = output;
+    }
+
+    public void error(Exception e) {
+        error(String.format("The command could not be executed. Reason: **%s** - %s",
+                e.getClass().getSimpleName(), e.getMessage()));
     }
 
     public void notFound() {

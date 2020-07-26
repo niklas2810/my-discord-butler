@@ -58,4 +58,12 @@ public class ButlerUtils {
     public static MessageEmbed.Field buildEmbedCommandInfo(ButlerCommandInformation info) {
         return buildEmbedCommandInfo(info, 50, true);
     }
+
+    public static int parseInt(String input, int defaultValue) {
+        try {
+            return Integer.parseInt(input);
+        } catch (NumberFormatException e) {
+            return defaultValue;
+        }
+    }
 }
