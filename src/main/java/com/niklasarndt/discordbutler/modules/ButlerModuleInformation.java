@@ -9,13 +9,25 @@ import java.util.Objects;
  */
 public class ButlerModuleInformation {
 
-    private static final String DEFAULT_EMOJI = Emojis.QUESTION_MARK;
+    protected static final String DEFAULT_EMOJI = Emojis.QUESTION_MARK;
 
     private final String emoji;
     private final String name;
     private final String displayName;
     private final String description;
     private final String version;
+
+    protected ButlerModuleInformation(String name) {
+        this(name, null);
+    }
+
+    protected ButlerModuleInformation(String name, String description) {
+        this(name, description, null);
+    }
+
+    protected ButlerModuleInformation(String name, String description, String version) {
+        this(null, name, null, description, version);
+    }
 
     protected ButlerModuleInformation(String emoji, String name, String displayName, String description, String version) {
         Objects.requireNonNull(name);
@@ -26,6 +38,12 @@ public class ButlerModuleInformation {
         this.description = description != null ? description : "n/a";
         this.version = version != null ? version : "n/a";
 
+        if (this.name.length() == 0 || this.displayName.length() == 0) {
+            throw new IllegalArgumentException("Both module name and display name must not be null.");
+        }
+        if (this.description.length() == 0) {
+            throw new IllegalArgumentException("The module description must not be null.");
+        }
         if (!Emojis.isOnlyEmojis(this.emoji)) {
             throw new IllegalArgumentException(String.format(
                     "The emoji for the module '%s' is invalid.", name));
