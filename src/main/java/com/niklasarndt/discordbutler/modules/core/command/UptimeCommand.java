@@ -17,6 +17,6 @@ public class UptimeCommand extends ButlerCommand {
     public void execute(ButlerContext context) {
         long runtime = System.currentTimeMillis() - context.instance().getStartupTimestamp();
         String out = ButlerUtils.prettyPrintTime(runtime);
-        context.resultBuilder().success("Uptime: " + out + ".");
+        context.resultBuilder().success("Uptime: %s.", out);
     }
 }

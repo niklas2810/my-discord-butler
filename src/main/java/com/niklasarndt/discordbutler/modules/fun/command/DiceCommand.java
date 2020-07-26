@@ -28,6 +28,6 @@ public class DiceCommand extends ButlerCommand {
         }
 
         int result = new SecureRandom().nextInt(faceCount) + 1;
-        context.resultBuilder().success(String.format("Result: **%d** (1-%d).", result, faceCount));
+        context.resultBuilder().success("Result: **%d** (1-%d).", result, faceCount);
     }
 }

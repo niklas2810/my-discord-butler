@@ -15,7 +15,7 @@ public class GimmeCommand extends ButlerCommand {
 
     @Override
     public void execute(ButlerContext context) {
-        context.resultBuilder().success(String.format("Of course, please enjoy your `%s`.",
-                String.join(" ", context.args()).trim()));
+        context.resultBuilder().success("Of course, please enjoy your `%s`.",
+                String.join(" ", context.args()).trim());
     }
 }

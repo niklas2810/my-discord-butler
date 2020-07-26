@@ -28,9 +28,9 @@ public class ModulesCommand extends ButlerCommand {
 
             context.instance().getModuleManager().getModule(moduleName)
                     .ifPresentOrElse(module -> buildModuleOverview(context, module),
-                            () -> context.resultBuilder().notFound(
-                                    String.format("Could not find module with name `%s`.", moduleName))
-                    );
+                            () -> context.resultBuilder()
+                                    .notFound("Could not find module with name `%s`.",
+                                            moduleName));
         }
     }
 

@@ -16,6 +16,7 @@ public class CoinCommand extends ButlerCommand {
 
     @Override
     public void execute(ButlerContext context) {
-        context.resultBuilder().success(String.format("It's %s!", new Random().nextBoolean() ? "heads" : "tails"));
+        context.resultBuilder().success("It's %s!",
+                new Random().nextBoolean() ? "heads" : "tails");
     }
 }

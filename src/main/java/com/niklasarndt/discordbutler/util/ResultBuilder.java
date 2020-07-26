@@ -93,18 +93,30 @@ public class ResultBuilder {
         this.output = output;
     }
 
+    public void success(String output, Object... args) {
+        success(String.format(output, args));
+    }
+
     public void error(String output) {
         type = ResultType.ERROR;
         this.output = output;
     }
 
+    public void error(String output, Object... args) {
+        error(String.format(output, args));
+    }
+
     public void error(Exception e) {
-        error(String.format("The command could not be executed. Reason: **%s** - %s",
-                e.getClass().getSimpleName(), e.getMessage()));
+        error("The command could not be executed. Reason: **%s** - %s",
+                e.getClass().getSimpleName(), e.getMessage());
     }
 
     public void notFound(String output) {
         this.type = ResultType.NOT_FOUND;
         this.output = output;
+    }
+
+    public void notFound(String output, Object... args) {
+        notFound(String.format(output, args));
     }
 }
