@@ -43,7 +43,7 @@ public class ResultBuilder {
     }
 
     public String getOutput() {
-        return output;
+        return output != null ? output : "";
     }
 
     public void invalidArgsLength(int min, int max, int actual) {
@@ -66,7 +66,7 @@ public class ResultBuilder {
     }
 
     public String produceString(boolean addEmoji) {
-        return (addEmoji ? type.emoji + " " : "") + (usesEmbed ? "" : getOutput());
+        return usesEmbed ? "" : (addEmoji ? type.emoji + " " : "") + getOutput();
     }
 
     public String produceString() {
