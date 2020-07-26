@@ -5,7 +5,7 @@ import com.niklasarndt.discordbutler.modules.ButlerContext;
 import com.niklasarndt.discordbutler.util.ButlerUtils;
 
 /**
- * Created by Niklas on 2020/07/25
+ * Created by Niklas on 2020/07/25.
  */
 public class UptimeCommand extends ButlerCommand {
 

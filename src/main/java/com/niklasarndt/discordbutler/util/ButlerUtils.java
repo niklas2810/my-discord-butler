@@ -4,7 +4,7 @@ import com.niklasarndt.discordbutler.modules.ButlerCommandInformation;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 
 /**
- * Created by Niklas on 2020/07/25
+ * Created by Niklas on 2020/07/25.
  */
 public class ButlerUtils {
 

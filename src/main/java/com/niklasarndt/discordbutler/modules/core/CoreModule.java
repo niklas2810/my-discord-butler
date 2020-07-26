@@ -4,7 +4,7 @@ import com.niklasarndt.discordbutler.modules.ButlerModule;
 import com.niklasarndt.discordbutler.util.Emojis;
 
 /**
- * Created by Niklas on 2020/07/25
+ * Created by Niklas on 2020/07/25.
  */
 public class CoreModule extends ButlerModule {
 

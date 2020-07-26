@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 /**
- * Created by Niklas on 2020/07/25
+ * Created by Niklas on 2020/07/25.
  */
 public class BuildInformationTest extends ButlerTest {
 

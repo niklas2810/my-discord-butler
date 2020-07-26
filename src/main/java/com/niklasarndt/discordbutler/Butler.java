@@ -11,7 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Created by Niklas on 2020/07/24
+ * Created by Niklas on 2020/07/24.
  */
 public class Butler {
 
@@ -74,10 +74,18 @@ public class Butler {
     }
 
     public void shutdown(int exitCode) {
-        logger.info("Initiating shutdown...");
-        moduleManager.unloadAll();
-        jda.shutdown();
-        logger.info("The connection to the Discord API was shut down. Goodbye!");
-        System.exit(exitCode);
+        new Thread(null, () -> {
+            logger.info("Shutdown in 5 seconds!");
+            try {
+                Thread.sleep(5000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            logger.info("Initiating shutdown...");
+            moduleManager.unloadAll();
+            jda.shutdown();
+            logger.info("The connection to the Discord API was shut down. Goodbye!");
+            System.exit(exitCode);
+        }, "terminator").start();
     }
 }

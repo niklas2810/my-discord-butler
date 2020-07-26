@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
- * Created by Niklas on 2020/07/26
+ * Created by Niklas on 2020/07/26.
  */
 class ButlerModuleInformationTest extends ButlerTest {
 

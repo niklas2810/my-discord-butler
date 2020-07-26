@@ -7,7 +7,7 @@ import com.niklasarndt.discordbutler.util.ButlerUtils;
 import java.security.SecureRandom;
 
 /**
- * Created by Niklas on 2020/07/26
+ * Created by Niklas on 2020/07/26.
  */
 public class DiceCommand extends ButlerCommand {
 

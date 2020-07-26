@@ -5,7 +5,7 @@ import com.niklasarndt.discordbutler.modules.ButlerContext;
 import com.niklasarndt.discordbutler.util.Emojis;
 
 /**
- * Created by Niklas on 2020/07/26
+ * Created by Niklas on 2020/07/26.
  */
 public class PingCommand extends ButlerCommand {
 

@@ -6,7 +6,7 @@ import com.vdurmont.emoji.EmojiManager;
 import java.util.Optional;
 
 /**
- * Created by Niklas on 2020/07/26
+ * Created by Niklas on 2020/07/26.
  */
 public class Emojis {
 

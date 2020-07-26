@@ -6,7 +6,7 @@ import com.niklasarndt.discordbutler.util.BuildInfo;
 import net.dv8tion.jda.api.EmbedBuilder;
 
 /**
- * Created by Niklas on 2020/07/26
+ * Created by Niklas on 2020/07/26.
  */
 public class VersionCommand extends ButlerCommand {
 
