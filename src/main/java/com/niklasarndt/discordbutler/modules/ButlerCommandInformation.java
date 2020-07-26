@@ -33,6 +33,10 @@ public class ButlerCommandInformation {
         this.argsMax = argsMax;
         this.description = description != null ? description : "n/a";
 
+        applyLimits();
+    }
+
+    private void applyLimits() {
         if (this.name.length() == 0 || this.description.length() == 0) {
             throw new IllegalArgumentException("Both your command name and description must not be empty.");
         }

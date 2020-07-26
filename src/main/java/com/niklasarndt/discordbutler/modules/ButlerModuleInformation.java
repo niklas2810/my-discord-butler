@@ -38,6 +38,10 @@ public class ButlerModuleInformation {
         this.description = description != null ? description : "n/a";
         this.version = version != null ? version : "n/a";
 
+        applyLimits();
+    }
+
+    private void applyLimits() {
         if (this.name.length() == 0 || this.displayName.length() == 0) {
             throw new IllegalArgumentException("Both module name and display name must not be null.");
         }
