@@ -25,9 +25,9 @@ jobs:
         uses: actions/cache@v2
         with:
           path: ~/.m2/repository
-          key: maven-${{ runner.os }}-${{ hashFiles('**/pom.xml') }}
+          key: maven-coverage-${{ runner.os }}-${{ hashFiles('**/pom.xml') }}
           restore-keys: |
-            maven-${{ runner.os }}-
+            maven-coverage-${{ runner.os }}-
       - name: Test & publish code coverage
         uses: paambaati/codeclimate-action@v2.6.0
         env:
