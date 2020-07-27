@@ -10,6 +10,9 @@ import java.util.Properties;
  */
 public class BuildInfo {
 
+    private BuildInfo() {
+    }
+
     public static String NAME;
     public static String DESCRIPTION;
     public static String VERSION;

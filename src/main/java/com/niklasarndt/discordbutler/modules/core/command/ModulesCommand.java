@@ -49,7 +49,7 @@ public class ModulesCommand extends ButlerCommand {
     private void buildOverview(ButlerContext context) {
         List<ButlerModule> modules = context.instance().getModuleManager().getModules();
         EmbedBuilder embed = context.resultBuilder().useEmbed();
-        embed.setFooter("" + modules.size() + " modules loaded");
+        embed.setFooter(modules.size() + " modules loaded");
 
         for (int i = 0; i < modules.size(); i++) {
             ButlerModule module = modules.get(i);

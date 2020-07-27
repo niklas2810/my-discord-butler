@@ -6,7 +6,6 @@ import com.niklasarndt.discordbutler.modules.ButlerContext;
 import com.niklasarndt.discordbutler.modules.ButlerModule;
 import com.niklasarndt.discordbutler.util.ButlerUtils;
 import net.dv8tion.jda.api.EmbedBuilder;
-
 import java.util.List;
 import java.util.Optional;
 
@@ -45,9 +44,12 @@ public class HelpCommand extends ButlerCommand {
         String aliases = info.getAliases().length == 0
                 ? "None" : String.join(", ", info.getAliases());
 
-        String args = info.getArgsMin() != info.getArgsMax() ?
-                info.getArgsMin() + "-" + info.getArgsMax() : info.getArgsMin() == 0 ?
-                "None" : info.getArgsMin() + "";
+        String args;
+        if (info.getArgsMin() != info.getArgsMax()) { //Parameter range
+            args = info.getArgsMin() + "-" + info.getArgsMax();
+        } else { //Fixed parameter count
+            args = info.getArgsMin() == 0 ? "None" : info.getArgsMin() + "";
+        }
 
         EmbedBuilder embed = context.resultBuilder().useEmbed();
         embed.setTitle("Overview for command `" + info.getName() + "`");
