@@ -6,7 +6,6 @@ on:
   push:
     branches-ignore:
       - main
-  pull_request:
     paths:
       - 'src/**'
       - '**.xml'
