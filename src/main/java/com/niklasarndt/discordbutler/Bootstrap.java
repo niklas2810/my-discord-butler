@@ -30,7 +30,8 @@ public class Bootstrap {
     }
 
     private static String[] buildEnvironmentFlags(String[] args) {
-        String[] envs = Optional.of(System.getenv("EXECUTION_FLAGS")).orElse("").split(",");
+        String[] envs = Optional.ofNullable(System.getenv("EXECUTION_FLAGS"))
+                .orElse("").split(",");
         boolean oneOnly = envs.length == 0 || args.length == 0;
 
         String[] combined;
