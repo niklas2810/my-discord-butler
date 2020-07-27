@@ -11,7 +11,8 @@ import net.dv8tion.jda.api.EmbedBuilder;
 public class VersionCommand extends ButlerCommand {
 
     public VersionCommand() {
-        super("version", 0, 0, "Displays some info about the current build.");
+        super("version", 0, 0, "Displays some info about the current build.",
+                "about", "info");
     }
 
     @Override
