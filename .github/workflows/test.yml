@@ -3,6 +3,9 @@
 name: Unit Testing
 
 on:
+  push:
+    branches-ignore:
+      - main
   pull_request:
     paths:
       - 'src/**'
