@@ -2,13 +2,6 @@ version: "2"
 plugins:
   checkstyle:
     enabled: true
-  pmd:
-    enabled: true
-  sonar-java:
-    enabled: true
-engines:
-  checkstyle:
-    enabled: true
     checks:
       com.puppycrawl.tools.checkstyle.checks.blocks.NeedBracesCheck:
         enabled: false
@@ -17,3 +10,7 @@ engines:
         enabled: false
       com.puppycrawl.tools.checkstyle.checks.imports.CustomImportOrderCheck:
         enabled: false
+  pmd:
+    enabled: true
+  sonar-java:
+    enabled: true
