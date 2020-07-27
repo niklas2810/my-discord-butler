@@ -21,9 +21,25 @@ public class Bootstrap {
         }
 
         try {
-            new Butler(args);
+
+            new Butler(buildEnvironmentFlags(args));
         } catch (Exception e) {
             logger.error("Encountered uncaught exception", e);
         }
+    }
+
+    private static String[] buildEnvironmentFlags(String[] args) {
+        String[] envs = System.getenv("EXECUTION_FLAGS").split(",");
+        boolean oneOnly = envs.length == 0 || args.length == 0;
+
+        String[] combined;
+        if (oneOnly) combined = envs.length != 0 ? envs : args;
+        else combined = new String[envs.length + args.length];
+
+        if (!oneOnly) {
+            System.arraycopy(envs, 0, combined, 0, envs.length);
+            System.arraycopy(args, 0, combined, envs.length, args.length);
+        }
+        return combined;
     }
 }

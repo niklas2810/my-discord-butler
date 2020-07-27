@@ -25,6 +25,7 @@ public abstract class ButlerModule {
     }
 
     public void onStartup() {
+        loadCommandsFromDefaultPackage(this);
     }
 
     public void onShutdown() {
