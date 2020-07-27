@@ -46,11 +46,11 @@ public class Butler {
         logger.info("Startup is in progress");
         this.flags = Collections.unmodifiableList(List.of(flags));
 
-        loadOwnerId();
 
         if (hasFlag(ExecutionFlags.NO_API_CONNECTION)) {
             logger.warn("NO_API_CONNECTION: App will not be kept alive by daemon.");
         } else {
+            loadOwnerId();
             jda = setUpJda();
             logger.info("JDA has been set up!");
         }
