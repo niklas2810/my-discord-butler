@@ -146,9 +146,13 @@
                         <phase>test</phase>
                     </execution>
                 </executions>
+                <configuration>
+                    <excludes>
+                        <exclude>com/niklasarndt/discordbutler/listener/**</exclude>
+                    </excludes>
+                </configuration>
             </plugin>
         </plugins>
-
     </build>
 
 </project>
