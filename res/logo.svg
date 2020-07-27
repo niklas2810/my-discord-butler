@@ -1,5 +1,5 @@
 <svg fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300">
-  <path fill="#fff" d="M0 0h300v300H0z"/>
+  <path fill="#fff" fill-opacity="1.0" d="M0 0h300v300H0z"/>
   <path d="M102 32l48 22 47-22v43l-47-21-48 21V32z" fill="#000"/>
   <g clip-path="url(#clip0)" fill="#000">
     <circle cx="150" cy="161.4" r="8"/>
@@ -9,7 +9,7 @@
   <path d="M0 0l150 245L300 0v300H0V0z" fill="#000"/>
   <defs>
     <clipPath id="clip0">
-      <path fill="#fff" transform="translate(142 83)" d="M0 0h16v86H0z"/>
+      <path fill="#fff" fill-opacity="1.0" transform="translate(142 83)" d="M0 0h16v86H0z"/>
     </clipPath>
   </defs>
 </svg>

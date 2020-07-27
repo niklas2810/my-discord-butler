@@ -5,11 +5,12 @@
     <img alt="codeclimate maintainability" src="https://api.codeclimate.com/v1/badges/e38a30ce52b06ec070b0/maintainability"/></a>
     <a href="https://codeclimate.com/github/niklas2810/my-discord-butler/test_coverage">
     <img alt="codeclimate test coverage" src="https://api.codeclimate.com/v1/badges/e38a30ce52b06ec070b0/test_coverage"/></a>
-     <a href="https://github.com/niklas2810/my-discord-butler/actions?query=workflow%3A%22Unit+Testing%22">
-     <img alt="unit testing" src="https://github.com/niklas2810/my-discord-butler/workflows/Unit%20Testing/badge.svg?branch=main"/></a>
+    <a href="https://github.com/niklas2810/my-discord-butler/actions?query=workflow%3A%22Unit+Testing%22">
+    <img alt="unit testing" src="https://github.com/niklas2810/my-discord-butler/workflows/Unit%20Testing/badge.svg?branch=main"/></a>
+    <br>
 </div>
 
-A discord bot which for personal use.
+A discord bot for personal use.
 Feel free to fork and alter the code to create features
 that you need.
 
