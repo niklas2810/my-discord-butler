@@ -2,6 +2,8 @@ package com.niklasarndt.discordbutler.listener;
 
 import com.niklasarndt.discordbutler.Butler;
 import com.niklasarndt.discordbutler.enums.ResultType;
+import com.niklasarndt.discordbutler.util.Emojis;
+import com.niklasarndt.discordbutler.util.ExecutionFlags;
 import com.niklasarndt.discordbutler.util.ResultBuilder;
 import net.dv8tion.jda.api.events.message.priv.PrivateMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
@@ -26,6 +28,15 @@ public class DirectMessageReceived extends ListenerAdapter {
         //This message was not sent by the bot owner.
         if (event.getAuthor().getIdLong() != butler.getOwnerId()) return;
 
+        if (butler.hasFlag(ExecutionFlags.NO_MODULE_MANAGER)) {
+            event.getMessage().addReaction(Emojis.LOCK).queue();
+            return;
+        }
+
+        handleCommand(event);
+    }
+
+    private void handleCommand(PrivateMessageReceivedEvent event) {
         ResultBuilder result = butler.getModuleManager().execute(event.getMessage());
 
         if (result.hasOutput()) {
