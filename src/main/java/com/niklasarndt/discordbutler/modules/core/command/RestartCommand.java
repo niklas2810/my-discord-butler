@@ -17,14 +17,5 @@ public class RestartCommand extends ButlerCommand {
     public void execute(ButlerContext context) {
         context.resultBuilder().success("The application will terminate in 5 seconds.");
         context.instance().shutdown(1);
-        new Thread(null, () -> {
-            logger.info("Restart in 5 seconds!");
-            try {
-                Thread.sleep(5000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            context.instance().shutdown(1);
-        }, "restarter").start();
     }
 }

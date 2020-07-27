@@ -1,6 +1,7 @@
 package com.niklasarndt.discordbutler.listener;
 
 import com.niklasarndt.discordbutler.Butler;
+import com.niklasarndt.discordbutler.util.ExecutionFlags;
 import net.dv8tion.jda.api.events.ReadyEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.slf4j.Logger;
@@ -22,5 +23,7 @@ public class ApiConnected extends ListenerAdapter {
     @Override
     public void onReady(@Nonnull ReadyEvent event) {
         logger.info("Connection to the Discord API is now established. Listening for events!");
+        if (butler.hasFlag(ExecutionFlags.NO_MODULE_MANAGER))
+            logger.warn("Module manager is disabled.");
     }
 }

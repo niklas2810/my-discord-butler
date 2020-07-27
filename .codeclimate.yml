@@ -1,4 +1,5 @@
-engines:
+version: "2"
+plugins:
   checkstyle:
     enabled: true
     checks:
@@ -8,4 +9,11 @@ engines:
       com.puppycrawl.tools.checkstyle.checks.whitespace.OperatorWrapCheck:
         enabled: false
       com.puppycrawl.tools.checkstyle.checks.imports.CustomImportOrderCheck:
+        enabled: false
+  pmd:
+    enabled: true
+  sonar-java:
+    enabled: true
+    checks:
+      squid:UnusedPrivateMethod:
         enabled: false

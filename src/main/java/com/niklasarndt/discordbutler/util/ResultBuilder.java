@@ -69,7 +69,8 @@ public class ResultBuilder {
     }
 
     public String produceString(boolean addEmoji) {
-        return usesEmbed ? "" : (addEmoji ? type.emoji + " " : "") + getOutput();
+        if (usesEmbed) return "";
+        return (addEmoji ? type.emoji + " " : "") + getOutput();
     }
 
     public String produceString() {
@@ -84,7 +85,7 @@ public class ResultBuilder {
         if (usesEmbed) {
             MessageEmbed result = produceEmbed();
             if (!result.isSendable()) {
-                throw new RuntimeException(
+                throw new IllegalArgumentException(
                         String.format("The produced result is too long to be sent " +
                                         "(length: %s, max allowed: %s).",
                                 result.getLength(), MessageEmbed.EMBED_MAX_LENGTH_BOT));

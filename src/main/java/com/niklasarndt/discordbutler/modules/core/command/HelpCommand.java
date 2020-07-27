@@ -6,7 +6,6 @@ import com.niklasarndt.discordbutler.modules.ButlerContext;
 import com.niklasarndt.discordbutler.modules.ButlerModule;
 import com.niklasarndt.discordbutler.util.ButlerUtils;
 import net.dv8tion.jda.api.EmbedBuilder;
-
 import java.util.List;
 import java.util.Optional;
 
@@ -40,21 +39,27 @@ public class HelpCommand extends ButlerCommand {
             return;
         }
 
-        ButlerCommandInformation info = command.get().info();
-
-        String aliases = info.getAliases().length == 0
-                ? "None" : String.join(", ", info.getAliases());
-
-        String args = info.getArgsMin() != info.getArgsMax() ?
-                info.getArgsMin() + "-" + info.getArgsMax() : info.getArgsMin() == 0 ?
-                "None" : info.getArgsMin() + "";
-
         EmbedBuilder embed = context.resultBuilder().useEmbed();
+        buildEmbedInfo(embed, command.get());
+    }
+
+    private void buildEmbedInfo(EmbedBuilder embed, ButlerCommand command) {
+        ButlerCommandInformation info = command.info();
+
         embed.setTitle("Overview for command `" + info.getName() + "`");
-        embed.addField("Module", String.format("%s %s", command.get().module().info().getEmoji(),
-                command.get().module().info().getDisplayName()), false);
+        embed.addField("Module", String.format("%s %s", command.module().info().getEmoji(),
+                command.module().info().getDisplayName()), false);
         embed.addField("Description", info.getDescription(), false);
-        embed.addField("Aliases", aliases, true);
+
+        embed.addField("Aliases", info.getAliases().length == 0
+                ? "None" : String.join(", ", info.getAliases()), true);
+
+        String args;
+        if (info.getArgsMin() != info.getArgsMax()) { //Parameter range
+            args = info.getArgsMin() + "-" + info.getArgsMax();
+        } else { //Fixed parameter count
+            args = info.getArgsMin() == 0 ? "None" : info.getArgsMin() + "";
+        }
         embed.addField("Parameters", args, true);
     }
 

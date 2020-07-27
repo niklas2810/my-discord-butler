@@ -11,6 +11,7 @@ import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import javax.security.auth.login.LoginException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -27,21 +28,21 @@ public class Butler {
     private JDA jda;
     private ModuleManager moduleManager;
 
-    protected Butler() throws Exception {
+    protected Butler() throws LoginException {
         this(ExecutionFlags.NONE);
     }
 
-    protected Butler(String... flags) throws Exception {
+    protected Butler(String... flags) throws LoginException {
         this(Arrays.stream(flags)
                 .map(el -> ButlerUtils.parseInt(el, 0))
                 .toArray(Integer[]::new));
     }
 
-    protected Butler(Integer... flags) throws Exception {
+    protected Butler(Integer... flags) throws LoginException {
         this(ExecutionFlags.getFlagsById(flags));
     }
 
-    protected Butler(ExecutionFlags... flags) throws Exception {
+    protected Butler(ExecutionFlags... flags) throws LoginException {
         logger.info("Startup is in progress");
         this.flags = Collections.unmodifiableList(List.of(flags));
 
@@ -54,9 +55,7 @@ public class Butler {
             logger.info("JDA has been set up!");
         }
 
-        if (hasFlag(ExecutionFlags.NO_MODULE_MANAGER)) {
-            logger.warn("NO_MODULE_MANAGER: Commands won't work.");
-        } else {
+        if (!hasFlag(ExecutionFlags.NO_MODULE_MANAGER)) {
             moduleManager = new ModuleManager(this);
             moduleManager.loadAll();
             logger.info("Module manager has been set up!");
@@ -83,7 +82,7 @@ public class Butler {
      * @return The completely initialized JDA instance.
      * @throws Exception Will cause a shutdown + sentry log.
      */
-    private JDA setUpJda() throws Exception {
+    private JDA setUpJda() throws LoginException {
         final JDABuilder builder = JDABuilder.create(System.getenv("TOKEN_DISCORD"),
                 GatewayIntent.DIRECT_MESSAGES, GatewayIntent.DIRECT_MESSAGE_REACTIONS);
         builder.setActivity(Activity.of(Activity.ActivityType.WATCHING, "via direct messages"));
@@ -130,6 +129,7 @@ public class Butler {
                 e.printStackTrace();
             }
             logger.info("Initiating shutdown...");
+
             moduleManager.unloadAll();
             jda.shutdown();
             logger.info("The connection to the Discord API was shut down. Goodbye!");

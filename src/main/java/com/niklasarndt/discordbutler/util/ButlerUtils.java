@@ -8,6 +8,8 @@ import net.dv8tion.jda.api.entities.MessageEmbed;
  */
 public class ButlerUtils {
 
+    private ButlerUtils() {
+    }
 
     public static String prettyPrintTime(long ms) {
         StringBuilder builder = new StringBuilder();

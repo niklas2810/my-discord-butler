@@ -6,10 +6,15 @@ on:
   push:
     branches:
       - main
-      - development
     paths:
-      - src/**
+      - 'src/**'
+      - '**.xml'
+      - '**.yml'
   pull_request:
+    paths:
+      - 'src/**'
+      - '**.xml'
+      - '**.yml'
   workflow_dispatch:
 
 jobs:
