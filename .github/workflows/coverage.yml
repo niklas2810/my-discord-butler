@@ -1,3 +1,4 @@
+# https://github.com/paambaati/codeclimate-action#example-with-jacoco
 name: Publish Code Coverage
 
 on:
@@ -6,12 +7,27 @@ on:
       - main
     paths:
       - 'src/**'
+      - '**.xml'
+      - '**.yml'
 
 jobs:
   generate-coverage:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Checkout code
+          uses: actions/checkout@v2
+      - name: Set up JDK 14
+        uses: actions/setup-java@v1
+        with:
+          java-version: 14
+      - name: Restore Maven cache
+        uses: actions/cache@v2
+        with:
+          path: ~/.m2/repository
+          key: maven-${{ runner.os }}-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            maven-${{ runner.os }}-
       - name: Test & publish code coverage
         uses: paambaati/codeclimate-action@v2.6.0
         env:
