@@ -28,21 +28,21 @@ public class Butler {
     private JDA jda;
     private ModuleManager moduleManager;
 
-    protected Butler() throws Exception {
+    protected Butler() throws LoginException {
         this(ExecutionFlags.NONE);
     }
 
-    protected Butler(String... flags) throws Exception {
+    protected Butler(String... flags) throws LoginException {
         this(Arrays.stream(flags)
                 .map(el -> ButlerUtils.parseInt(el, 0))
                 .toArray(Integer[]::new));
     }
 
-    protected Butler(Integer... flags) throws Exception {
+    protected Butler(Integer... flags) throws LoginException {
         this(ExecutionFlags.getFlagsById(flags));
     }
 
-    protected Butler(ExecutionFlags... flags) throws Exception {
+    protected Butler(ExecutionFlags... flags) throws LoginException {
         logger.info("Startup is in progress");
         this.flags = Collections.unmodifiableList(List.of(flags));
 

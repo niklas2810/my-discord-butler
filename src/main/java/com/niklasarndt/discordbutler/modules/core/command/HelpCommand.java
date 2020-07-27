@@ -39,10 +39,20 @@ public class HelpCommand extends ButlerCommand {
             return;
         }
 
-        ButlerCommandInformation info = command.get().info();
+        EmbedBuilder embed = context.resultBuilder().useEmbed();
+        buildEmbedInfo(embed, command.get());
+    }
 
-        String aliases = info.getAliases().length == 0
-                ? "None" : String.join(", ", info.getAliases());
+    private void buildEmbedInfo(EmbedBuilder embed, ButlerCommand command) {
+        ButlerCommandInformation info = command.info();
+
+        embed.setTitle("Overview for command `" + info.getName() + "`");
+        embed.addField("Module", String.format("%s %s", command.module().info().getEmoji(),
+                command.module().info().getDisplayName()), false);
+        embed.addField("Description", info.getDescription(), false);
+
+        embed.addField("Aliases", info.getAliases().length == 0
+                ? "None" : String.join(", ", info.getAliases()), true);
 
         String args;
         if (info.getArgsMin() != info.getArgsMax()) { //Parameter range
@@ -50,13 +60,6 @@ public class HelpCommand extends ButlerCommand {
         } else { //Fixed parameter count
             args = info.getArgsMin() == 0 ? "None" : info.getArgsMin() + "";
         }
-
-        EmbedBuilder embed = context.resultBuilder().useEmbed();
-        embed.setTitle("Overview for command `" + info.getName() + "`");
-        embed.addField("Module", String.format("%s %s", command.get().module().info().getEmoji(),
-                command.get().module().info().getDisplayName()), false);
-        embed.addField("Description", info.getDescription(), false);
-        embed.addField("Aliases", aliases, true);
         embed.addField("Parameters", args, true);
     }
 
