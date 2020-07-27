@@ -21,7 +21,7 @@ public class Bootstrap {
         }
 
         try {
-            new Butler();
+            new Butler(args);
         } catch (Exception e) {
             logger.error("Encountered uncaught exception", e);
         }

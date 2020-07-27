@@ -2,6 +2,8 @@ package com.niklasarndt.discordbutler;
 
 import com.niklasarndt.discordbutler.listener.ApiConnected;
 import com.niklasarndt.discordbutler.listener.DirectMessageReceived;
+import com.niklasarndt.discordbutler.util.ButlerUtils;
+import com.niklasarndt.discordbutler.util.ExecutionFlags;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
@@ -9,6 +11,9 @@ import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Created by Niklas on 2020/07/24.
@@ -17,38 +22,59 @@ public class Butler {
 
     private final long startupTimestamp = System.currentTimeMillis();
     private final Logger logger = LoggerFactory.getLogger(getClass());
-    private final JDA jda;
-    private final long ownerId;
-
-    private final ModuleManager moduleManager;
+    private final List<ExecutionFlags> flags;
+    private long ownerId;
+    private JDA jda;
+    private ModuleManager moduleManager;
 
     protected Butler() throws Exception {
-        logger.info("Startup is in progress");
+        this(ExecutionFlags.NONE);
+    }
 
+    protected Butler(String... flags) throws Exception {
+        this(Arrays.stream(flags)
+                .map(el -> ButlerUtils.parseInt(el, 0))
+                .toArray(Integer[]::new));
+    }
+
+    protected Butler(Integer... flags) throws Exception {
+        this(ExecutionFlags.getFlagsById(flags));
+    }
+
+    protected Butler(ExecutionFlags... flags) throws Exception {
+        logger.info("Startup is in progress");
+        this.flags = Collections.unmodifiableList(List.of(flags));
+
+        loadOwnerId();
+
+        if (hasFlag(ExecutionFlags.NO_API_CONNECTION)) {
+            logger.warn("NO_API_CONNECTION: App will not be kept alive by daemon.");
+        } else {
+            jda = setUpJda();
+            logger.info("JDA has been set up!");
+        }
+
+        if (hasFlag(ExecutionFlags.NO_MODULE_MANAGER)) {
+            logger.warn("NO_MODULE_MANAGER: Commands won't work.");
+        } else {
+            moduleManager = new ModuleManager(this);
+            moduleManager.loadAll();
+            logger.info("Module manager has been set up!");
+        }
+
+        logger.info("SUCCESS: SETUP COMPLETE");
+        logger.info("EXEC FLAGS: {}", ExecutionFlags.prettyPrint(
+                this.flags.toArray(new ExecutionFlags[0])));
+    }
+
+    private void loadOwnerId() {
         try {
             ownerId = Long.parseLong(System.getenv("OWNER_ID"));
         } catch (Exception e) {
             throw new IllegalArgumentException(
                     "You must provide the owner's Discord ID via OWNER_ID.");
         }
-        logger.info("Owner ID has been stored.");
-
-        jda = setUpJda();
-        logger.info("JDA has been set up!");
-
-        moduleManager = new ModuleManager(this);
-        moduleManager.loadAll();
-        logger.info("Module manager has been set up!");
-
-        logger.info("SUCCESS: SETUP COMPLETE");
-    }
-
-    public JDA getJda() {
-        return jda;
-    }
-
-    public long getOwnerId() {
-        return ownerId;
+        logger.info("Owner ID has been retrieved.");
     }
 
     /**
@@ -67,12 +93,32 @@ public class Butler {
         return builder.build();
     }
 
+    public JDA getJda() {
+        return jda;
+    }
+
+    public long getOwnerId() {
+        return ownerId;
+    }
+
     public long getStartupTimestamp() {
         return startupTimestamp;
     }
 
     public ModuleManager getModuleManager() {
         return moduleManager;
+    }
+
+    public List<ExecutionFlags> getFlags() {
+        return flags;
+    }
+
+    public boolean hasFlag(int flagId) {
+        return hasFlag(ExecutionFlags.getFlagById(flagId));
+    }
+
+    public boolean hasFlag(ExecutionFlags flag) {
+        return flags.contains(flag);
     }
 
     public void shutdown(int exitCode) {
