@@ -3,6 +3,7 @@ package com.niklasarndt.discordbutler;
 import io.sentry.Sentry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import java.util.Optional;
 
 /**
  * Created by Niklas on 2020/07/24.
@@ -29,7 +30,7 @@ public class Bootstrap {
     }
 
     private static String[] buildEnvironmentFlags(String[] args) {
-        String[] envs = System.getenv("EXECUTION_FLAGS").split(",");
+        String[] envs = Optional.of(System.getenv("EXECUTION_FLAGS")).orElse("").split(",");
         boolean oneOnly = envs.length == 0 || args.length == 0;
 
         String[] combined;
