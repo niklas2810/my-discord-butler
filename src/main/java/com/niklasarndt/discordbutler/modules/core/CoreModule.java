@@ -12,11 +12,4 @@ public class CoreModule extends ButlerModule {
         super(Emojis.TOOLS, "core", "Core Functionality",
                 "All basic features are implemented in this module.", "1.0");
     }
-
-    @Override
-    public void onStartup() {
-        loadCommandsFromDefaultPackage(this);
-    }
-
-
 }

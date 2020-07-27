@@ -11,9 +11,4 @@ public class FunModule extends ButlerModule {
         super(Emojis.PARTYING_FACE, "fun", "Funny Features",
                 "You don't really need this module, but it has some entertaining features.", "1.0");
     }
-
-    @Override
-    public void onStartup() {
-        loadCommandsFromDefaultPackage(this);
-    }
 }

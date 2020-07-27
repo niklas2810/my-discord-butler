@@ -49,9 +49,8 @@ public class ModuleManager {
     }
 
     public void unloadAll() {
-        for (ButlerModule module : modules) {
-            unregisterModule(module);
-        }
+        modules.forEach(mod -> unregisterModule(mod, false));
+        modules.clear();
         logger.info("Unloaded all modules.");
     }
 
@@ -70,10 +69,14 @@ public class ModuleManager {
     }
 
     public void unregisterModule(ButlerModule module) {
+        unregisterModule(module, true);
+    }
+
+    public void unregisterModule(ButlerModule module, boolean removeFromList) {
         if (module == null || !hasModule(module)) return;
 
         module.onShutdown();
-        modules.remove(module);
+        if (removeFromList) modules.remove(module);
     }
 
     private boolean hasModule(String name) {
@@ -85,7 +88,11 @@ public class ModuleManager {
     }
 
     public ResultBuilder execute(Message message) {
-        String[] parts = message.getContentRaw().split(" ");
+        return execute(message.getContentRaw(), message);
+    }
+
+    public ResultBuilder execute(String content, Message origin) {
+        String[] parts = content.split(" ");
         String name = parts[0].toLowerCase();
         String[] args = Arrays.copyOfRange(parts, 1, parts.length);
 
@@ -95,7 +102,7 @@ public class ModuleManager {
         if (command.isPresent()) {
             ButlerCommand cmd = command.get();
 
-            ButlerContext context = new ButlerContext(instance, message, name, args,
+            ButlerContext context = new ButlerContext(instance, origin, name, args,
                     new ResultBuilder(command.get().module().info()));
 
             if (args.length < cmd.info().getArgsMin() || args.length > cmd.info().getArgsMax()) {
