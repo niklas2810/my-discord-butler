@@ -10,7 +10,7 @@
     <br>
 </div>
 
-A discord bot which for personal use.
+A discord bot for personal use.
 Feel free to fork and alter the code to create features
 that you need.
 
