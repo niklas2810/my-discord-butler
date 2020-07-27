@@ -7,7 +7,8 @@ import com.niklasarndt.discordbutler.util.Emojis;
  */
 public enum ResultType {
     SUCCESS(Emojis.WHITE_CHECK_MARK), ERROR(Emojis.X),
-    NOT_FOUND(Emojis.QUESTION_MARK), UNAUTHORIZED(Emojis.LOCK);
+    NOT_FOUND(Emojis.QUESTION_MARK), UNAUTHORIZED(Emojis.LOCK),
+    WARNING(Emojis.WARNING);
 
     public final String emoji;
 

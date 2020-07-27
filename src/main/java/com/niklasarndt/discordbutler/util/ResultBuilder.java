@@ -124,4 +124,13 @@ public class ResultBuilder {
     public void notFound(String output, Object... args) {
         notFound(String.format(output, args));
     }
+
+    public void warn(String output) {
+        this.type = ResultType.WARNING;
+        this.output = output;
+    }
+
+    public void warn(String output, Object... args) {
+        warn(String.format(output, args));
+    }
 }
