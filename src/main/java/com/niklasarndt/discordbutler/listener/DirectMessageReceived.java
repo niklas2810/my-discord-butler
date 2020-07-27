@@ -33,6 +33,10 @@ public class DirectMessageReceived extends ListenerAdapter {
             return;
         }
 
+        handleCommand(event);
+    }
+
+    private void handleCommand(PrivateMessageReceivedEvent event) {
         ResultBuilder result = butler.getModuleManager().execute(event.getMessage());
 
         if (result.hasOutput()) {
