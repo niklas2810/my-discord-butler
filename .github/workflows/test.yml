@@ -3,13 +3,6 @@
 name: Unit Testing
 
 on:
-  push:
-    branches:
-      - main
-    paths:
-      - 'src/**'
-      - '**.xml'
-      - '**.yml'
   pull_request:
     paths:
       - 'src/**'
