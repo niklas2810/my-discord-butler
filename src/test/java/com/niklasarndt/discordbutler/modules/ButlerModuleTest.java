@@ -16,7 +16,7 @@ class ButlerModuleTest extends ButlerTest {
     public void testModuleInitialization() {
         ButlerModule module = new FakeModule();
         module.onStartup();
-        assertEquals(1, module.getCommandCount());
+        assertEquals(2, module.getCommandCount());
 
         Optional<ButlerCommand> cmd = module.getCommand("fake");
         assertTrue(cmd.isPresent());
