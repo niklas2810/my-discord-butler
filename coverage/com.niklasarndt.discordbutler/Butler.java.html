@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Butler.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">MyDiscordButler</a> &gt; <a href="index.source.html" class="el_package">com.niklasarndt.discordbutler</a> &gt; <span class="el_source">Butler.java</span></div><h1>Butler.java</h1><pre class="source lang-java linenums">package com.niklasarndt.discordbutler;
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Butler.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">my-discord-butler</a> &gt; <a href="index.source.html" class="el_package">com.niklasarndt.discordbutler</a> &gt; <span class="el_source">Butler.java</span></div><h1>Butler.java</h1><pre class="source lang-java linenums">package com.niklasarndt.discordbutler;
 
 import com.niklasarndt.discordbutler.listener.ApiConnected;
 import com.niklasarndt.discordbutler.listener.DirectMessageReceived;
@@ -80,61 +80,62 @@ public class Butler {
      * Sets up the JDA instance.
      *
      * @return The completely initialized JDA instance.
-     * @throws Exception Will cause a shutdown + sentry log.
+     *
+     * @throws LoginException Will cause a shutdown + sentry log.
      */
     private JDA setUpJda() throws LoginException {
-<span class="nc" id="L86">        final JDABuilder builder = JDABuilder.create(System.getenv(&quot;TOKEN_DISCORD&quot;),</span>
+<span class="nc" id="L87">        final JDABuilder builder = JDABuilder.create(System.getenv(&quot;TOKEN_DISCORD&quot;),</span>
                 GatewayIntent.DIRECT_MESSAGES, GatewayIntent.DIRECT_MESSAGE_REACTIONS);
-<span class="nc" id="L88">        builder.setActivity(Activity.of(Activity.ActivityType.WATCHING, &quot;via direct messages&quot;));</span>
-<span class="nc" id="L89">        builder.addEventListeners(new ApiConnected(this), new DirectMessageReceived(this));</span>
-<span class="nc" id="L90">        builder.disableCache(CacheFlag.ACTIVITY, CacheFlag.VOICE_STATE,</span>
+<span class="nc" id="L89">        builder.setActivity(Activity.of(Activity.ActivityType.WATCHING, &quot;via direct messages&quot;));</span>
+<span class="nc" id="L90">        builder.addEventListeners(new ApiConnected(this), new DirectMessageReceived(this));</span>
+<span class="nc" id="L91">        builder.disableCache(CacheFlag.ACTIVITY, CacheFlag.VOICE_STATE,</span>
                 CacheFlag.EMOTE, CacheFlag.CLIENT_STATUS);
-<span class="nc" id="L92">        return builder.build();</span>
+<span class="nc" id="L93">        return builder.build();</span>
     }
 
     public JDA getJda() {
-<span class="fc" id="L96">        return jda;</span>
+<span class="fc" id="L97">        return jda;</span>
     }
 
     public long getOwnerId() {
-<span class="fc" id="L100">        return ownerId;</span>
+<span class="fc" id="L101">        return ownerId;</span>
     }
 
     public long getStartupTimestamp() {
-<span class="fc" id="L104">        return startupTimestamp;</span>
+<span class="fc" id="L105">        return startupTimestamp;</span>
     }
 
     public ModuleManager getModuleManager() {
-<span class="fc" id="L108">        return moduleManager;</span>
+<span class="fc" id="L109">        return moduleManager;</span>
     }
 
     public List&lt;ExecutionFlags&gt; getFlags() {
-<span class="fc" id="L112">        return flags;</span>
+<span class="fc" id="L113">        return flags;</span>
     }
 
     public boolean hasFlag(int flagId) {
-<span class="fc" id="L116">        return hasFlag(ExecutionFlags.getFlagById(flagId));</span>
+<span class="fc" id="L117">        return hasFlag(ExecutionFlags.getFlagById(flagId));</span>
     }
 
     public boolean hasFlag(ExecutionFlags flag) {
-<span class="fc" id="L120">        return flags.contains(flag);</span>
+<span class="fc" id="L121">        return flags.contains(flag);</span>
     }
 
     public void shutdown(int exitCode) {
-<span class="nc" id="L124">        new Thread(null, () -&gt; {</span>
-<span class="nc" id="L125">            logger.info(&quot;Shutdown in 5 seconds!&quot;);</span>
+<span class="nc" id="L125">        new Thread(null, () -&gt; {</span>
+<span class="nc" id="L126">            logger.info(&quot;Shutdown in 5 seconds!&quot;);</span>
             try {
-<span class="nc" id="L127">                Thread.sleep(5000);</span>
-<span class="nc" id="L128">            } catch (InterruptedException e) {</span>
-<span class="nc" id="L129">                e.printStackTrace();</span>
-<span class="nc" id="L130">            }</span>
-<span class="nc" id="L131">            logger.info(&quot;Initiating shutdown...&quot;);</span>
+<span class="nc" id="L128">                Thread.sleep(5000);</span>
+<span class="nc" id="L129">            } catch (InterruptedException e) {</span>
+<span class="nc" id="L130">                e.printStackTrace();</span>
+<span class="nc" id="L131">            }</span>
+<span class="nc" id="L132">            logger.info(&quot;Initiating shutdown...&quot;);</span>
 
-<span class="nc" id="L133">            moduleManager.unloadAll();</span>
-<span class="nc" id="L134">            jda.shutdown();</span>
-<span class="nc" id="L135">            logger.info(&quot;The connection to the Discord API was shut down. Goodbye!&quot;);</span>
-<span class="nc" id="L136">            System.exit(exitCode);</span>
-<span class="nc" id="L137">        }, &quot;terminator&quot;).start();</span>
-<span class="nc" id="L138">    }</span>
+<span class="nc" id="L134">            moduleManager.unloadAll();</span>
+<span class="nc" id="L135">            jda.shutdown();</span>
+<span class="nc" id="L136">            logger.info(&quot;The connection to the Discord API was shut down. Goodbye!&quot;);</span>
+<span class="nc" id="L137">            System.exit(exitCode);</span>
+<span class="nc" id="L138">        }, &quot;terminator&quot;).start();</span>
+<span class="nc" id="L139">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>
