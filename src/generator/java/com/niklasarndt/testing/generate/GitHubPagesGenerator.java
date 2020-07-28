@@ -15,7 +15,6 @@ public class GitHubPagesGenerator extends ButlerTest {
 
     private GitHubPagesGenerator() throws IOException {
         File dir = new File(System.getProperty("user.dir"));
-        String title = dir.getName();
         File targetDir = new File(dir, "target");
         File compiledDir = new File(targetDir, "classes");
         File pagesDir = new File(targetDir, "gh-pages");
@@ -30,10 +29,10 @@ public class GitHubPagesGenerator extends ButlerTest {
 
         ExecFileLoader execFileLoader = new ExecFileLoader();
         execFileLoader.load(execDataFile);
-        IBundleCoverage coverage = analyzeStructure(title, execFileLoader, compiledDir);
+        IBundleCoverage coverage = analyzeStructure(dir.getName(), execFileLoader, compiledDir);
 
 
-        GeneratorContext context = new GeneratorContext(dir, title, execDataFile, sourceDir,
+        GeneratorContext context = new GeneratorContext(dir, execDataFile, sourceDir,
                 targetDir, pagesDir, coverageDir, execFileLoader, coverage);
 
         new XmlGenerator(context).create();

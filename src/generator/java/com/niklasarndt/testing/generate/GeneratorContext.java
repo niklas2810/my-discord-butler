@@ -9,7 +9,6 @@ import java.io.File;
  */
 public class GeneratorContext {
     private final File dir;
-    private final String title;
     private final File execDataFile;
     private final File sourceDir;
     private final File targetDir;
@@ -18,11 +17,11 @@ public class GeneratorContext {
     private final ExecFileLoader execFileLoader;
     private final IBundleCoverage coverage;
 
-    public GeneratorContext(File dir, String title, File execDataFile,
+    public GeneratorContext(File dir, File execDataFile,
                             File sourceDir, File targetDir, File pagesDir,
-                            File coverageDir, ExecFileLoader execFileLoader, IBundleCoverage coverage) {
+                            File coverageDir, ExecFileLoader execFileLoader,
+                            IBundleCoverage coverage) {
         this.dir = dir;
-        this.title = title;
         this.execDataFile = execDataFile;
         this.sourceDir = sourceDir;
         this.targetDir = targetDir;
@@ -37,7 +36,7 @@ public class GeneratorContext {
     }
 
     public String getTitle() {
-        return title;
+        return dir.getName();
     }
 
     public File getExecDataFile() {

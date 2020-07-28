@@ -34,15 +34,14 @@ public class CustomResources {
             outFile.createNewFile();
         }
 
-        final InputStream in = getResourceAsStream(String.format("%s/%s", path, name));
-        final OutputStream out = new FileOutputStream(outFile);
-        final byte[] buffer = new byte[256];
-        int len;
-        while ((len = in.read(buffer)) != -1) {
-            out.write(buffer, 0, len);
+        try (final InputStream in = getResourceAsStream(String.format("%s/%s", path, name));
+             final OutputStream out = new FileOutputStream(outFile)) {
+            final byte[] buffer = new byte[256];
+            int len;
+            while ((len = in.read(buffer)) != -1) {
+                out.write(buffer, 0, len);
+            }
         }
-        in.close();
-        out.close();
     }
 
     /**
