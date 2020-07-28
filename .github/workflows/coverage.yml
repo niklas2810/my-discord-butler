@@ -43,9 +43,9 @@ jobs:
           rm ${{github.workspace}}/target/site/jacoco/jacoco.csv
           rm ${{github.workspace}}/target/site/jacoco/jacoco.xml
       - name: 🚀 Deploy to GitHub Pages
-          uses: JamesIves/github-pages-deploy-action@3.5.9
-          with:
-            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-            BRANCH: gh-pages
-            FOLDER: target/site/jacoco
-            TARGET_FOLDER: coverage
+        uses: JamesIves/github-pages-deploy-action@3.5.9
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BRANCH: gh-pages
+          FOLDER: target/site/jacoco
+          TARGET_FOLDER: coverage
