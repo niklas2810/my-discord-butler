@@ -1,0 +1,20 @@
+name: Automatically assign Issues and Pull Requests
+
+on:
+  issues:
+    types: [opened]
+  pull_request:
+    types: [opened]
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  PROJECT_VERSION: 1
+
+jobs:
+  assign-project:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Assign to the latest version's project
+        uses: srggrs/assign-one-project-github-action@1.2.0
+        with:
+          project: 'https://github.com/niklas2810/my-discord-butler/projects/$PROJECT_VERSION'
