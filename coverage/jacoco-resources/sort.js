@@ -11,6 +11,17 @@
  *
  *******************************************************************************/
 
+ /*****************************
+ * This file originated in the Jacoco project itself.
+ * https://github.com/jacoco/jacoco/blob/master/org.jacoco.report/src/org/jacoco
+ * /report/internal/html/resources/sort.js
+ *
+ * This file was altered by Niklas Arndt (https://github.com/niklas2810) to create a different
+ * look-and-feel. I do not claim every part of this file as my own work.
+ *
+ * The original copyright license by Mountainminds GmbH & Co. KG and Contributors
+ * will be included in all altered files, as well as this notices.
+ *******************************/
 (function () {
 
   /**
@@ -21,6 +32,8 @@
    *          hash links
    */
   function initialSort(linkelementids) {
+    loadScript("custom.js");
+
     window.linkelementids = linkelementids;
     var hash = window.location.hash;
     if (hash) {
@@ -41,6 +54,55 @@
         return
       }
     }
+  }
+
+  /**
+   * Load a JavaScript file from an external source.
+   * @param {*} url The url of the script
+   */
+  function loadScript(url) {
+
+    var resourceScript = document.createElement("script");
+    resourceScript.innerHTML = `
+    function endsWidth(str, suffix) {
+        return str.match(suffix+"$")==suffix;
+    }
+
+
+    function getResourcePath() {
+        String.prototype.endsWith = function(suffix) {
+            return this.indexOf(suffix, this.length - suffix.length) !== -1;
+        };
+        var path = window.location.pathname;
+        var parts = path.split("/");
+        parts.pop();
+        var last = parts.pop();
+        if(last === undefined || last.split(".").length < 3) { //This should be the index site
+          return path.replace("index.html", "").replace("jacoco-sessions.html", "")
+          +"jacoco-resources/";
+        }
+        //Is in subfolder
+        var parts = path.split("/");
+        parts.pop();
+        parts.pop();
+
+        return parts.join("/")+"/jacoco-resources/";
+   }
+
+   function getResourcePathWithOrigin() {
+        if(window.location.protocol === "file:") return "file://"+getResourcePath();
+        return window.location.origin+getResourcePath();
+   }
+   `;
+    document.body.appendChild(resourceScript);
+
+    var script = document.createElement("script"); // create a script DOM node
+    var loc = getResourcePath() + url;
+    console.log("Location:", loc);
+    script.src = loc; // set its src to the provided URL
+    console.log("Source path: ", script.src);
+
+    document.body.appendChild(script);
   }
 
   /**
@@ -94,7 +156,7 @@
     window.document.location.hash = hash;
     ids = window.linkelementids;
     for (var i = 0; i < ids.length; i++) {
-        setHashOnAllLinks(document.getElementById(ids[i]), hash);
+      setHashOnAllLinks(document.getElementById(ids[i]), hash);
     }
   }
 
@@ -104,13 +166,13 @@
   function setHashOnAllLinks(tag, hash) {
     links = tag.getElementsByTagName("a");
     for (var i = 0; i < links.length; i++) {
-        var a = links[i];
-        var href = a.href;
-        var hashpos = href.indexOf("#");
-        if (hashpos != -1) {
-            href = href.substring(0, hashpos);
-        }
-        a.href = href + "#" + hash;
+      var a = links[i];
+      var href = a.href;
+      var hashpos = href.indexOf("#");
+      if (hashpos != -1) {
+        href = href.substring(0, hashpos);
+      }
+      a.href = href + "#" + hash;
     }
   }
 

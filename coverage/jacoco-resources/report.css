@@ -1,85 +1,113 @@
-body, td {
-  font-family:sans-serif;
-  font-size:10pt;
+/*******************************************************************************
+ * Copyright (c) 2009, 2018 Mountainminds GmbH & Co. KG and Contributors
+ * This program and the accompanying materials are made available under
+ * the terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0
+ *
+ * SPDX-License-Identifier: EPL-2.0
+ *
+ * Contributors:
+ *    Marc R. Hoffmann - initial API and implementation
+ *
+ *******************************************************************************/
+
+ /*****************************
+ * This file originated in the Jacoco project itself.
+ * https://github.com/jacoco/jacoco/blob/master/org.jacoco.report/src/org/jacoco/report
+ * /internal/html/resources/report.css
+ *
+ * This file was altered by Niklas Arndt (https://github.com/niklas2810) to create a different
+ * look-and-feel. I do not claim every part of this file as my own work.
+ *
+ * The original copyright license by Mountainminds GmbH & Co. KG and Contributors
+ * will be included in all altered files, as well as this notices.
+ *******************************/
+
+body,
+td {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 10pt;
+
+  --bar-radius: 5;
 }
 
 h1 {
-  font-weight:bold;
-  font-size:18pt;
+  font-weight: bold;
+  font-size: 18pt;
 }
 
 .breadcrumb {
-  border:#d6d3ce 1px solid;
-  padding:2px 4px 2px 4px;
+  border: #d6d3ce 1px solid;
+  padding: 2px 4px 2px 4px;
 }
 
 .breadcrumb .info {
-  float:right;
+  float: right;
 }
 
 .breadcrumb .info a {
-  margin-left:8px;
+  margin-left: 8px;
 }
 
 .el_report {
-  padding-left:18px;
-  background-image:url(report.gif);
-  background-position:left center;
-  background-repeat:no-repeat;
+  padding-left: 18px;
+  background-image: url(report.gif);
+  background-position: left center;
+  background-repeat: no-repeat;
 }
 
 .el_group {
-  padding-left:18px;
-  background-image:url(group.gif);
-  background-position:left center;
-  background-repeat:no-repeat;
+  padding-left: 18px;
+  background-image: url(group.gif);
+  background-position: left center;
+  background-repeat: no-repeat;
 }
 
 .el_bundle {
-  padding-left:18px;
-  background-image:url(bundle.gif);
-  background-position:left center;
-  background-repeat:no-repeat;
+  padding-left: 18px;
+  background-image: url(bundle.gif);
+  background-position: left center;
+  background-repeat: no-repeat;
 }
 
 .el_package {
-  padding-left:18px;
-  background-image:url(package.gif);
-  background-position:left center;
-  background-repeat:no-repeat;
+  padding-left: 18px;
+  background-image: url(package.gif);
+  background-position: left center;
+  background-repeat: no-repeat;
 }
 
 .el_class {
-  padding-left:18px;
-  background-image:url(class.gif);
-  background-position:left center;
-  background-repeat:no-repeat;
+  padding-left: 18px;
+  background-image: url(class.gif);
+  background-position: left center;
+  background-repeat: no-repeat;
 }
 
 .el_source {
-  padding-left:18px;
-  background-image:url(source.gif);
-  background-position:left center;
-  background-repeat:no-repeat;
+  padding-left: 18px;
+  background-image: url(source.gif);
+  background-position: left center;
+  background-repeat: no-repeat;
 }
 
 .el_method {
-  padding-left:18px;
-  background-image:url(method.gif);
-  background-position:left center;
-  background-repeat:no-repeat;
+  padding-left: 18px;
+  background-image: url(method.gif);
+  background-position: left center;
+  background-repeat: no-repeat;
 }
 
 .el_session {
-  padding-left:18px;
-  background-image:url(session.gif);
-  background-position:left center;
-  background-repeat:no-repeat;
+  padding-left: 18px;
+  background-image: url(session.gif);
+  background-position: left center;
+  background-repeat: no-repeat;
 }
 
 pre.source {
-  border:#d6d3ce 1px solid;
-  font-family:monospace;
+  border: #d6d3ce 1px solid;
+  font-family: monospace;
 }
 
 pre.source ol {
@@ -94,15 +122,15 @@ pre.source li {
 }
 
 pre.source span.fc {
-  background-color:#ccffcc;
+  background-color: #ccffcc;
 }
 
 pre.source span.nc {
-  background-color:#ffaaaa;
+  background-color: #ffaaaa;
 }
 
 pre.source span.pc {
-  background-color:#ffffcc;
+  background-color: #ffffcc;
 }
 
 pre.source span.bfc {
@@ -112,7 +140,7 @@ pre.source span.bfc {
 }
 
 pre.source span.bfc:hover {
-  background-color:#80ff80;
+  background-color: #80ff80;
 }
 
 pre.source span.bnc {
@@ -122,7 +150,7 @@ pre.source span.bnc {
 }
 
 pre.source span.bnc:hover {
-  background-color:#ff8080;
+  background-color: #ff8080;
 }
 
 pre.source span.bpc {
@@ -132,57 +160,62 @@ pre.source span.bpc {
 }
 
 pre.source span.bpc:hover {
-  background-color:#ffff80;
+  background-color: #ffff80;
 }
 
 table.coverage {
-  empty-cells:show;
-  border-collapse:collapse;
+  empty-cells: show;
+  border-collapse: collapse;
 }
 
 table.coverage thead {
-  background-color:#e0e0e0;
+  background-color: #e0e0e0;
 }
 
 table.coverage thead td {
-  white-space:nowrap;
-  padding:2px 14px 0px 6px;
-  border-bottom:#b0b0b0 1px solid;
+  white-space: nowrap;
+  padding: 2px 14px 0px 6px;
+  border-bottom: #b0b0b0 1px solid;
 }
 
 table.coverage thead td.bar {
-  border-left:#cccccc 1px solid;
+  border-left: #cccccc 1px solid;
 }
 
 table.coverage thead td.ctr1 {
-  text-align:right;
-  border-left:#cccccc 1px solid;
+  text-align: right;
+  border-left: #cccccc 1px solid;
 }
 
 table.coverage thead td.ctr2 {
-  text-align:right;
-  padding-left:2px;
+  text-align: right;
+  padding-left: 2px;
 }
 
 table.coverage thead td.sortable {
-  cursor:pointer;
-  background-image:url(sort.gif);
-  background-position:right center;
-  background-repeat:no-repeat;
+  cursor: pointer;
+  background-image: url(sort.gif);
+  background-position: right center;
+  background-repeat: no-repeat;
 }
 
 table.coverage thead td.up {
-  background-image:url(up.gif);
+  background-image: url(up.gif);
 }
 
 table.coverage thead td.down {
-  background-image:url(down.gif);
+  background-image: url(down.gif);
 }
 
 table.coverage tbody td {
-  white-space:nowrap;
-  padding:2px 6px 2px 6px;
-  border-bottom:#d6d3ce 1px solid;
+  white-space: nowrap;
+  padding: 2px 6px 2px 6px;
+  border-bottom: #d6d3ce 1px solid;
+}
+
+table.coverage a {
+  color: black;
+  text-decoration: none;
 }
 
 table.coverage tbody tr:hover {
@@ -190,54 +223,69 @@ table.coverage tbody tr:hover {
 }
 
 table.coverage tbody td.bar {
-  border-left:#e8e8e8 1px solid;
+  border-left: #e8e8e8 1px solid;
+  border-radius: 50%;
+}
+
+table.coverage tbody td.bar img:first-child {
+  border-top-left-radius: var(--bar-radius);
+  border-bottom-left-radius: var(--bar-radius);
+}
+
+table.coverage tbody td.bar img {
+  color: transparent; /*Hide alt text*/
+}
+
+table.coverage tbody td.bar img:last-child {
+  border-top-right-radius: var(--bar-radius);
+  border-bottom-right-radius: var(--bar-radius);
 }
 
 table.coverage tbody td.ctr1 {
-  text-align:right;
-  padding-right:14px;
-  border-left:#e8e8e8 1px solid;
+  text-align: right;
+  padding-right: 14px;
+  border-left: #e8e8e8 1px solid;
 }
 
 table.coverage tbody td.ctr2 {
-  text-align:right;
-  padding-right:14px;
-  padding-left:2px;
+  text-align: right;
+  padding-right: 14px;
+  padding-left: 2px;
 }
 
 table.coverage tfoot td {
-  white-space:nowrap;
-  padding:2px 6px 2px 6px;
+  white-space: nowrap;
+  padding: 2px 6px 2px 6px;
 }
 
 table.coverage tfoot td.bar {
-  border-left:#e8e8e8 1px solid;
+  border-left: #e8e8e8 1px solid;
 }
 
 table.coverage tfoot td.ctr1 {
-  text-align:right;
-  padding-right:14px;
-  border-left:#e8e8e8 1px solid;
+  text-align: right;
+  padding-right: 14px;
+  border-left: #e8e8e8 1px solid;
 }
 
 table.coverage tfoot td.ctr2 {
-  text-align:right;
-  padding-right:14px;
-  padding-left:2px;
+  text-align: right;
+  padding-right: 14px;
+  padding-left: 2px;
 }
 
 .footer {
-  margin-top:20px;
-  border-top:#d6d3ce 1px solid;
-  padding-top:2px;
-  font-size:8pt;
-  color:#a0a0a0;
+  margin-top: 20px;
+  border-top: #d6d3ce 1px solid;
+  padding-top: 2px;
+  font-size: 8pt;
+  color: #a0a0a0;
 }
 
 .footer a {
-  color:#a0a0a0;
+  color: #a0a0a0;
 }
 
 .right {
-  float:right;
+  float: right;
 }
