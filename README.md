@@ -76,6 +76,7 @@ Dependencies:
 - [Reflections by ronmamo](https://github.com/ronmamo/reflections)
 - [emoji-java by Vincent Durmont](https://github.com/vdurmont/emoji-java)
 
-Dependencies (Testing only):
+Dependencies (not at runtime):
 
-- [JUnit5](https://github.com/junit-team/junit5)
+- [JUnit5 for unit tests](https://github.com/junit-team/junit5)
+- [Jacoco for code coverage](https://github.com/jacoco/jacoco)
