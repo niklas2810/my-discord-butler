@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ButlerModule.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">MyDiscordButler</a> &gt; <a href="index.source.html" class="el_package">com.niklasarndt.discordbutler.modules</a> &gt; <span class="el_source">ButlerModule.java</span></div><h1>ButlerModule.java</h1><pre class="source lang-java linenums">package com.niklasarndt.discordbutler.modules;
+
+import org.reflections.Reflections;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+
+/**
+ * Created by Niklas on 2020/07/25.
+ */
+public abstract class ButlerModule {
+
+<span class="fc" id="L17">    private static final Logger logger = LoggerFactory.getLogger(ButlerModule.class);</span>
+
+    private final ButlerModuleInformation info;
+<span class="fc" id="L20">    private final List&lt;ButlerCommand&gt; commands = new ArrayList&lt;&gt;();</span>
+
+    public ButlerModule(String emoji, String name, String displayName,
+<span class="fc" id="L23">                        String description, String version) {</span>
+<span class="fc" id="L24">        this.info = new ButlerModuleInformation(emoji, name, displayName, description, version);</span>
+<span class="fc" id="L25">    }</span>
+
+    public void onStartup() {
+<span class="fc" id="L28">        loadCommandsFromDefaultPackage(this);</span>
+<span class="fc" id="L29">    }</span>
+
+    public void onShutdown() {
+<span class="fc" id="L32">    }</span>
+
+    public final void loadCommands(ButlerCommand... commands) {
+<span class="nc" id="L35">        this.commands.addAll(Arrays.asList(commands));</span>
+<span class="nc" id="L36">    }</span>
+
+    public final void loadCommandsFromDefaultPackage(ButlerModule instance) {
+<span class="fc" id="L39">        loadCommandsFromPackage(instance.getClass().getPackageName() + &quot;.command&quot;);</span>
+<span class="fc" id="L40">    }</span>
+
+    public final void loadCommandsFromPackage(String packagePath) {
+<span class="fc" id="L43">        final Set&lt;Class&lt;? extends ButlerCommand&gt;&gt; classes = new Reflections(packagePath)</span>
+<span class="fc" id="L44">                .getSubTypesOf(ButlerCommand.class);</span>
+
+<span class="fc" id="L46">        classes.forEach(item -&gt; {</span>
+            try {
+<span class="fc" id="L48">                final ButlerCommand cmd = item.getDeclaredConstructor().newInstance();</span>
+<span class="fc" id="L49">                cmd.setModule(this);</span>
+<span class="fc" id="L50">                this.commands.add(cmd);</span>
+<span class="nc" id="L51">            } catch (Exception e) {</span>
+<span class="nc" id="L52">                logger.error(&quot;Unable to register module \&quot;{}\&quot;&quot;, item.getSimpleName(), e);</span>
+<span class="fc" id="L53">            }</span>
+<span class="fc" id="L54">        });</span>
+<span class="fc" id="L55">    }</span>
+
+    public final List&lt;ButlerCommand&gt; getCommands() {
+<span class="fc" id="L58">        return commands;</span>
+    }
+
+    public final int getCommandCount() {
+<span class="fc" id="L62">        return commands.size();</span>
+    }
+
+    public final ButlerModuleInformation info() {
+<span class="fc" id="L66">        return info;</span>
+    }
+
+    public final Optional&lt;ButlerCommand&gt; getCommand(String name) {
+<span class="fc" id="L70">        return getCommands().stream().filter(</span>
+<span class="pc bpc" id="L71" title="1 of 4 branches missed.">                cmd -&gt; cmd.info().getName().equals(name) || cmd.info().hasAlias(name)).findFirst();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

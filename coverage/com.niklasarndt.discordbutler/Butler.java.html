@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Butler.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">MyDiscordButler</a> &gt; <a href="index.source.html" class="el_package">com.niklasarndt.discordbutler</a> &gt; <span class="el_source">Butler.java</span></div><h1>Butler.java</h1><pre class="source lang-java linenums">package com.niklasarndt.discordbutler;
+
+import com.niklasarndt.discordbutler.listener.ApiConnected;
+import com.niklasarndt.discordbutler.listener.DirectMessageReceived;
+import com.niklasarndt.discordbutler.util.ButlerUtils;
+import com.niklasarndt.discordbutler.util.ExecutionFlags;
+import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.JDABuilder;
+import net.dv8tion.jda.api.entities.Activity;
+import net.dv8tion.jda.api.requests.GatewayIntent;
+import net.dv8tion.jda.api.utils.cache.CacheFlag;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import javax.security.auth.login.LoginException;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
+/**
+ * Created by Niklas on 2020/07/24.
+ */
+public class Butler {
+
+<span class="fc" id="L24">    private final long startupTimestamp = System.currentTimeMillis();</span>
+<span class="fc" id="L25">    private final Logger logger = LoggerFactory.getLogger(getClass());</span>
+    private final List&lt;ExecutionFlags&gt; flags;
+    private long ownerId;
+    private JDA jda;
+    private ModuleManager moduleManager;
+
+    protected Butler() throws LoginException {
+<span class="nc" id="L32">        this(ExecutionFlags.NONE);</span>
+<span class="nc" id="L33">    }</span>
+
+    protected Butler(String... flags) throws LoginException {
+<span class="fc" id="L36">        this(Arrays.stream(flags)</span>
+<span class="fc" id="L37">                .map(el -&gt; ButlerUtils.parseInt(el, 0))</span>
+<span class="fc" id="L38">                .toArray(Integer[]::new));</span>
+<span class="fc" id="L39">    }</span>
+
+    protected Butler(Integer... flags) throws LoginException {
+<span class="fc" id="L42">        this(ExecutionFlags.getFlagsById(flags));</span>
+<span class="fc" id="L43">    }</span>
+
+<span class="fc" id="L45">    protected Butler(ExecutionFlags... flags) throws LoginException {</span>
+<span class="fc" id="L46">        logger.info(&quot;Startup is in progress&quot;);</span>
+<span class="fc" id="L47">        this.flags = Collections.unmodifiableList(List.of(flags));</span>
+
+
+<span class="pc bpc" id="L50" title="1 of 2 branches missed.">        if (hasFlag(ExecutionFlags.NO_API_CONNECTION)) {</span>
+<span class="fc" id="L51">            logger.warn(&quot;NO_API_CONNECTION: App will not be kept alive by daemon.&quot;);</span>
+        } else {
+<span class="nc" id="L53">            loadOwnerId();</span>
+<span class="nc" id="L54">            jda = setUpJda();</span>
+<span class="nc" id="L55">            logger.info(&quot;JDA has been set up!&quot;);</span>
+        }
+
+<span class="pc bpc" id="L58" title="1 of 2 branches missed.">        if (!hasFlag(ExecutionFlags.NO_MODULE_MANAGER)) {</span>
+<span class="fc" id="L59">            moduleManager = new ModuleManager(this);</span>
+<span class="fc" id="L60">            moduleManager.loadAll();</span>
+<span class="fc" id="L61">            logger.info(&quot;Module manager has been set up!&quot;);</span>
+        }
+
+<span class="fc" id="L64">        logger.info(&quot;SUCCESS: SETUP COMPLETE&quot;);</span>
+<span class="fc" id="L65">        logger.info(&quot;EXEC FLAGS: {}&quot;, ExecutionFlags.prettyPrint(</span>
+<span class="fc" id="L66">                this.flags.toArray(new ExecutionFlags[0])));</span>
+<span class="fc" id="L67">    }</span>
+
+    private void loadOwnerId() {
+        try {
+<span class="nc" id="L71">            ownerId = Long.parseLong(System.getenv(&quot;OWNER_ID&quot;));</span>
+<span class="nc" id="L72">        } catch (Exception e) {</span>
+<span class="nc" id="L73">            throw new IllegalArgumentException(</span>
+                    &quot;You must provide the owner's Discord ID via OWNER_ID.&quot;);
+<span class="nc" id="L75">        }</span>
+<span class="nc" id="L76">        logger.info(&quot;Owner ID has been retrieved.&quot;);</span>
+<span class="nc" id="L77">    }</span>
+
+    /**
+     * Sets up the JDA instance.
+     *
+     * @return The completely initialized JDA instance.
+     * @throws Exception Will cause a shutdown + sentry log.
+     */
+    private JDA setUpJda() throws LoginException {
+<span class="nc" id="L86">        final JDABuilder builder = JDABuilder.create(System.getenv(&quot;TOKEN_DISCORD&quot;),</span>
+                GatewayIntent.DIRECT_MESSAGES, GatewayIntent.DIRECT_MESSAGE_REACTIONS);
+<span class="nc" id="L88">        builder.setActivity(Activity.of(Activity.ActivityType.WATCHING, &quot;via direct messages&quot;));</span>
+<span class="nc" id="L89">        builder.addEventListeners(new ApiConnected(this), new DirectMessageReceived(this));</span>
+<span class="nc" id="L90">        builder.disableCache(CacheFlag.ACTIVITY, CacheFlag.VOICE_STATE,</span>
+                CacheFlag.EMOTE, CacheFlag.CLIENT_STATUS);
+<span class="nc" id="L92">        return builder.build();</span>
+    }
+
+    public JDA getJda() {
+<span class="fc" id="L96">        return jda;</span>
+    }
+
+    public long getOwnerId() {
+<span class="fc" id="L100">        return ownerId;</span>
+    }
+
+    public long getStartupTimestamp() {
+<span class="fc" id="L104">        return startupTimestamp;</span>
+    }
+
+    public ModuleManager getModuleManager() {
+<span class="fc" id="L108">        return moduleManager;</span>
+    }
+
+    public List&lt;ExecutionFlags&gt; getFlags() {
+<span class="fc" id="L112">        return flags;</span>
+    }
+
+    public boolean hasFlag(int flagId) {
+<span class="fc" id="L116">        return hasFlag(ExecutionFlags.getFlagById(flagId));</span>
+    }
+
+    public boolean hasFlag(ExecutionFlags flag) {
+<span class="fc" id="L120">        return flags.contains(flag);</span>
+    }
+
+    public void shutdown(int exitCode) {
+<span class="nc" id="L124">        new Thread(null, () -&gt; {</span>
+<span class="nc" id="L125">            logger.info(&quot;Shutdown in 5 seconds!&quot;);</span>
+            try {
+<span class="nc" id="L127">                Thread.sleep(5000);</span>
+<span class="nc" id="L128">            } catch (InterruptedException e) {</span>
+<span class="nc" id="L129">                e.printStackTrace();</span>
+<span class="nc" id="L130">            }</span>
+<span class="nc" id="L131">            logger.info(&quot;Initiating shutdown...&quot;);</span>
+
+<span class="nc" id="L133">            moduleManager.unloadAll();</span>
+<span class="nc" id="L134">            jda.shutdown();</span>
+<span class="nc" id="L135">            logger.info(&quot;The connection to the Discord API was shut down. Goodbye!&quot;);</span>
+<span class="nc" id="L136">            System.exit(exitCode);</span>
+<span class="nc" id="L137">        }, &quot;terminator&quot;).start();</span>
+<span class="nc" id="L138">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>
