@@ -2,12 +2,18 @@
     <img style="width: 80%;" src="https://raw.githubusercontent.com/niklas2810/my-discord-butler/main/res/social-inverted.svg" alt="Social Banner">
     <br>
     <a href="https://codeclimate.com/github/niklas2810/my-discord-butler/maintainability">
-    <img alt="codeclimate maintainability" src="https://api.codeclimate.com/v1/badges/e38a30ce52b06ec070b0/maintainability"/></a>
+        <img alt="codeclimate maintainability" src="https://img.shields.io/codeclimate/maintainability/niklas2810/my-discord-butler?logo=Code%20Climate&style=for-the-badge"/></a>
     <a href="https://codeclimate.com/github/niklas2810/my-discord-butler/test_coverage">
-    <img alt="codeclimate test coverage" src="https://api.codeclimate.com/v1/badges/e38a30ce52b06ec070b0/test_coverage"/></a>
-    <a href="https://github.com/niklas2810/my-discord-butler/actions?query=workflow%3A%22Unit+Testing%22">
-    <img alt="unit testing" src="https://github.com/niklas2810/my-discord-butler/workflows/Unit%20Testing/badge.svg?branch=main"/></a>
+        <img alt="codeclimate test coverage" src="https://img.shields.io/codeclimate/coverage/niklas2810/my-discord-butler?logo=Code%20Climate&style=for-the-badge"/></a>
+    <a href="https://codeclimate.com/github/niklas2810/my-discord-butler/issues">
+        <img alt="codeclimate issues" src="https://img.shields.io/codeclimate/issues/niklas2810/my-discord-butler?logo=Code%20Climate&style=for-the-badge"/>
+    </a>    
     <br>
+    <a href="https://github.com/niklas2810/my-discord-butler/actions?query=workflow%3A%22Unit+Testing%22">
+    <img alt="unit testing" src="https://img.shields.io/github/workflow/status/niklas2810/my-discord-butler/Unit%20Testing?label=Unit%20Tests&style=for-the-badge"/></a>
+    <a href="https://hub.docker.com/r/niklas2810/my-discord-butler">
+        <img alt="docker build" src="https://img.shields.io/docker/cloud/build/niklas2810/my-discord-butler?style=for-the-badge"/></a>
+        
 </div>
 
 A discord bot for personal use.
