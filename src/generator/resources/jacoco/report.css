@@ -224,21 +224,6 @@ table.coverage tbody tr:hover {
 
 table.coverage tbody td.bar {
   border-left: #e8e8e8 1px solid;
-  border-radius: 50%;
-}
-
-table.coverage tbody td.bar img:first-child {
-  border-top-left-radius: var(--bar-radius);
-  border-bottom-left-radius: var(--bar-radius);
-}
-
-table.coverage tbody td.bar img {
-  color: transparent; /*Hide alt text*/
-}
-
-table.coverage tbody td.bar img:last-child {
-  border-top-right-radius: var(--bar-radius);
-  border-bottom-right-radius: var(--bar-radius);
 }
 
 table.coverage tbody td.ctr1 {
