@@ -75,6 +75,7 @@ Dependencies:
 - [sentry-logback by Sentry.io](https://github.com/getsentry/sentry-java/tree/master/sentry-logback)
 - [Reflections by ronmamo](https://github.com/ronmamo/reflections)
 - [emoji-java by Vincent Durmont](https://github.com/vdurmont/emoji-java)
+- [ExpiringMap by jodah](https://github.com/jhalterman/expiringmap)
 
 Dependencies (not at runtime):
 
