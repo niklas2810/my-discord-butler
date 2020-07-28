@@ -91,7 +91,7 @@ public class Butler {
         builder.addEventListeners(new ApiConnectedListener(this),
                 new DirectMessageListener(this), new PrivateReactionListener(this));
         builder.disableCache(CacheFlag.ACTIVITY, CacheFlag.VOICE_STATE,
-                CacheFlag.EMOTE);
+                CacheFlag.EMOTE, CacheFlag.CLIENT_STATUS);
         return builder.build();
     }
 
