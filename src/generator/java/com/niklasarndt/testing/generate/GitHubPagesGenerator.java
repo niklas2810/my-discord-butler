@@ -22,7 +22,7 @@ public class GitHubPagesGenerator extends ButlerTest {
         File execDataFile = new File(targetDir, "jacoco.exec");
 
         File sourceDir = new File(dir,
-                String.format("src%smain", File.separator));
+                String.format("src%smain%sjava", File.separator, File.separator));
 
 
         logger.info("Using running directory: " + dir.getAbsolutePath());

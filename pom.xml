@@ -151,6 +151,13 @@
                             <goal>prepare-agent</goal>
                         </goals>
                     </execution>
+                    <execution>
+                        <id>default-report</id>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                        <phase>verify</phase>
+                    </execution>
                 </executions>
                 <configuration>
                     <excludes>
