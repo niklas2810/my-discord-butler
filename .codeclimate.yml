@@ -10,6 +10,12 @@ plugins:
         enabled: false
       com.puppycrawl.tools.checkstyle.checks.imports.CustomImportOrderCheck:
         enabled: false
+      # Leaving out a summary is fine sometimes
+      com.puppycrawl.tools.checkstyle.checks.javadoc.SummaryJavadocCheck:
+        enabled: false
+      # <p> tag placement is not relevant
+      com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocParagraphCheck:
+        enabled: false
   pmd:
     enabled: true
   sonar-java:
