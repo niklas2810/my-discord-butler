@@ -80,7 +80,8 @@ public class Butler {
      * Sets up the JDA instance.
      *
      * @return The completely initialized JDA instance.
-     * @throws Exception Will cause a shutdown + sentry log.
+     *
+     * @throws LoginException Will cause a shutdown + sentry log.
      */
     private JDA setUpJda() throws LoginException {
         final JDABuilder builder = JDABuilder.create(System.getenv("TOKEN_DISCORD"),
