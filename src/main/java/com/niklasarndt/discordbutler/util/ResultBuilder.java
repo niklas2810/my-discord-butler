@@ -5,6 +5,7 @@ import com.niklasarndt.discordbutler.modules.ButlerModuleInformation;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.MessageEmbed;
+import net.dv8tion.jda.api.requests.restaction.MessageAction;
 
 /**
  * Created by Niklas on 2020/07/25.
@@ -82,6 +83,7 @@ public class ResultBuilder {
     }
 
     public void produceIntoChannel(MessageChannel channel) {
+        MessageAction action;
         if (usesEmbed) {
             MessageEmbed result = produceEmbed();
             if (!result.isSendable()) {
@@ -89,8 +91,11 @@ public class ResultBuilder {
                         String.format("The produced result is too long to be sent " +
                                         "(length: %s, max allowed: %s).",
                                 result.getLength(), MessageEmbed.EMBED_MAX_LENGTH_BOT));
-            } else channel.sendMessage(produceEmbed()).queue();
-        } else channel.sendMessage(produceString()).queue();
+            } else action = channel.sendMessage(produceEmbed());
+        } else action = channel.sendMessage(produceString());
+
+        //Deletion hint
+        action.flatMap(message -> message.addReaction(Emojis.WASTEBASKET)).queue();
     }
 
     public void success(String output) {

@@ -11,12 +11,12 @@ import javax.annotation.Nonnull;
 /**
  * Created by Niklas on 2020/07/26.
  */
-public class ApiConnected extends ListenerAdapter {
+public class ApiConnectedListener extends ListenerAdapter {
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
     private final Butler butler;
 
-    public ApiConnected(Butler butler) {
+    public ApiConnectedListener(Butler butler) {
         this.butler = butler;
     }
 

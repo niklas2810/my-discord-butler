@@ -14,12 +14,12 @@ import javax.annotation.Nonnull;
 /**
  * Created by Niklas on 2020/07/24.
  */
-public class DirectMessageReceived extends ListenerAdapter {
+public class DirectMessageListener extends ListenerAdapter {
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
     private final Butler butler;
 
-    public DirectMessageReceived(Butler butler) {
+    public DirectMessageListener(Butler butler) {
         this.butler = butler;
     }
 
