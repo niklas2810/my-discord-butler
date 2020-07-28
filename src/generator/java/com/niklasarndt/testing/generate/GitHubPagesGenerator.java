@@ -1,5 +1,6 @@
 package com.niklasarndt.testing.generate;
 
+import com.niklasarndt.testing.util.ButlerTest;
 import org.jacoco.core.analysis.Analyzer;
 import org.jacoco.core.analysis.CoverageBuilder;
 import org.jacoco.core.analysis.IBundleCoverage;
@@ -10,37 +11,46 @@ import java.io.IOException;
 /**
  * Created by Niklas on 2020/07/28.
  */
-public class GitHubPagesGenerator {
+public class GitHubPagesGenerator extends ButlerTest {
 
-    public static void main(String[] args) throws IOException {
+    private GitHubPagesGenerator() throws IOException {
         File dir = new File(System.getProperty("user.dir"));
         String title = dir.getName();
-        File execDataFile = new File(dir,
-                String.format("target%sjacoco.exec", File.separator));
-        File sourceDir = new File(dir,
-                String.format("src%smain", File.separator));
         File targetDir = new File(dir, "target");
+        File compiledDir = new File(targetDir, "classes");
         File pagesDir = new File(targetDir, "gh-pages");
         File coverageDir = new File(pagesDir, "coverage");
+        File execDataFile = new File(targetDir, "jacoco.exec");
 
-        File compiledDir = new File(dir,
-                String.format("target%sclasses", File.separator));
+        File sourceDir = new File(dir,
+                String.format("src%smain", File.separator));
 
-        System.out.println("Using running directory: " + dir.getAbsolutePath());
+
+        logger.info("Using running directory: " + dir.getAbsolutePath());
 
         ExecFileLoader execFileLoader = new ExecFileLoader();
         execFileLoader.load(execDataFile);
         IBundleCoverage coverage = analyzeStructure(title, execFileLoader, compiledDir);
 
 
-        new XmlGenerator(sourceDir, targetDir, coverage, execFileLoader).create();
-        new ReportGenerator(execFileLoader,
-                sourceDir, coverageDir, coverage).create();
-        new IndexGenerator(pagesDir).create();
+        GeneratorContext context = new GeneratorContext(dir, title, execDataFile, sourceDir,
+                targetDir, pagesDir, coverageDir, execFileLoader, coverage);
+
+        new XmlGenerator(context).create();
+        new ReportGenerator(context).create();
+        new IndexGenerator(context).create();
     }
 
-    private static IBundleCoverage analyzeStructure(String title, ExecFileLoader execFileLoader,
-                                                    File classesDirectory) throws IOException {
+    public static void main(String[] args) {
+        try {
+            new GitHubPagesGenerator();
+        } catch (Exception e) {
+            System.exit(1);
+        }
+    }
+
+    private IBundleCoverage analyzeStructure(String title, ExecFileLoader execFileLoader,
+                                             File classesDirectory) throws IOException {
         final CoverageBuilder coverageBuilder = new CoverageBuilder();
         final Analyzer analyzer = new Analyzer(
                 execFileLoader.getExecutionDataStore(), coverageBuilder);

@@ -1,13 +1,12 @@
 package com.niklasarndt.testing.generate;
 
-import org.jacoco.core.analysis.IBundleCoverage;
-import org.jacoco.core.tools.ExecFileLoader;
 import org.jacoco.report.DirectorySourceFileLocator;
 import org.jacoco.report.FileMultiReportOutput;
 import org.jacoco.report.IReportVisitor;
 import org.jacoco.report.html.HTMLFormatter;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 
 /**
  * Created by Niklas on 2020/07/28.
@@ -29,24 +28,18 @@ import java.io.IOException;
 
 public class ReportGenerator {
 
-    private final File sourceDir;
+    private final GeneratorContext context;
     private final File reportDir;
-    private final ExecFileLoader execFileLoader;
-    private final IBundleCoverage coverage;
 
 
-    public ReportGenerator(ExecFileLoader execFileLoader,
-                           File sourceDir, File targetDir,
-                           IBundleCoverage coverage) {
-        this.execFileLoader = execFileLoader;
-        this.sourceDir = sourceDir;
-        this.reportDir = targetDir;
-        this.coverage = coverage;
+    public ReportGenerator(GeneratorContext context) {
+        this.context = context;
+        this.reportDir = context.getCoverageDir();
     }
 
     public void create() throws IOException {
 
-        if (reportDir.exists()) reportDir.delete();
+        Files.deleteIfExists(reportDir.toPath());
         reportDir.mkdir();
 
         final HTMLFormatter htmlFormatter = new HTMLFormatter();
@@ -57,20 +50,12 @@ public class ReportGenerator {
                 new File(reportDir, "jacoco-resources"));
         resources.copyResources();
 
-        visitor.visitInfo(execFileLoader.getSessionInfoStore().getInfos(),
-                execFileLoader.getExecutionDataStore().getContents());
+        visitor.visitInfo(context.getExecFileLoader().getSessionInfoStore().getInfos(),
+                context.getExecFileLoader().getExecutionDataStore().getContents());
 
-        visitor.visitBundle(coverage,
-                new DirectorySourceFileLocator(sourceDir, "utf-8", 4));
+        visitor.visitBundle(context.getCoverage(),
+                new DirectorySourceFileLocator(context.getSourceDir(), "utf-8", 4));
 
         visitor.visitEnd();
     }
-
-    private void createReport(final IBundleCoverage bundleCoverage)
-            throws IOException {
-
-
-    }
-
-
 }

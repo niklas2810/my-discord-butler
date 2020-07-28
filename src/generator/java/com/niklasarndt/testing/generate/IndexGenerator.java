@@ -9,9 +9,9 @@ import java.io.IOException;
 public class IndexGenerator {
     private final File target;
 
-    public IndexGenerator(File target) {
+    public IndexGenerator(GeneratorContext context) {
 
-        this.target = target;
+        this.target = context.getPagesDir();
     }
 
     public void create() throws IOException {

@@ -14,7 +14,6 @@ public class CustomResources {
     public CustomResources(String path, File target) {
         this.path = path;
         this.outputFolder = target;
-        System.out.println("Dest: " + this.outputFolder.getAbsolutePath());
     }
 
     public void copyResources() throws IOException {
@@ -52,9 +51,8 @@ public class CustomResources {
     private List<String> getResourceFiles(String path) throws IOException {
         List<String> filenames = new ArrayList<>();
 
-        try (
-                InputStream in = getResourceAsStream(path);
-                BufferedReader br = new BufferedReader(new InputStreamReader(in))) {
+        try (InputStream in = getResourceAsStream(path);
+             BufferedReader br = new BufferedReader(new InputStreamReader(in))) {
             String resource;
 
             while ((resource = br.readLine()) != null) {
