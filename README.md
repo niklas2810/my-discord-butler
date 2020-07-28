@@ -13,7 +13,8 @@
     <img alt="unit testing" src="https://img.shields.io/github/workflow/status/niklas2810/my-discord-butler/Unit%20Testing?label=Unit%20Tests&style=for-the-badge"/></a>
     <a href="https://hub.docker.com/r/niklas2810/my-discord-butler">
         <img alt="docker build" src="https://img.shields.io/docker/cloud/build/niklas2810/my-discord-butler?style=for-the-badge"/></a>
-        
+    <br>
+    <br>   
 </div>
 
 A discord bot for personal use.
