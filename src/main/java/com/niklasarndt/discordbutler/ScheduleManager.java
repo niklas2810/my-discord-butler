@@ -29,10 +29,10 @@ public class ScheduleManager {
         this.butler = butler;
     }
 
-    public void schedule(Runnable r, long waitTimeInMs) {
+    public void schedule(Runnable runnable, long waitTimeInMs) {
         executorService.schedule(() -> {
             try {
-                r.run();
+                runnable.run();
             } catch (Exception e) {
                 logger.error("Failed to run scheduled task", e);
             }
@@ -64,6 +64,7 @@ public class ScheduleManager {
                 executorService.shutdownNow();
             }
         } catch (InterruptedException e) {
+            logger.warn("Executor service did not shut down automatically, forcing shutdown", e);
             executorService.shutdownNow();
         }
     }

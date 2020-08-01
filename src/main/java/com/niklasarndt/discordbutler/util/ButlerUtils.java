@@ -56,29 +56,21 @@ public class ButlerUtils {
         if (input.contains(letter)) {
             String num = input.substring(0, input.indexOf(letter));
             input = input.substring(input.indexOf(letter) + letter.length());
-            String finalInput = input;
-            return new Pair<>() {
-                @Override
-                public String getLeft() {
-                    return finalInput;
-                }
-
-                @Override
-                public Integer getRight() {
-                    return parseInt(num, 0);
-                }
-            };
+            return generatePair(input, parseInt(num, 0));
         }
-        String finalInput1 = input;
+        return generatePair(input, 0);
+    }
+
+    private static Pair<String, Integer> generatePair(String left, Integer right) {
         return new Pair<>() {
             @Override
             public String getLeft() {
-                return finalInput1;
+                return left;
             }
 
             @Override
             public Integer getRight() {
-                return 0;
+                return right;
             }
         };
     }
