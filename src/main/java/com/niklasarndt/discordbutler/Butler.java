@@ -5,6 +5,7 @@ import com.niklasarndt.discordbutler.listener.DirectMessageListener;
 import com.niklasarndt.discordbutler.listener.PrivateReactionListener;
 import com.niklasarndt.discordbutler.util.ButlerUtils;
 import com.niklasarndt.discordbutler.util.ExecutionFlags;
+import io.sentry.Sentry;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
@@ -16,14 +17,50 @@ import javax.security.auth.login.LoginException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Created by Niklas on 2020/07/24.
  */
 public class Butler {
 
+    private static final Logger logger = LoggerFactory.getLogger(Butler.class);
+
+    public static void main(String[] args) {
+        if (System.getenv("SENTRY_DSN") != null || System.getProperty("sentry.dsn") != null) {
+
+            Sentry.init();
+            logger.info("Has Sentry been initialized correctly? {}", Sentry.isInitialized());
+        } else {
+            logger.info("Specify your DSN via SENTRY_DSN to enable Sentry logging.");
+        }
+
+        try {
+            new Butler(buildEnvironmentFlags(args));
+        } catch (Exception e) {
+            logger.error("Encountered uncaught exception", e);
+            logger.error("This fatal exception will lead to an application shutdown.");
+            System.exit(1);
+        }
+    }
+
+    private static String[] buildEnvironmentFlags(String[] args) {
+        String[] envs = Optional.ofNullable(System.getenv("EXECUTION_FLAGS"))
+                .orElse("").split(",");
+        boolean oneOnly = envs.length == 0 || args.length == 0;
+
+        String[] combined;
+        if (oneOnly) combined = envs.length != 0 ? envs : args;
+        else combined = new String[envs.length + args.length];
+
+        if (!oneOnly) {
+            System.arraycopy(envs, 0, combined, 0, envs.length);
+            System.arraycopy(args, 0, combined, envs.length, args.length);
+        }
+        return combined;
+    }
+
     private final long startupTimestamp = System.currentTimeMillis();
-    private final Logger logger = LoggerFactory.getLogger(getClass());
     private final List<ExecutionFlags> flags;
     private long ownerId;
     private JDA jda;
