@@ -107,7 +107,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>com.niklasarndt.discordbutler.Bootstrap</mainClass>
+                            <mainClass>com.niklasarndt.discordbutler.Butler</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

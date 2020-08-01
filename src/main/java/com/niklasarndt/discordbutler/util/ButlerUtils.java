@@ -2,6 +2,7 @@ package com.niklasarndt.discordbutler.util;
 
 import com.niklasarndt.discordbutler.modules.ButlerCommandInformation;
 import net.dv8tion.jda.api.entities.MessageEmbed;
+import net.dv8tion.jda.internal.utils.tuple.Pair;
 
 /**
  * Created by Niklas on 2020/07/25.
@@ -35,6 +36,43 @@ public class ButlerUtils {
 
     private static String timeDisplay(int num, String singular) {
         return String.format("%02d %s, ", num, num == 1 ? singular : singular + "s");
+    }
+
+    public static long parseTimeString(String input) {
+        String[] keys = {"d", "h", "m", "s"};
+        int[] values = new int[keys.length]; //Days, Hours, Minutes, Seconds
+
+
+        for (int i = 0; i < keys.length; i++) {
+            Pair<String, Integer> out = parseAndEdit(input, keys[i]);
+            input = out.getLeft();
+            values[i] = out.getRight();
+        }
+
+        return ((((values[0] * 24) + values[1]) * 60 + values[2]) * 60 + values[3]) * 1000;
+    }
+
+    private static Pair<String, Integer> parseAndEdit(String input, String letter) {
+        if (input.contains(letter)) {
+            String num = input.substring(0, input.indexOf(letter));
+            input = input.substring(input.indexOf(letter) + letter.length());
+            return generatePair(input, parseInt(num, 0));
+        }
+        return generatePair(input, 0);
+    }
+
+    private static Pair<String, Integer> generatePair(String left, Integer right) {
+        return new Pair<>() {
+            @Override
+            public String getLeft() {
+                return left;
+            }
+
+            @Override
+            public Integer getRight() {
+                return right;
+            }
+        };
     }
 
     public static String buildShortCommandInfo(ButlerCommandInformation info, int maxCommandLength,

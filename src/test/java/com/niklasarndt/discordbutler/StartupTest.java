@@ -7,10 +7,10 @@ import org.junit.jupiter.api.Test;
 /**
  * Created by Niklas on 2020/07/27.
  */
-class BootstrapTest extends ButlerTest {
+class StartupTest extends ButlerTest {
 
     @Test
     public void testMain() {
-        assertDoesNotThrow(() -> Bootstrap.main(new String[]{"0", "1"}));
+        assertDoesNotThrow(() -> Butler.main(new String[]{"0", "1"}));
     }
 }
