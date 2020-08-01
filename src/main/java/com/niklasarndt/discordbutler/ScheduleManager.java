@@ -16,6 +16,11 @@ import java.util.concurrent.TimeUnit;
  * <p>
  * WARNING: Automating a task without explicit user consent is considered API abuse.
  * A message should only be scheduled if the user to you to do so. (e.g. via the remind command)
+ * <p>
+ * Quote: "You may not post messages, trigger notifications, or play audio on behalf of a Discord
+ * user except in response to such Discord user expressly opting-in to each instance of such action"
+ * <p>
+ * https://discord.com/developers/docs/policy (1st August 2020)
  */
 public class ScheduleManager {
 
@@ -41,19 +46,19 @@ public class ScheduleManager {
 
     public void scheduleMessage(String message, long waitTimeInMs) {
         schedule(() -> {
-            User user = butler.getJda().retrieveUserById(butler.getOwnerId()).complete();
-
             String duration = ButlerUtils.prettyPrintTime(waitTimeInMs);
 
             String intro = String.format("Hey there %s Here's what you " +
                             "asked me to **remind** you of **%s ago**!", Emojis.WAVE,
                     duration);
+
             MessageEmbed embed = new EmbedBuilder()
                     .addField("Your Reminder", message, false)
                     .setFooter(String.format("Requested %s ago", duration)).build();
 
-            user.openPrivateChannel()
-                    .queue(channel -> channel.sendMessage(intro).embed(embed).queue());
+            butler.getJda().retrieveUserById(butler.getOwnerId())
+                    .flatMap(User::openPrivateChannel)
+                    .flatMap(channel -> channel.sendMessage(intro).embed(embed)).queue();
         }, waitTimeInMs);
     }
 
