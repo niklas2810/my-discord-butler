@@ -37,10 +37,15 @@ jobs:
         with:
           # The report file must be there, otherwise Code Climate won't find it
           coverageCommand: mvn test
-          coverageLocations: target/coverage.xml:jacoco
+          coverageLocations: target/site/jacoco/jacoco.xml:jacoco
+      - name: 🗑️ Clean + Move files
+        run: |
+          rm target/site/jacoco/jacoco.csv
+          rm target/site/jacoco/jacoco.xml
+          cp -r target/site/jacoco pages/coverage
       - name: 🚀 Deploy to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@3.5.9
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           BRANCH: gh-pages
-          FOLDER: target/gh-pages
+          FOLDER: pages
