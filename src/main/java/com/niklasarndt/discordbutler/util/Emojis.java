@@ -19,6 +19,7 @@ public class Emojis {
     public static final String WARNING = getUnicode("warning");
     public static final String HOURGLASS = getUnicode("hourglass_flowing_sand");
     public static final String WASTEBASKET = getUnicode("wastebasket");
+    public static final String WAVE = getUnicode("wave");
 
     private Emojis() {
     }

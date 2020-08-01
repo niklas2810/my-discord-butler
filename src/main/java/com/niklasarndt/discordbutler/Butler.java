@@ -65,6 +65,7 @@ public class Butler {
     private long ownerId;
     private JDA jda;
     private ModuleManager moduleManager;
+    private ScheduleManager scheduleManager;
 
     protected Butler() throws LoginException {
         this(ExecutionFlags.NONE);
@@ -97,6 +98,11 @@ public class Butler {
             moduleManager = new ModuleManager(this);
             moduleManager.loadAll();
             logger.info("Module manager has been set up!");
+        }
+
+        if (!hasFlag(ExecutionFlags.NO_SCHEDULE_MANAGER)) {
+            scheduleManager = new ScheduleManager(this);
+            logger.info("Schedule manager has been set up!");
         }
 
         logger.info("SUCCESS: SETUP COMPLETE");
@@ -146,6 +152,10 @@ public class Butler {
 
     public ModuleManager getModuleManager() {
         return moduleManager;
+    }
+
+    public ScheduleManager getScheduleManager() {
+        return scheduleManager;
     }
 
     public List<ExecutionFlags> getFlags() {

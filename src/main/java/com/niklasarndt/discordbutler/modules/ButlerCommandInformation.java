@@ -8,7 +8,7 @@ import java.util.Objects;
 public class ButlerCommandInformation {
 
     public static final int MAX_CMD_LENGTH = 16;
-    public static final int MAX_DESC_LENGTH = 128;
+    public static final int MAX_DESC_LENGTH = 512;
 
     private final String name;
     private final String[] aliases;

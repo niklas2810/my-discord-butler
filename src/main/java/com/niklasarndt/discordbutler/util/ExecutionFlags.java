@@ -5,7 +5,7 @@ package com.niklasarndt.discordbutler.util;
  */
 public enum ExecutionFlags {
 
-    NONE, NO_API_CONNECTION, NO_MODULE_MANAGER;
+    NONE, NO_API_CONNECTION, NO_MODULE_MANAGER, NO_SCHEDULE_MANAGER;
 
     public static ExecutionFlags getFlagById(int id) {
         return id < 0 || id > ExecutionFlags.values().length ? null : ExecutionFlags.values()[id];
