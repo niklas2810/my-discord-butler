@@ -1,5 +1,8 @@
 package com.niklasarndt.testing.generate;
 
+import com.niklasarndt.testing.generate.html.IndexGenerator;
+import com.niklasarndt.testing.generate.html.ReportGenerator;
+import com.niklasarndt.testing.generate.util.GeneratorContext;
 import com.niklasarndt.testing.util.ButlerTest;
 import org.jacoco.core.analysis.Analyzer;
 import org.jacoco.core.analysis.CoverageBuilder;
@@ -44,6 +47,7 @@ public class GitHubPagesGenerator extends ButlerTest {
         try {
             new GitHubPagesGenerator();
         } catch (Exception e) {
+            e.printStackTrace();
             System.exit(1);
         }
     }

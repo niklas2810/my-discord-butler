@@ -1,5 +1,6 @@
-package com.niklasarndt.testing.generate;
+package com.niklasarndt.testing.generate.html;
 
+import com.niklasarndt.testing.generate.util.GeneratorContext;
 import org.jacoco.report.DirectorySourceFileLocator;
 import org.jacoco.report.FileMultiReportOutput;
 import org.jacoco.report.IReportVisitor;
@@ -43,13 +44,9 @@ public class ReportGenerator {
         reportDir.mkdir();
 
         final HTMLFormatter htmlFormatter = new HTMLFormatter();
+        htmlFormatter.setFooterText("IM HERE");
         final IReportVisitor visitor = htmlFormatter
                 .createVisitor(new FileMultiReportOutput(reportDir));
-
-        CustomResources resources = new CustomResources("jacoco",
-                new File(reportDir, "jacoco-resources"));
-        resources.copyResources();
-
         visitor.visitInfo(context.getExecFileLoader().getSessionInfoStore().getInfos(),
                 context.getExecFileLoader().getExecutionDataStore().getContents());
 
@@ -57,5 +54,7 @@ public class ReportGenerator {
                 new DirectorySourceFileLocator(context.getSourceDir(), "utf-8", 4));
 
         visitor.visitEnd();
+
+        new JacocoSiteStyler(reportDir).applyChanges();
     }
 }

@@ -100,9 +100,10 @@ h1 {
 
 .el_session {
   padding-left: 18px;
-  background-image: url(session.gif);
+  background-image: url(sessions.svg);
   background-position: left center;
   background-repeat: no-repeat;
+  background-size: contain;
 }
 
 pre.source {

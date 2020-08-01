@@ -1,5 +1,6 @@
 package com.niklasarndt.testing.generate;
 
+import com.niklasarndt.testing.generate.util.GeneratorContext;
 import org.jacoco.core.tools.ExecFileLoader;
 import org.jacoco.report.DirectorySourceFileLocator;
 import org.jacoco.report.IReportVisitor;

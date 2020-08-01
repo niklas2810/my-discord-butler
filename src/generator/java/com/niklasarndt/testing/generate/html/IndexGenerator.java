@@ -1,5 +1,7 @@
-package com.niklasarndt.testing.generate;
+package com.niklasarndt.testing.generate.html;
 
+import com.niklasarndt.testing.generate.util.CustomResources;
+import com.niklasarndt.testing.generate.util.GeneratorContext;
 import java.io.File;
 import java.io.IOException;
 

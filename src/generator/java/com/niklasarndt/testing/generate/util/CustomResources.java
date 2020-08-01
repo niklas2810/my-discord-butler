@@ -1,4 +1,4 @@
-package com.niklasarndt.testing.generate;
+package com.niklasarndt.testing.generate.util;
 
 import java.io.*;
 import java.util.ArrayList;

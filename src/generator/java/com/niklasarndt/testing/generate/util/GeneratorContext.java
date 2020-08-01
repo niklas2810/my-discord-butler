@@ -1,4 +1,4 @@
-package com.niklasarndt.testing.generate;
+package com.niklasarndt.testing.generate.util;
 
 import org.jacoco.core.analysis.IBundleCoverage;
 import org.jacoco.core.tools.ExecFileLoader;
