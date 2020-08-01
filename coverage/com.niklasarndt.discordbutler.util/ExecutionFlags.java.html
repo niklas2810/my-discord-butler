@@ -5,7 +5,7 @@
  */
 <span class="fc" id="L6">public enum ExecutionFlags {</span>
 
-<span class="fc" id="L8">    NONE, NO_API_CONNECTION, NO_MODULE_MANAGER;</span>
+<span class="fc" id="L8">    NONE, NO_API_CONNECTION, NO_MODULE_MANAGER, NO_SCHEDULE_MANAGER;</span>
 
     public static ExecutionFlags getFlagById(int id) {
 <span class="pc bpc" id="L11" title="2 of 4 branches missed.">        return id &lt; 0 || id &gt; ExecutionFlags.values().length ? null : ExecutionFlags.values()[id];</span>

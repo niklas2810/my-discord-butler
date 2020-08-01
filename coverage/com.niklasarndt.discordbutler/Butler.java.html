@@ -5,6 +5,7 @@ import com.niklasarndt.discordbutler.listener.DirectMessageListener;
 import com.niklasarndt.discordbutler.listener.PrivateReactionListener;
 import com.niklasarndt.discordbutler.util.ButlerUtils;
 import com.niklasarndt.discordbutler.util.ExecutionFlags;
+import io.sentry.Sentry;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
@@ -16,66 +17,108 @@ import javax.security.auth.login.LoginException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Created by Niklas on 2020/07/24.
  */
 public class Butler {
 
-<span class="fc" id="L25">    private final long startupTimestamp = System.currentTimeMillis();</span>
-<span class="fc" id="L26">    private final Logger logger = LoggerFactory.getLogger(getClass());</span>
+<span class="fc" id="L27">    private static final Logger logger = LoggerFactory.getLogger(Butler.class);</span>
+
+    public static void main(String[] args) {
+<span class="pc bpc" id="L30" title="2 of 4 branches missed.">        if (System.getenv(&quot;SENTRY_DSN&quot;) != null || System.getProperty(&quot;sentry.dsn&quot;) != null) {</span>
+
+<span class="nc" id="L32">            Sentry.init();</span>
+<span class="nc" id="L33">            logger.info(&quot;Has Sentry been initialized correctly? {}&quot;, Sentry.isInitialized());</span>
+        } else {
+<span class="fc" id="L35">            logger.info(&quot;Specify your DSN via SENTRY_DSN to enable Sentry logging.&quot;);</span>
+        }
+
+        try {
+<span class="fc" id="L39">            new Butler(buildEnvironmentFlags(args));</span>
+<span class="nc" id="L40">        } catch (Exception e) {</span>
+<span class="nc" id="L41">            logger.error(&quot;Encountered uncaught exception&quot;, e);</span>
+<span class="nc" id="L42">            logger.error(&quot;This fatal exception will lead to an application shutdown.&quot;);</span>
+<span class="nc" id="L43">            System.exit(1);</span>
+<span class="fc" id="L44">        }</span>
+<span class="fc" id="L45">    }</span>
+
+    private static String[] buildEnvironmentFlags(String[] args) {
+<span class="fc" id="L48">        String[] envs = Optional.ofNullable(System.getenv(&quot;EXECUTION_FLAGS&quot;))</span>
+<span class="fc" id="L49">                .orElse(&quot;&quot;).split(&quot;,&quot;);</span>
+<span class="pc bpc" id="L50" title="2 of 4 branches missed.">        boolean oneOnly = envs.length == 0 || args.length == 0;</span>
+
+        String[] combined;
+<span class="pc bpc" id="L53" title="3 of 4 branches missed.">        if (oneOnly) combined = envs.length != 0 ? envs : args;</span>
+<span class="fc" id="L54">        else combined = new String[envs.length + args.length];</span>
+
+<span class="pc bpc" id="L56" title="1 of 2 branches missed.">        if (!oneOnly) {</span>
+<span class="fc" id="L57">            System.arraycopy(envs, 0, combined, 0, envs.length);</span>
+<span class="fc" id="L58">            System.arraycopy(args, 0, combined, envs.length, args.length);</span>
+        }
+<span class="fc" id="L60">        return combined;</span>
+    }
+
+<span class="fc" id="L63">    private final long startupTimestamp = System.currentTimeMillis();</span>
     private final List&lt;ExecutionFlags&gt; flags;
     private long ownerId;
     private JDA jda;
     private ModuleManager moduleManager;
+    private ScheduleManager scheduleManager;
 
     protected Butler() throws LoginException {
-<span class="nc" id="L33">        this(ExecutionFlags.NONE);</span>
-<span class="nc" id="L34">    }</span>
+<span class="nc" id="L71">        this(ExecutionFlags.NONE);</span>
+<span class="nc" id="L72">    }</span>
 
     protected Butler(String... flags) throws LoginException {
-<span class="fc" id="L37">        this(Arrays.stream(flags)</span>
-<span class="fc" id="L38">                .map(el -&gt; ButlerUtils.parseInt(el, 0))</span>
-<span class="fc" id="L39">                .toArray(Integer[]::new));</span>
-<span class="fc" id="L40">    }</span>
+<span class="fc" id="L75">        this(Arrays.stream(flags)</span>
+<span class="fc" id="L76">                .map(el -&gt; ButlerUtils.parseInt(el, 0))</span>
+<span class="fc" id="L77">                .toArray(Integer[]::new));</span>
+<span class="fc" id="L78">    }</span>
 
     protected Butler(Integer... flags) throws LoginException {
-<span class="fc" id="L43">        this(ExecutionFlags.getFlagsById(flags));</span>
-<span class="fc" id="L44">    }</span>
+<span class="fc" id="L81">        this(ExecutionFlags.getFlagsById(flags));</span>
+<span class="fc" id="L82">    }</span>
 
-<span class="fc" id="L46">    protected Butler(ExecutionFlags... flags) throws LoginException {</span>
-<span class="fc" id="L47">        logger.info(&quot;Startup is in progress&quot;);</span>
-<span class="fc" id="L48">        this.flags = Collections.unmodifiableList(List.of(flags));</span>
+<span class="fc" id="L84">    protected Butler(ExecutionFlags... flags) throws LoginException {</span>
+<span class="fc" id="L85">        logger.info(&quot;Startup is in progress&quot;);</span>
+<span class="fc" id="L86">        this.flags = Collections.unmodifiableList(List.of(flags));</span>
 
 
-<span class="pc bpc" id="L51" title="1 of 2 branches missed.">        if (hasFlag(ExecutionFlags.NO_API_CONNECTION)) {</span>
-<span class="fc" id="L52">            logger.warn(&quot;NO_API_CONNECTION: App will not be kept alive by daemon.&quot;);</span>
+<span class="pc bpc" id="L89" title="1 of 2 branches missed.">        if (hasFlag(ExecutionFlags.NO_API_CONNECTION)) {</span>
+<span class="fc" id="L90">            logger.warn(&quot;NO_API_CONNECTION: App will not be kept alive by daemon.&quot;);</span>
         } else {
-<span class="nc" id="L54">            loadOwnerId();</span>
-<span class="nc" id="L55">            jda = setUpJda();</span>
-<span class="nc" id="L56">            logger.info(&quot;JDA has been set up!&quot;);</span>
+<span class="nc" id="L92">            loadOwnerId();</span>
+<span class="nc" id="L93">            jda = setUpJda();</span>
+<span class="nc" id="L94">            logger.info(&quot;JDA has been set up!&quot;);</span>
         }
 
-<span class="pc bpc" id="L59" title="1 of 2 branches missed.">        if (!hasFlag(ExecutionFlags.NO_MODULE_MANAGER)) {</span>
-<span class="fc" id="L60">            moduleManager = new ModuleManager(this);</span>
-<span class="fc" id="L61">            moduleManager.loadAll();</span>
-<span class="fc" id="L62">            logger.info(&quot;Module manager has been set up!&quot;);</span>
+<span class="pc bpc" id="L97" title="1 of 2 branches missed.">        if (!hasFlag(ExecutionFlags.NO_MODULE_MANAGER)) {</span>
+<span class="fc" id="L98">            moduleManager = new ModuleManager(this);</span>
+<span class="fc" id="L99">            moduleManager.loadAll();</span>
+<span class="fc" id="L100">            logger.info(&quot;Module manager has been set up!&quot;);</span>
         }
 
-<span class="fc" id="L65">        logger.info(&quot;SUCCESS: SETUP COMPLETE&quot;);</span>
-<span class="fc" id="L66">        logger.info(&quot;EXEC FLAGS: {}&quot;, ExecutionFlags.prettyPrint(</span>
-<span class="fc" id="L67">                this.flags.toArray(new ExecutionFlags[0])));</span>
-<span class="fc" id="L68">    }</span>
+<span class="pc bpc" id="L103" title="1 of 2 branches missed.">        if (!hasFlag(ExecutionFlags.NO_SCHEDULE_MANAGER)) {</span>
+<span class="fc" id="L104">            scheduleManager = new ScheduleManager(this);</span>
+<span class="fc" id="L105">            logger.info(&quot;Schedule manager has been set up!&quot;);</span>
+        }
+
+<span class="fc" id="L108">        logger.info(&quot;SUCCESS: SETUP COMPLETE&quot;);</span>
+<span class="fc" id="L109">        logger.info(&quot;EXEC FLAGS: {}&quot;, ExecutionFlags.prettyPrint(</span>
+<span class="fc" id="L110">                this.flags.toArray(new ExecutionFlags[0])));</span>
+<span class="fc" id="L111">    }</span>
 
     private void loadOwnerId() {
         try {
-<span class="nc" id="L72">            ownerId = Long.parseLong(System.getenv(&quot;OWNER_ID&quot;));</span>
-<span class="nc" id="L73">        } catch (Exception e) {</span>
-<span class="nc" id="L74">            throw new IllegalArgumentException(</span>
+<span class="nc" id="L115">            ownerId = Long.parseLong(System.getenv(&quot;OWNER_ID&quot;));</span>
+<span class="nc" id="L116">        } catch (Exception e) {</span>
+<span class="nc" id="L117">            throw new IllegalArgumentException(</span>
                     &quot;You must provide the owner's Discord ID via OWNER_ID.&quot;);
-<span class="nc" id="L76">        }</span>
-<span class="nc" id="L77">        logger.info(&quot;Owner ID has been retrieved.&quot;);</span>
-<span class="nc" id="L78">    }</span>
+<span class="nc" id="L119">        }</span>
+<span class="nc" id="L120">        logger.info(&quot;Owner ID has been retrieved.&quot;);</span>
+<span class="nc" id="L121">    }</span>
 
     /**
      * Sets up the JDA instance.
@@ -85,59 +128,63 @@ public class Butler {
      * @throws LoginException Will cause a shutdown + sentry log.
      */
     private JDA setUpJda() throws LoginException {
-<span class="nc" id="L88">        final JDABuilder builder = JDABuilder.create(System.getenv(&quot;TOKEN_DISCORD&quot;),</span>
+<span class="nc" id="L131">        final JDABuilder builder = JDABuilder.create(System.getenv(&quot;TOKEN_DISCORD&quot;),</span>
                 GatewayIntent.DIRECT_MESSAGES, GatewayIntent.DIRECT_MESSAGE_REACTIONS);
-<span class="nc" id="L90">        builder.setActivity(Activity.of(Activity.ActivityType.WATCHING, &quot;via direct messages&quot;));</span>
-<span class="nc" id="L91">        builder.addEventListeners(new ApiConnectedListener(this),</span>
+<span class="nc" id="L133">        builder.setActivity(Activity.of(Activity.ActivityType.WATCHING, &quot;via direct messages&quot;));</span>
+<span class="nc" id="L134">        builder.addEventListeners(new ApiConnectedListener(this),</span>
                 new DirectMessageListener(this), new PrivateReactionListener(this));
-<span class="nc" id="L93">        builder.disableCache(CacheFlag.ACTIVITY, CacheFlag.VOICE_STATE,</span>
+<span class="nc" id="L136">        builder.disableCache(CacheFlag.ACTIVITY, CacheFlag.VOICE_STATE,</span>
                 CacheFlag.EMOTE, CacheFlag.CLIENT_STATUS);
-<span class="nc" id="L95">        return builder.build();</span>
+<span class="nc" id="L138">        return builder.build();</span>
     }
 
     public JDA getJda() {
-<span class="fc" id="L99">        return jda;</span>
+<span class="fc" id="L142">        return jda;</span>
     }
 
     public long getOwnerId() {
-<span class="fc" id="L103">        return ownerId;</span>
+<span class="fc" id="L146">        return ownerId;</span>
     }
 
     public long getStartupTimestamp() {
-<span class="fc" id="L107">        return startupTimestamp;</span>
+<span class="fc" id="L150">        return startupTimestamp;</span>
     }
 
     public ModuleManager getModuleManager() {
-<span class="fc" id="L111">        return moduleManager;</span>
+<span class="fc" id="L154">        return moduleManager;</span>
+    }
+
+    public ScheduleManager getScheduleManager() {
+<span class="nc" id="L158">        return scheduleManager;</span>
     }
 
     public List&lt;ExecutionFlags&gt; getFlags() {
-<span class="fc" id="L115">        return flags;</span>
+<span class="fc" id="L162">        return flags;</span>
     }
 
     public boolean hasFlag(int flagId) {
-<span class="fc" id="L119">        return hasFlag(ExecutionFlags.getFlagById(flagId));</span>
+<span class="fc" id="L166">        return hasFlag(ExecutionFlags.getFlagById(flagId));</span>
     }
 
     public boolean hasFlag(ExecutionFlags flag) {
-<span class="fc" id="L123">        return flags.contains(flag);</span>
+<span class="fc" id="L170">        return flags.contains(flag);</span>
     }
 
     public void shutdown(int exitCode) {
-<span class="nc" id="L127">        new Thread(null, () -&gt; {</span>
-<span class="nc" id="L128">            logger.info(&quot;Shutdown in 5 seconds!&quot;);</span>
+<span class="nc" id="L174">        new Thread(null, () -&gt; {</span>
+<span class="nc" id="L175">            logger.info(&quot;Shutdown in 5 seconds!&quot;);</span>
             try {
-<span class="nc" id="L130">                Thread.sleep(5000);</span>
-<span class="nc" id="L131">            } catch (InterruptedException e) {</span>
-<span class="nc" id="L132">                e.printStackTrace();</span>
-<span class="nc" id="L133">            }</span>
-<span class="nc" id="L134">            logger.info(&quot;Initiating shutdown...&quot;);</span>
+<span class="nc" id="L177">                Thread.sleep(5000);</span>
+<span class="nc" id="L178">            } catch (InterruptedException e) {</span>
+<span class="nc" id="L179">                e.printStackTrace();</span>
+<span class="nc" id="L180">            }</span>
+<span class="nc" id="L181">            logger.info(&quot;Initiating shutdown...&quot;);</span>
 
-<span class="nc" id="L136">            moduleManager.unloadAll();</span>
-<span class="nc" id="L137">            jda.shutdown();</span>
-<span class="nc" id="L138">            logger.info(&quot;The connection to the Discord API was shut down. Goodbye!&quot;);</span>
-<span class="nc" id="L139">            System.exit(exitCode);</span>
-<span class="nc" id="L140">        }, &quot;terminator&quot;).start();</span>
-<span class="nc" id="L141">    }</span>
+<span class="nc" id="L183">            moduleManager.unloadAll();</span>
+<span class="nc" id="L184">            jda.shutdown();</span>
+<span class="nc" id="L185">            logger.info(&quot;The connection to the Discord API was shut down. Goodbye!&quot;);</span>
+<span class="nc" id="L186">            System.exit(exitCode);</span>
+<span class="nc" id="L187">        }, &quot;terminator&quot;).start();</span>
+<span class="nc" id="L188">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

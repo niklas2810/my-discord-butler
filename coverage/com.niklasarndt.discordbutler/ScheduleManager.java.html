@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ScheduleManager.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">MyDiscordButler</a> &gt; <a href="index.source.html" class="el_package">com.niklasarndt.discordbutler</a> &gt; <span class="el_source">ScheduleManager.java</span></div><h1>ScheduleManager.java</h1><pre class="source lang-java linenums">package com.niklasarndt.discordbutler;
+
+import com.niklasarndt.discordbutler.util.ButlerUtils;
+import com.niklasarndt.discordbutler.util.Emojis;
+import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.MessageEmbed;
+import net.dv8tion.jda.api.entities.User;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+
+/**
+ * Created by Niklas on 2020/08/01.
+ * &lt;p&gt;
+ * WARNING: Automating a task without explicit user consent is considered API abuse.
+ * A message should only be scheduled if the user to you to do so. (e.g. via the remind command)
+ */
+public class ScheduleManager {
+
+<span class="fc" id="L22">    private final Logger logger = LoggerFactory.getLogger(getClass());</span>
+<span class="fc" id="L23">    private final ScheduledExecutorService executorService = Executors</span>
+<span class="fc" id="L24">            .newScheduledThreadPool(1, runnable -&gt; new Thread(null, runnable,</span>
+<span class="fc" id="L25">                    &quot;ScheduleThread-&quot; + System.currentTimeMillis()));</span>
+    private final Butler butler;
+
+<span class="fc" id="L28">    public ScheduleManager(Butler butler) {</span>
+<span class="fc" id="L29">        this.butler = butler;</span>
+<span class="fc" id="L30">    }</span>
+
+    public void schedule(Runnable runnable, long waitTimeInMs) {
+<span class="fc" id="L33">        executorService.schedule(() -&gt; {</span>
+            try {
+<span class="fc" id="L35">                runnable.run();</span>
+<span class="nc" id="L36">            } catch (Exception e) {</span>
+<span class="nc" id="L37">                logger.error(&quot;Failed to run scheduled task&quot;, e);</span>
+<span class="fc" id="L38">            }</span>
+<span class="fc" id="L39">        }, waitTimeInMs, TimeUnit.MILLISECONDS);</span>
+<span class="fc" id="L40">    }</span>
+
+    public void scheduleMessage(String message, long waitTimeInMs) {
+<span class="nc" id="L43">        schedule(() -&gt; {</span>
+<span class="nc" id="L44">            User user = butler.getJda().retrieveUserById(butler.getOwnerId()).complete();</span>
+
+<span class="nc" id="L46">            String duration = ButlerUtils.prettyPrintTime(waitTimeInMs);</span>
+
+<span class="nc" id="L48">            String intro = String.format(&quot;Hey there %s Here's what you &quot; +</span>
+                            &quot;asked me to **remind** you of **%s ago**!&quot;, Emojis.WAVE,
+                    duration);
+<span class="nc" id="L51">            MessageEmbed embed = new EmbedBuilder()</span>
+<span class="nc" id="L52">                    .addField(&quot;Your Reminder&quot;, message, false)</span>
+<span class="nc" id="L53">                    .setFooter(String.format(&quot;Requested %s ago&quot;, duration)).build();</span>
+
+<span class="nc" id="L55">            user.openPrivateChannel()</span>
+<span class="nc" id="L56">                    .queue(channel -&gt; channel.sendMessage(intro).embed(embed).queue());</span>
+<span class="nc" id="L57">        }, waitTimeInMs);</span>
+<span class="nc" id="L58">    }</span>
+
+    public void shutdown() {
+<span class="fc" id="L61">        executorService.shutdown();</span>
+        try {
+<span class="pc bpc" id="L63" title="1 of 2 branches missed.">            if (!executorService.awaitTermination(1, TimeUnit.SECONDS)) {</span>
+<span class="nc" id="L64">                executorService.shutdownNow();</span>
+            }
+<span class="nc" id="L66">        } catch (InterruptedException e) {</span>
+<span class="nc" id="L67">            logger.warn(&quot;Executor service did not shut down automatically, forcing shutdown&quot;, e);</span>
+<span class="nc" id="L68">            executorService.shutdownNow();</span>
+<span class="fc" id="L69">        }</span>
+<span class="fc" id="L70">    }</span>
+
+    public boolean isShutdown() {
+<span class="fc" id="L73">        return executorService.isShutdown();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>
