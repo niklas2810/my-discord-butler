@@ -3,3 +3,4 @@ target
 *.iml
 .env
 *.cmd
+pages/coverage

@@ -34,7 +34,7 @@
         <dependency>
             <groupId>net.dv8tion</groupId>
             <artifactId>JDA</artifactId>
-            <version>4.2.0_182</version>
+            <version>4.2.0_183</version>
             <exclusions>
                 <exclusion>
                     <groupId>club.minnced</groupId>
@@ -67,12 +67,6 @@
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
             <version>5.6.2</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.jacoco</groupId>
-            <artifactId>jacoco-maven-plugin</artifactId>
-            <version>0.8.5</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -161,7 +155,7 @@
                         <goals>
                             <goal>report</goal>
                         </goals>
-                        <phase>verify</phase>
+                        <phase>test</phase>
                     </execution>
                 </executions>
                 <configuration>
@@ -170,63 +164,6 @@
                     </excludes>
                 </configuration>
             </plugin>
-
-            <!-- INCLUDE GENERATOR AT COMPILE TIME -->
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>build-helper-maven-plugin</artifactId>
-                <version>3.2.0</version>
-                <executions>
-                    <execution>
-                        <id>compile-pages-generator</id>
-                        <phase>generate-test-sources</phase>
-                        <goals>
-                            <goal>add-test-source</goal>
-                        </goals>
-                        <configuration>
-                            <sources>
-                                <source>src/generator/java</source>
-                            </sources>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>pages-resources</id>
-                        <phase>generate-test-resources</phase>
-                        <goals>
-                            <goal>add-test-resource</goal>
-                        </goals>
-                        <configuration>
-                            <resources>
-                                <resource>
-                                    <directory>src/generator/resources</directory>
-                                </resource>
-                            </resources>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-
-            <!-- Generate content for GitHub pages -->
-
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>exec-maven-plugin</artifactId>
-                <version>3.0.0</version>
-                <configuration>
-                    <mainClass>com.niklasarndt.testing.generate.GitHubPagesGenerator</mainClass>
-                    <classpathScope>test</classpathScope>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>generate-pages</id>
-                        <phase>test</phase>
-                        <goals>
-                            <goal>java</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-
         </plugins>
     </build>
 

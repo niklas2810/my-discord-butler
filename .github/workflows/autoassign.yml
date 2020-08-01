@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Assign to the latest version's project
+      - name: 🤖 Assign to project
         uses: srggrs/assign-one-project-github-action@1.2.0
         with:
           project: 'https://github.com/niklas2810/my-discord-butler/projects/1'
