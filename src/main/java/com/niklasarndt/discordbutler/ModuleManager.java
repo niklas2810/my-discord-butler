@@ -3,6 +3,7 @@ package com.niklasarndt.discordbutler;
 import com.niklasarndt.discordbutler.modules.ButlerCommand;
 import com.niklasarndt.discordbutler.modules.ButlerContext;
 import com.niklasarndt.discordbutler.modules.ButlerModule;
+import com.niklasarndt.discordbutler.modules.core.command.RedoCommand;
 import com.niklasarndt.discordbutler.util.ResultBuilder;
 import net.dv8tion.jda.api.entities.Message;
 import org.reflections.Reflections;
@@ -25,6 +26,7 @@ public class ModuleManager {
 
     private final Butler instance;
     private final List<ButlerModule> modules = new ArrayList<>();
+    private String mostRecentMessage;
 
     public ModuleManager(Butler instance) {
         this.instance = instance;
@@ -88,10 +90,14 @@ public class ModuleManager {
     }
 
     public ResultBuilder execute(Message message) {
-        return execute(message.getContentRaw(), message);
+        return execute(message.getContentRaw(), message, false);
     }
 
     public ResultBuilder execute(String content, Message origin) {
+        return execute(content, origin, false);
+    }
+
+    public ResultBuilder execute(String content, Message origin, boolean isRedo) {
         String[] parts = content.split(" ");
         String name = parts[0].toLowerCase();
         String[] args = Arrays.copyOfRange(parts, 1, parts.length);
@@ -119,6 +125,7 @@ public class ModuleManager {
                 }
             }
 
+            if (!(cmd instanceof RedoCommand)) this.mostRecentMessage = content;
             return context.resultBuilder();
         } else return ResultBuilder.NOT_FOUND;
     }
@@ -139,5 +146,13 @@ public class ModuleManager {
 
     public Optional<ButlerModule> getModule(String name) {
         return modules.stream().filter(m -> m.info().getName().equals(name)).findFirst();
+    }
+
+    public ResultBuilder redo() {
+        return execute(mostRecentMessage, null, true);
+    }
+
+    public String getMostRecentMessage() {
+        return mostRecentMessage;
     }
 }

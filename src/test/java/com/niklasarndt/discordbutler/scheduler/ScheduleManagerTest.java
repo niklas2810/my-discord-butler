@@ -43,7 +43,7 @@ public class ScheduleManagerTest {
     public void testFailingManager() {
         ScheduleManager manager = new ScheduleManager(null);
         ScheduledTask task = manager.schedule("Test", () -> {
-            throw new NullPointerException("beep");
+            throw new NullPointerException("test exception");
         }, 50);
 
         try {
