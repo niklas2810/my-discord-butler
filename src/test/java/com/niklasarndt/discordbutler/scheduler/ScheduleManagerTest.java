@@ -2,6 +2,7 @@ package com.niklasarndt.discordbutler.scheduler;
 
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
+import java.util.List;
 
 
 /**
@@ -13,6 +14,7 @@ public class ScheduleManagerTest {
 
     @Test
     public void testScheduleManager() {
+        VISITED = false;
         ScheduleManager manager = new ScheduleManager(null);
 
         ScheduledTask task = manager.schedule("test", () -> {
@@ -24,7 +26,7 @@ public class ScheduleManagerTest {
         assertFalse(task.wasExecuted());
         assertFalse(task.wasSuccessfullyExecuted());
         assertFalse(task.hasFailed());
-        assertEquals(1, task.getIndex());
+        assertEquals(1, task.getId());
 
         try {
             Thread.sleep(100);
@@ -52,6 +54,7 @@ public class ScheduleManagerTest {
             e.printStackTrace();
         }
 
+        assertTrue(manager.hasTask(1));
         assertTrue(task.wasExecuted());
         assertTrue(task.hasFailed());
         assertFalse(manager.getFailedTasks(false).isEmpty());
@@ -64,5 +67,28 @@ public class ScheduleManagerTest {
 
         manager.shutdown();
         assertTrue(manager.isShutdown());
+    }
+
+    @Test
+    public void testCancelledTask() {
+        VISITED = false;
+
+        ScheduleManager manager = new ScheduleManager(null);
+
+        ScheduledTask task = manager.schedule("test", () -> {
+            ScheduleManagerTest.VISITED = true;
+        }, 50);
+
+        assertEquals(1, manager.cancel(List.of(task.getId())));
+        assertEquals(0, manager.cancel(0, 1, 2));
+
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        assertFalse(task.wasExecuted());
+        assertFalse(VISITED);
     }
 }

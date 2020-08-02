@@ -9,7 +9,7 @@ public class ScheduledTask {
 
     private final long start = System.currentTimeMillis();
 
-    private final int index;
+    private final int id;
     private final String name;
     private final Runnable runnable;
     private final long waitTimeInMs;
@@ -18,12 +18,12 @@ public class ScheduledTask {
     private boolean success = true;
 
 
-    protected ScheduledTask(int index, Runnable runnable, long waitTimeInMs) {
-        this(index, "Unnamed Task", runnable, waitTimeInMs);
+    protected ScheduledTask(int id, Runnable runnable, long waitTimeInMs) {
+        this(id, "Unnamed Task", runnable, waitTimeInMs);
     }
 
-    protected ScheduledTask(int index, String name, Runnable runnable, long waitTimeInMs) {
-        this.index = index;
+    protected ScheduledTask(int id, String name, Runnable runnable, long waitTimeInMs) {
+        this.id = id;
         this.name = name;
         this.runnable = runnable;
         this.waitTimeInMs = waitTimeInMs;
@@ -40,12 +40,12 @@ public class ScheduledTask {
         }
     }
 
-    public int getIndex() {
-        return index;
+    public int getId() {
+        return id;
     }
 
     public String getFancyIndex() {
-        return String.format("%02d", getIndex());
+        return String.format("%02d", getId());
     }
 
     public String getName() {

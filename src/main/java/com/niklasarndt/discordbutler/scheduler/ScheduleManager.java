@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -48,6 +49,10 @@ public class ScheduleManager {
     private ScheduledTask schedule(ScheduledTask task) {
         tasks.add(task);
         executorService.schedule(() -> {
+            if (!hasTask(task.getId())) {
+                logger.debug("Skipping cancelled task with id {}.", task.getId());
+                return;
+            }
             try {
                 task.execute();
             } catch (Exception e) {
@@ -56,6 +61,10 @@ public class ScheduleManager {
             }
         }, task.getWaitTimeInMs(), TimeUnit.MILLISECONDS);
         return task;
+    }
+
+    public boolean hasTask(int id) {
+        return tasks.stream().anyMatch(i -> i.getId() == id);
     }
 
     public ScheduledTask schedule(String name, Runnable runnable, long waitTimeInMs) {
@@ -107,5 +116,30 @@ public class ScheduleManager {
         tasks = tasks.stream().filter(item -> !item.shouldBeExecuted())
                 .collect(Collectors.toList());
         return Collections.unmodifiableList(tasks);
+    }
+
+    public boolean cancel(int id) {
+        Optional<ScheduledTask> task = tasks.stream().filter(i -> i.getId() == id).findFirst();
+
+        if (task.isEmpty()) return false;
+
+        tasks.remove(task.get());
+        return true;
+    }
+
+    public int cancel(int... ids) {
+        AtomicInteger result = new AtomicInteger();
+        for (int id : ids) {
+            if (cancel(id)) result.getAndIncrement();
+        }
+        return result.get();
+    }
+
+    public int cancel(List<Integer> taskIds) {
+        AtomicInteger result = new AtomicInteger();
+        taskIds.forEach(i -> {
+            if (cancel(i)) result.getAndIncrement();
+        });
+        return result.get();
     }
 }
