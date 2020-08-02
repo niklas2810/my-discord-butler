@@ -63,10 +63,6 @@ public class ScheduleManager {
         return task;
     }
 
-    public boolean hasTask(int id) {
-        return tasks.stream().anyMatch(i -> i.getId() == id);
-    }
-
     public ScheduledTask schedule(String name, Runnable runnable, long waitTimeInMs) {
         return schedule(new ScheduledTask(index.incrementAndGet(), name, runnable, waitTimeInMs));
     }
@@ -118,13 +114,16 @@ public class ScheduleManager {
         return Collections.unmodifiableList(tasks);
     }
 
+    public boolean hasTask(int id) {
+        return tasks.stream().anyMatch(i -> i.getId() == id);
+    }
+
     public boolean cancel(int id) {
         Optional<ScheduledTask> task = tasks.stream().filter(i -> i.getId() == id).findFirst();
 
-        if (task.isEmpty()) return false;
+        task.ifPresent(i -> tasks.remove(i));
 
-        tasks.remove(task.get());
-        return true;
+        return task.isPresent();
     }
 
     public int cancel(int... ids) {

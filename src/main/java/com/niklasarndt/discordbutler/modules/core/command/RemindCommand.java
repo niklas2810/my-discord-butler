@@ -36,7 +36,6 @@ public class RemindCommand extends ButlerCommand {
                         "Please specify what the I should remind you of.");
                 return;
             }
-
             cancelAllReminders(context);
         } else if (context.args().length == 2 && context.args()[0].equals("cancel")) {
             cancelReminder(context);
@@ -91,7 +90,8 @@ public class RemindCommand extends ButlerCommand {
 
     private void displayOverview(ButlerContext context) {
         StringBuilder builder = new StringBuilder("Pending reminders:\n\n");
-        List<ScheduledTask> tasks = context.instance().getScheduleManager().getScheduledTasks().stream()
+        List<ScheduledTask> tasks = context.instance().getScheduleManager()
+                .getScheduledTasks().stream()
                 .filter(i -> i.getName().equals(ScheduleManager.MESSAGE_REMINDER_NAME))
                 .collect(Collectors.toList());
         for (ScheduledTask task : tasks) {
@@ -102,7 +102,8 @@ public class RemindCommand extends ButlerCommand {
             builder.append("There are **no scheduled reminders**.\n");
         }
 
-        List<ScheduledTask> failedTasks = context.instance().getScheduleManager().getFailedTasks(true).stream()
+        List<ScheduledTask> failedTasks = context.instance().getScheduleManager()
+                .getFailedTasks(true).stream()
                 .filter(i -> i.getName().equals(ScheduleManager.MESSAGE_REMINDER_NAME))
                 .collect(Collectors.toList());
 
