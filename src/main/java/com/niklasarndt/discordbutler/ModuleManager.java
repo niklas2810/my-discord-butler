@@ -90,14 +90,10 @@ public class ModuleManager {
     }
 
     public ResultBuilder execute(Message message) {
-        return execute(message.getContentRaw(), message, false);
+        return execute(message.getContentRaw(), message);
     }
 
     public ResultBuilder execute(String content, Message origin) {
-        return execute(content, origin, false);
-    }
-
-    public ResultBuilder execute(String content, Message origin, boolean isRedo) {
         String[] parts = content.split(" ");
         String name = parts[0].toLowerCase();
         String[] args = Arrays.copyOfRange(parts, 1, parts.length);
@@ -149,7 +145,7 @@ public class ModuleManager {
     }
 
     public ResultBuilder redo() {
-        return execute(mostRecentMessage, null, true);
+        return execute(mostRecentMessage, null);
     }
 
     public String getMostRecentMessage() {
