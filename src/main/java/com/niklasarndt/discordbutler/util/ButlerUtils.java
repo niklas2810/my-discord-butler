@@ -13,6 +13,15 @@ public class ButlerUtils {
     }
 
     public static String prettyPrintTime(long ms) {
+        return prettyPrintTime(ms, false);
+    }
+
+    public static String prettyPrintTime(long ms, boolean includeMs) {
+        if (ms <= 0) {
+            throw new IllegalArgumentException(
+                    String.format("The provided long must be larger than zero! (set: %d)", ms));
+        }
+        if (!includeMs && ms < 1000) ms = 1000;
         StringBuilder builder = new StringBuilder();
 
         int days = (int) (ms / 86400000); //1.000 * 60 * 60 * 24
@@ -26,6 +35,11 @@ public class ButlerUtils {
 
         int seconds = (int) (ms / 1000) % 60; //1.000 * 60;
         appendTime(builder, seconds, "second");
+
+        if (includeMs) {
+            int milliseconds = (int) (ms % 1000);
+            appendTime(builder, milliseconds, "millisecond");
+        }
 
         return builder.substring(0, builder.length() - 2);
     }
@@ -77,7 +91,6 @@ public class ButlerUtils {
 
     public static String buildShortCommandInfo(ButlerCommandInformation info, int maxCommandLength,
                                                int maxDescLength) {
-
         String desc = trimString(info.getDescription(), maxDescLength);
 
         return String.format(String.format("`%%-%ds`: `%%-%ds`", maxCommandLength, maxDescLength),

@@ -3,6 +3,7 @@ package com.niklasarndt.discordbutler;
 import com.niklasarndt.discordbutler.listener.ApiConnectedListener;
 import com.niklasarndt.discordbutler.listener.DirectMessageListener;
 import com.niklasarndt.discordbutler.listener.PrivateReactionListener;
+import com.niklasarndt.discordbutler.scheduler.ScheduleManager;
 import com.niklasarndt.discordbutler.util.ButlerUtils;
 import com.niklasarndt.discordbutler.util.ExecutionFlags;
 import io.sentry.Sentry;

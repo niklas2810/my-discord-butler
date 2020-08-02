@@ -138,4 +138,11 @@ public class ResultBuilder {
     public void warn(String output, Object... args) {
         warn(String.format(output, args));
     }
+
+    public void output(ResultBuilder other) {
+        this.type = other.type;
+        this.output = other.output;
+        this.usesEmbed = other.usesEmbed;
+        this.embedBuilder = other.embedBuilder;
+    }
 }
