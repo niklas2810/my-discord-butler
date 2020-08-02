@@ -25,7 +25,7 @@ The bot is only available for communication via direct messages and
 replies to the bot owner's messages only. Alternatively, you can
 create a channel on a guild and add "allow-butler" to the channel
 description to allow the bot to use this channel. However, please keep
-in mind that the bot will only still respond to the bot owner's messages!
+in mind that the bot will still only respond to the bot owner's messages!
 
 
 ## Setup and Installation
