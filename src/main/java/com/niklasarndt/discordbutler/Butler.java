@@ -1,8 +1,8 @@
 package com.niklasarndt.discordbutler;
 
 import com.niklasarndt.discordbutler.listener.ApiConnectedListener;
-import com.niklasarndt.discordbutler.listener.DirectMessageListener;
-import com.niklasarndt.discordbutler.listener.PrivateReactionListener;
+import com.niklasarndt.discordbutler.listener.MessageListener;
+import com.niklasarndt.discordbutler.listener.ReactionListener;
 import com.niklasarndt.discordbutler.scheduler.ScheduleManager;
 import com.niklasarndt.discordbutler.util.ButlerUtils;
 import com.niklasarndt.discordbutler.util.ExecutionFlags;
@@ -130,10 +130,11 @@ public class Butler {
      */
     private JDA setUpJda() throws LoginException {
         final JDABuilder builder = JDABuilder.create(System.getenv("TOKEN_DISCORD"),
-                GatewayIntent.DIRECT_MESSAGES, GatewayIntent.DIRECT_MESSAGE_REACTIONS);
+                GatewayIntent.DIRECT_MESSAGES, GatewayIntent.DIRECT_MESSAGE_REACTIONS,
+                GatewayIntent.GUILD_MESSAGES, GatewayIntent.GUILD_MESSAGE_REACTIONS);
         builder.setActivity(Activity.of(Activity.ActivityType.WATCHING, "via direct messages"));
         builder.addEventListeners(new ApiConnectedListener(this),
-                new DirectMessageListener(this), new PrivateReactionListener(this));
+                new MessageListener(this), new ReactionListener(this));
         builder.disableCache(CacheFlag.ACTIVITY, CacheFlag.VOICE_STATE,
                 CacheFlag.EMOTE, CacheFlag.CLIENT_STATUS);
         return builder.build();
