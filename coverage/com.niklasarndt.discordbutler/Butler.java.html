@@ -35,8 +35,8 @@
         package com.niklasarndt.discordbutler;
 
 import com.niklasarndt.discordbutler.listener.ApiConnectedListener;
-import com.niklasarndt.discordbutler.listener.DirectMessageListener;
-import com.niklasarndt.discordbutler.listener.PrivateReactionListener;
+import com.niklasarndt.discordbutler.listener.MessageListener;
+import com.niklasarndt.discordbutler.listener.ReactionListener;
 import com.niklasarndt.discordbutler.scheduler.ScheduleManager;
 import com.niklasarndt.discordbutler.util.ButlerUtils;
 import com.niklasarndt.discordbutler.util.ExecutionFlags;
@@ -203,77 +203,78 @@ public class Butler {
     private JDA setUpJda() throws LoginException {
 <span class="nc" id=
 "L132">        final JDABuilder builder = JDABuilder.create(System.getenv("TOKEN_DISCORD"),</span>
-                GatewayIntent.DIRECT_MESSAGES, GatewayIntent.DIRECT_MESSAGE_REACTIONS);
+                GatewayIntent.DIRECT_MESSAGES, GatewayIntent.DIRECT_MESSAGE_REACTIONS,
+                GatewayIntent.GUILD_MESSAGES, GatewayIntent.GUILD_MESSAGE_REACTIONS);
 <span class="nc" id=
-"L134">        builder.setActivity(Activity.of(Activity.ActivityType.WATCHING, "via direct messages"));</span>
+"L135">        builder.setActivity(Activity.of(Activity.ActivityType.WATCHING, "via direct messages"));</span>
 <span class="nc" id=
-"L135">        builder.addEventListeners(new ApiConnectedListener(this),</span>
-                new DirectMessageListener(this), new PrivateReactionListener(this));
+"L136">        builder.addEventListeners(new ApiConnectedListener(this),</span>
+                new MessageListener(this), new ReactionListener(this));
 <span class="nc" id=
-"L137">        builder.disableCache(CacheFlag.ACTIVITY, CacheFlag.VOICE_STATE,</span>
+"L138">        builder.disableCache(CacheFlag.ACTIVITY, CacheFlag.VOICE_STATE,</span>
                 CacheFlag.EMOTE, CacheFlag.CLIENT_STATUS);
-<span class="nc" id="L139">        return builder.build();</span>
+<span class="nc" id="L140">        return builder.build();</span>
     }
 
     public JDA getJda() {
-<span class="fc" id="L143">        return jda;</span>
+<span class="fc" id="L144">        return jda;</span>
     }
 
     public long getOwnerId() {
-<span class="fc" id="L147">        return ownerId;</span>
+<span class="fc" id="L148">        return ownerId;</span>
     }
 
     public long getStartupTimestamp() {
-<span class="fc" id="L151">        return startupTimestamp;</span>
+<span class="fc" id="L152">        return startupTimestamp;</span>
     }
 
     public ModuleManager getModuleManager() {
-<span class="fc" id="L155">        return moduleManager;</span>
+<span class="fc" id="L156">        return moduleManager;</span>
     }
 
     public ScheduleManager getScheduleManager() {
-<span class="nc" id="L159">        return scheduleManager;</span>
+<span class="nc" id="L160">        return scheduleManager;</span>
     }
 
     public List&lt;ExecutionFlags&gt; getFlags() {
-<span class="fc" id="L163">        return flags;</span>
+<span class="fc" id="L164">        return flags;</span>
     }
 
     public boolean hasFlag(int flagId) {
 <span class="fc" id=
-"L167">        return hasFlag(ExecutionFlags.getFlagById(flagId));</span>
+"L168">        return hasFlag(ExecutionFlags.getFlagById(flagId));</span>
     }
 
     public boolean hasFlag(ExecutionFlags flag) {
 <span class="fc" id=
-"L171">        return flags.contains(flag);</span>
+"L172">        return flags.contains(flag);</span>
     }
 
     public void shutdown(int exitCode) {
 <span class="nc" id=
-"L175">        new Thread(null, () -&gt; {</span>
+"L176">        new Thread(null, () -&gt; {</span>
 <span class="nc" id=
-"L176">            logger.info("Shutdown in 5 seconds!");</span>
+"L177">            logger.info("Shutdown in 5 seconds!");</span>
             try {
 <span class="nc" id=
-"L178">                Thread.sleep(5000);</span>
+"L179">                Thread.sleep(5000);</span>
 <span class="nc" id=
-"L179">            } catch (InterruptedException e) {</span>
+"L180">            } catch (InterruptedException e) {</span>
 <span class="nc" id=
-"L180">                e.printStackTrace();</span>
-<span class="nc" id="L181">            }</span>
+"L181">                e.printStackTrace();</span>
+<span class="nc" id="L182">            }</span>
 <span class="nc" id=
-"L182">            logger.info("Initiating shutdown...");</span>
+"L183">            logger.info("Initiating shutdown...");</span>
 
 <span class="nc" id=
-"L184">            moduleManager.unloadAll();</span>
-<span class="nc" id="L185">            jda.shutdown();</span>
+"L185">            moduleManager.unloadAll();</span>
+<span class="nc" id="L186">            jda.shutdown();</span>
 <span class="nc" id=
-"L186">            logger.info("The connection to the Discord API was shut down. Goodbye!");</span>
+"L187">            logger.info("The connection to the Discord API was shut down. Goodbye!");</span>
 <span class="nc" id=
-"L187">            System.exit(exitCode);</span>
-<span class="nc" id="L188">        }, "terminator").start();</span>
-<span class="nc" id="L189">    }</span>
+"L188">            System.exit(exitCode);</span>
+<span class="nc" id="L189">        }, "terminator").start();</span>
+<span class="nc" id="L190">    }</span>
 }
 </pre>
         <div class="footer">
