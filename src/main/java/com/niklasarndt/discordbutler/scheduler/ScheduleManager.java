@@ -1,5 +1,6 @@
-package com.niklasarndt.discordbutler;
+package com.niklasarndt.discordbutler.scheduler;
 
+import com.niklasarndt.discordbutler.Butler;
 import com.niklasarndt.discordbutler.util.ButlerUtils;
 import com.niklasarndt.discordbutler.util.Emojis;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -7,9 +8,14 @@ import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 /**
  * Created by Niklas on 2020/08/01.
@@ -24,28 +30,40 @@ import java.util.concurrent.TimeUnit;
  */
 public class ScheduleManager {
 
+    public static final String MESSAGE_REMINDER_NAME = "Scheduled Message";
+
     private final Logger logger = LoggerFactory.getLogger(getClass());
     private final ScheduledExecutorService executorService = Executors
             .newScheduledThreadPool(1, runnable -> new Thread(null, runnable,
                     "ScheduleThread-" + System.currentTimeMillis()));
     private final Butler butler;
+    private final List<ScheduledTask> failedTasks = new ArrayList<>();
+    private List<ScheduledTask> tasks = new ArrayList<>();
+    private AtomicInteger index = new AtomicInteger();
 
     public ScheduleManager(Butler butler) {
         this.butler = butler;
     }
 
-    public void schedule(Runnable runnable, long waitTimeInMs) {
+    private ScheduledTask schedule(ScheduledTask task) {
+        tasks.add(task);
         executorService.schedule(() -> {
             try {
-                runnable.run();
+                task.execute();
             } catch (Exception e) {
                 logger.error("Failed to run scheduled task", e);
+                failedTasks.add(task);
             }
-        }, waitTimeInMs, TimeUnit.MILLISECONDS);
+        }, task.getWaitTimeInMs(), TimeUnit.MILLISECONDS);
+        return task;
+    }
+
+    public ScheduledTask schedule(String name, Runnable runnable, long waitTimeInMs) {
+        return schedule(new ScheduledTask(index.incrementAndGet(), name, runnable, waitTimeInMs));
     }
 
     public void scheduleMessage(String message, long waitTimeInMs) {
-        schedule(() -> {
+        schedule(MESSAGE_REMINDER_NAME, () -> {
             String duration = ButlerUtils.prettyPrintTime(waitTimeInMs);
 
             String intro = String.format("Hey there %s Here's what you " +
@@ -76,5 +94,18 @@ public class ScheduleManager {
 
     public boolean isShutdown() {
         return executorService.isShutdown();
+    }
+
+    public List<ScheduledTask> getFailedTasks(boolean clearAfterwards) {
+        List<ScheduledTask> result = Collections.unmodifiableList(
+                clearAfterwards ? List.copyOf(failedTasks) : failedTasks);
+        if (clearAfterwards) failedTasks.clear();
+        return result;
+    }
+
+    public List<ScheduledTask> getScheduledTasks() {
+        tasks = tasks.stream().filter(item -> !item.shouldBeExecuted())
+                .collect(Collectors.toList());
+        return Collections.unmodifiableList(tasks);
     }
 }

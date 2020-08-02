@@ -2,6 +2,7 @@ package com.niklasarndt.discordbutler.util;
 
 import com.niklasarndt.testing.util.ButlerTest;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -11,10 +12,14 @@ class ButlerUtilsTest extends ButlerTest {
 
     @Test
     void prettyPrintTime() {
+        assertThrows(IllegalArgumentException.class, () -> ButlerUtils.prettyPrintTime(0));
+        assertEquals("01 millisecond", ButlerUtils.prettyPrintTime(1, true));
         assertEquals("01 second", ButlerUtils.prettyPrintTime(1_000));
         assertEquals("01 minute", ButlerUtils.prettyPrintTime(60_000));
         assertEquals("01 hour", ButlerUtils.prettyPrintTime(3_600_000));
         assertEquals("01 day", ButlerUtils.prettyPrintTime(86_400_000));
+        assertEquals("01 second, 05 milliseconds",
+                ButlerUtils.prettyPrintTime(1_005, true));
         assertEquals("01 minute, 01 second", ButlerUtils.prettyPrintTime(61_000));
         assertEquals("01 minute, 02 seconds", ButlerUtils.prettyPrintTime(62_000));
         assertEquals("02 minutes, 01 second", ButlerUtils.prettyPrintTime(121_000));
