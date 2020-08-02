@@ -19,7 +19,7 @@ public class ScheduleManagerTest {
 
         ScheduledTask task = manager.schedule("test", () -> {
             ScheduleManagerTest.VISITED = true;
-        }, 50);
+        }, 500);
 
         assertFalse(task.shouldBeExecuted());
         assertEquals("01 second", task.getFancyTimeUntilExecution());
@@ -29,7 +29,7 @@ public class ScheduleManagerTest {
         assertEquals(1, task.getId());
 
         try {
-            Thread.sleep(100);
+            Thread.sleep(1000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -46,10 +46,10 @@ public class ScheduleManagerTest {
         ScheduleManager manager = new ScheduleManager(null);
         ScheduledTask task = manager.schedule("Test", () -> {
             throw new NullPointerException("test exception");
-        }, 50);
+        }, 500);
 
         try {
-            Thread.sleep(100);
+            Thread.sleep(1000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -77,13 +77,13 @@ public class ScheduleManagerTest {
 
         ScheduledTask task = manager.schedule("test", () -> {
             ScheduleManagerTest.VISITED = true;
-        }, 50);
+        }, 500);
 
         assertEquals(1, manager.cancel(List.of(task.getId())));
         assertEquals(0, manager.cancel(0, 1, 2));
 
         try {
-            Thread.sleep(100);
+            Thread.sleep(1000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
