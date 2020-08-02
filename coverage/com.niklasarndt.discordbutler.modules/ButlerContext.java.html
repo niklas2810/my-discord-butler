@@ -1,4 +1,38 @@
-<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ButlerContext.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">MyDiscordButler</a> &gt; <a href="index.source.html" class="el_package">com.niklasarndt.discordbutler.modules</a> &gt; <span class="el_source">ButlerContext.java</span></div><h1>ButlerContext.java</h1><pre class="source lang-java linenums">package com.niklasarndt.discordbutler.modules;
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+    <head>
+        <meta name="generator" content=
+        "HTML Tidy for HTML5 for Linux version 5.6.0" />
+        <meta http-equiv="Content-Type" content=
+        "text/html; charset=utf-8" />
+        <link rel="stylesheet" href=
+        "../jacoco-resources/report.css" type="text/css" />
+        <link rel="shortcut icon" href=
+        "../jacoco-resources/report.gif" type="image/gif" />
+        <title>
+            ButlerContext.java
+        </title>
+        <link rel="stylesheet" href=
+        "../jacoco-resources/prettify.css" type="text/css" />
+        <script type="text/javascript" src=
+        "../jacoco-resources/prettify.js"></script>
+    </head>
+    <body onload="window['PR_TAB_WIDTH']=4;prettyPrint()">
+        <div class="breadcrumb" id="breadcrumb">
+            <span class="info"><a href="../jacoco-sessions.html"
+            class="el_session">Sessions</a></span><a href=
+            "../index.html" class="el_report">MyDiscordButler</a>
+            &gt; <a href="index.source.html" class=
+            "el_package">com.niklasarndt.discordbutler.modules</a>
+            &gt; <span class="el_source">ButlerContext.java</span>
+        </div>
+        <h1>
+            ButlerContext.java
+        </h1>
+        <pre class="source lang-java linenums">
+        package com.niklasarndt.discordbutler.modules;
 
 import com.niklasarndt.discordbutler.Butler;
 import com.niklasarndt.discordbutler.util.ResultBuilder;
@@ -13,7 +47,8 @@ import org.slf4j.LoggerFactory;
  */
 public class ButlerContext {
 
-<span class="fc" id="L16">    private static final Logger logger = LoggerFactory.getLogger(ButlerContext.class);</span>
+<span class="fc" id=
+"L16">    private static final Logger logger = LoggerFactory.getLogger(ButlerContext.class);</span>
 
     private final Butler instance;
     private final Message message;
@@ -23,15 +58,18 @@ public class ButlerContext {
     private final ResultBuilder result;
 
     public ButlerContext(Butler instance, Message message, String command,
-<span class="fc" id="L26">                         String[] args, ResultBuilder result) {</span>
+<span class="fc" id=
+"L26">                         String[] args, ResultBuilder result) {</span>
 <span class="fc" id="L27">        this.instance = instance;</span>
 <span class="fc" id="L28">        this.message = message;</span>
 <span class="fc" id="L29">        this.command = command;</span>
 <span class="fc" id="L30">        this.args = args;</span>
 <span class="fc" id="L31">        this.result = result;</span>
 
-<span class="pc bpc" id="L33" title="1 of 2 branches missed.">        if (this.instance == null) {</span>
-<span class="fc" id="L34">            logger.warn(&quot;The bot instance is not set. Some commands may not work as expected.&quot;);</span>
+<span class="pc bpc" id="L33" title=
+"1 of 2 branches missed.">        if (this.instance == null) {</span>
+<span class="fc" id=
+"L34">            logger.warn("The bot instance is not set. Some commands may not work as expected.");</span>
         }
 <span class="fc" id="L36">    }</span>
 
@@ -55,4 +93,11 @@ public class ButlerContext {
 <span class="fc" id="L55">        return result;</span>
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>
+</pre>
+        <div class="footer">
+            <span class="right">Created with <a href=
+            "http://www.jacoco.org/jacoco">JaCoCo</a>
+            0.8.5.201910111838</span>
+        </div>
+    </body>
+</html>

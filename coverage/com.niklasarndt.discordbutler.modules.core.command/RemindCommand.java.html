@@ -1,9 +1,47 @@
-<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>RemindCommand.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">MyDiscordButler</a> &gt; <a href="index.source.html" class="el_package">com.niklasarndt.discordbutler.modules.core.command</a> &gt; <span class="el_source">RemindCommand.java</span></div><h1>RemindCommand.java</h1><pre class="source lang-java linenums">package com.niklasarndt.discordbutler.modules.core.command;
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+    <head>
+        <meta name="generator" content=
+        "HTML Tidy for HTML5 for Linux version 5.6.0" />
+        <meta http-equiv="Content-Type" content=
+        "text/html; charset=utf-8" />
+        <link rel="stylesheet" href=
+        "../jacoco-resources/report.css" type="text/css" />
+        <link rel="shortcut icon" href=
+        "../jacoco-resources/report.gif" type="image/gif" />
+        <title>
+            RemindCommand.java
+        </title>
+        <link rel="stylesheet" href=
+        "../jacoco-resources/prettify.css" type="text/css" />
+        <script type="text/javascript" src=
+        "../jacoco-resources/prettify.js"></script>
+    </head>
+    <body onload="window['PR_TAB_WIDTH']=4;prettyPrint()">
+        <div class="breadcrumb" id="breadcrumb">
+            <span class="info"><a href="../jacoco-sessions.html"
+            class="el_session">Sessions</a></span><a href=
+            "../index.html" class="el_report">MyDiscordButler</a>
+            &gt; <a href="index.source.html" class=
+            "el_package">com.niklasarndt.discordbutler.modules.core.command</a>
+            &gt; <span class="el_source">RemindCommand.java</span>
+        </div>
+        <h1>
+            RemindCommand.java
+        </h1>
+        <pre class="source lang-java linenums">
+        package com.niklasarndt.discordbutler.modules.core.command;
 
 import com.niklasarndt.discordbutler.modules.ButlerCommand;
 import com.niklasarndt.discordbutler.modules.ButlerContext;
+import com.niklasarndt.discordbutler.scheduler.ScheduleManager;
+import com.niklasarndt.discordbutler.scheduler.ScheduledTask;
 import com.niklasarndt.discordbutler.util.ButlerUtils;
 import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by Niklas on 2020/08/01.
@@ -11,30 +49,166 @@ import java.util.Arrays;
 public class RemindCommand extends ButlerCommand {
 
     public RemindCommand() {
-<span class="fc" id="L14">        super(&quot;remind&quot;, 2, Integer.MAX_VALUE,</span>
-                &quot;Be reminded in a certain time. Syntax: &quot; +
-                        &quot;remind &lt;days&gt;d&lt;hours&gt;h&lt;minutes&gt;m&lt;seconds&gt;s &lt;message&gt;. &quot; +
-                        &quot;Leave out some values for the duration if &quot; +
-                        &quot;these should be zero anyway (e.g. days).&quot;);
-<span class="fc" id="L19">    }</span>
+<span class="fc" id=
+"L18">        super("remind", 0, Integer.MAX_VALUE,</span>
+                "Be reminded in a certain time. Type \"remind\" to receive a list" +
+                        "of pending reminders. Syntax: \n" +
+                        "remind clear - Deletes all reminders.\n" +
+                        "remind cancel &lt;id&gt; - Removes a specific reminder.\n" +
+                        "remind 5d10h35m10s &lt;message&gt;.\n" +
+                        "Leave out some values for the duration if " +
+                        "these should be zero anyway (e.g. days).",
+                "reminder");
+<span class="fc" id="L27">    }</span>
 
     @Override
     public void execute(ButlerContext context) {
-<span class="nc" id="L23">        long duration = ButlerUtils.parseTimeString(context.args()[0]);</span>
+<span class="nc bnc" id="L31" title=
+"All 2 branches missed.">        if (context.args().length == 0) {</span>
+<span class="nc" id=
+"L32">            displayOverview(context);</span>
+<span class="nc bnc" id="L33" title=
+"All 2 branches missed.">        } else if (context.args().length == 1) {</span>
+<span class="nc bnc" id="L34" title=
+"All 2 branches missed.">            if (!context.args()[0].equals("clear")) {</span>
+<span class="nc" id=
+"L35">                context.resultBuilder().error(</span>
+                        "Please specify what the I should remind you of.");
+<span class="nc" id="L37">                return;</span>
+            }
+<span class="nc" id=
+"L39">            cancelAllReminders(context);</span>
+<span class="nc bnc" id="L40" title=
+"All 4 branches missed.">        } else if (context.args().length == 2 &amp;&amp; context.args()[0].equals("cancel")) {</span>
+<span class="nc" id=
+"L41">            cancelReminder(context);</span>
 
-<span class="nc bnc" id="L25" title="All 2 branches missed.">        if (duration &lt;= 0) {</span>
-<span class="nc" id="L26">            context.resultBuilder()</span>
-<span class="nc" id="L27">                    .error(&quot;Invalid duration: %s. Please make sure that the format &quot; +</span>
-                            &quot;is correct and you specified a positive duration. &quot; +
-                            &quot;Use \&quot;help remind\&quot; for more details.&quot;);
-<span class="nc" id="L30">            return;</span>
+        } else {
+<span class="nc" id=
+"L44">            createReminder(context);</span>
+        }
+<span class="nc" id="L46">    }</span>
+
+    private void cancelReminder(ButlerContext context) {
+<span class="nc" id=
+"L49">        int id = ButlerUtils.parseInt(context.args()[1], -1);</span>
+<span class="nc bnc" id="L50" title=
+"All 2 branches missed.">        if (id &lt;= 0) {</span>
+<span class="nc" id=
+"L51">            context.resultBuilder().error("Please make sure to " +</span>
+                    "provide a valid reminder id.");
+<span class="nc" id="L53">            return;</span>
         }
 
-<span class="nc" id="L33">        String message = String.join(&quot; &quot;,</span>
-<span class="nc" id="L34">                Arrays.copyOfRange(context.args(), 1, context.args().length));</span>
-<span class="nc" id="L35">        context.instance().getScheduleManager().scheduleMessage(message, duration);</span>
-<span class="nc" id="L36">        context.resultBuilder().success(&quot;You will be reminded in %s.&quot;,</span>
-<span class="nc" id="L37">                ButlerUtils.prettyPrintTime(duration));</span>
-<span class="nc" id="L38">    }</span>
+<span class="nc" id=
+"L56">        boolean removed = context.instance().getScheduleManager().cancel(id);</span>
+<span class="nc bnc" id="L57" title=
+"All 2 branches missed.">        if (removed) context.resultBuilder()</span>
+<span class="nc" id=
+"L58">                .success("Reminder **#%02d** has been deleted.", id);</span>
+<span class="nc" id=
+"L59">        else context.resultBuilder().notFound("Reminder **#%02d** was not found.", id);</span>
+<span class="nc" id="L60">    }</span>
+
+    private void cancelAllReminders(ButlerContext context) {
+<span class="nc" id=
+"L63">        List&lt;Integer&gt; taskIds = context.instance().getScheduleManager().getScheduledTasks().stream()</span>
+<span class="nc" id=
+"L64">                .filter(i -&gt; i.getName().equals(ScheduleManager.MESSAGE_REMINDER_NAME))</span>
+<span class="nc" id=
+"L65">                .map(ScheduledTask::getId)</span>
+<span class="nc" id=
+"L66">                .collect(Collectors.toList());</span>
+
+<span class="nc" id=
+"L68">        context.resultBuilder().success("Cancelled %d reminders.",</span>
+<span class="nc" id=
+"L69">                context.instance().getScheduleManager().cancel(taskIds));</span>
+
+<span class="nc" id="L71">    }</span>
+
+    private void createReminder(ButlerContext context) {
+<span class="nc" id=
+"L74">        long duration = ButlerUtils.parseTimeString(context.args()[0]);</span>
+
+<span class="nc bnc" id="L76" title=
+"All 2 branches missed.">        if (duration &lt;= 0) {</span>
+<span class="nc" id=
+"L77">            context.resultBuilder()</span>
+<span class="nc" id=
+"L78">                    .error("Invalid duration: %s. Please make sure that the format " +</span>
+                            "is correct and you specified a positive duration. " +
+                            "Use \"help remind\" for more details.");
+<span class="nc" id="L81">            return;</span>
+        }
+
+<span class="nc" id=
+"L84">        String message = String.join(" ",</span>
+<span class="nc" id=
+"L85">                Arrays.copyOfRange(context.args(), 1, context.args().length));</span>
+<span class="nc" id=
+"L86">        context.instance().getScheduleManager().scheduleMessage(message, duration);</span>
+<span class="nc" id=
+"L87">        context.resultBuilder().success("You will be reminded in %s.",</span>
+<span class="nc" id=
+"L88">                ButlerUtils.prettyPrintTime(duration));</span>
+<span class="nc" id="L89">    }</span>
+
+    private void displayOverview(ButlerContext context) {
+<span class="nc" id=
+"L92">        StringBuilder builder = new StringBuilder("Pending reminders:\n\n");</span>
+<span class="nc" id=
+"L93">        List&lt;ScheduledTask&gt; tasks = context.instance().getScheduleManager()</span>
+<span class="nc" id=
+"L94">                .getScheduledTasks().stream()</span>
+<span class="nc" id=
+"L95">                .filter(i -&gt; i.getName().equals(ScheduleManager.MESSAGE_REMINDER_NAME))</span>
+<span class="nc" id=
+"L96">                .collect(Collectors.toList());</span>
+<span class="nc bnc" id="L97" title=
+"All 2 branches missed.">        for (ScheduledTask task : tasks) {</span>
+<span class="nc" id=
+"L98">            builder.append(String.format("Reminder **#%s**: In %s.\n", task.getFancyIndex(),</span>
+<span class="nc" id=
+"L99">                    task.getFancyTimeUntilExecution()));</span>
+<span class="nc" id="L100">        }</span>
+<span class="nc bnc" id="L101" title=
+"All 2 branches missed.">        if (tasks.size() == 0) {</span>
+<span class="nc" id=
+"L102">            builder.append("There are **no scheduled reminders**.\n");</span>
+        }
+
+<span class="nc" id=
+"L105">        List&lt;ScheduledTask&gt; failedTasks = context.instance().getScheduleManager()</span>
+<span class="nc" id=
+"L106">                .getFailedTasks(true).stream()</span>
+<span class="nc" id=
+"L107">                .filter(i -&gt; i.getName().equals(ScheduleManager.MESSAGE_REMINDER_NAME))</span>
+<span class="nc" id=
+"L108">                .collect(Collectors.toList());</span>
+
+<span class="nc bnc" id="L110" title=
+"All 2 branches missed.">        if (failedTasks.size() &gt; 0) {</span>
+<span class="nc" id=
+"L111">            builder.append("\n\nFailed reminders:");</span>
+
+<span class="nc bnc" id="L113" title=
+"All 2 branches missed.">            for (ScheduledTask task : tasks) {</span>
+<span class="nc" id=
+"L114">                builder.append(String.format("Reminder **#%s**: %s ago.\n", task.getFancyIndex(),</span>
+<span class="nc" id=
+"L115">                        task.getTimeSinceExecution()));</span>
+<span class="nc" id="L116">            }</span>
+        }
+<span class="nc" id=
+"L118">        context.resultBuilder().success(builder.toString().trim());</span>
+<span class="nc" id="L119">    }</span>
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>
+</pre>
+        <div class="footer">
+            <span class="right">Created with <a href=
+            "http://www.jacoco.org/jacoco">JaCoCo</a>
+            0.8.5.201910111838</span>
+        </div>
+    </body>
+</html>
