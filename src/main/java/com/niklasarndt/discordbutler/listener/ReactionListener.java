@@ -113,11 +113,19 @@ public class ReactionListener extends ListenerAdapter {
                     .delay(100, TimeUnit.MILLISECONDS)
                     .flatMap(history -> {
 
+                        long distanceInSeconds = history.isEmpty() ? 0 :
+                                Math.abs(history.getRetrievedHistory().get(0)
+                                        .getTimeCreated().toEpochSecond() -
+                                        message.getTimeCreated().toEpochSecond());
+
                         if (history.isEmpty()) {
                             logger.debug("Did not retrieve any previous messages");
                         } else if (history.getRetrievedHistory().get(0).getAuthor().getIdLong()
                                 != butler.getOwnerId()) {
                             logger.debug("Author of previous message is not the bot owner");
+                        } else if (distanceInSeconds > 5) {
+                            logger.debug("Time between bot message and original message " +
+                                    "is too large ({}s)", distanceInSeconds);
                         } else {
                             return channel.deleteMessageById(
                                     history.getRetrievedHistory().get(0).getId())
