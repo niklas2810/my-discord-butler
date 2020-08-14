@@ -59,16 +59,7 @@ public class MessageListener extends ListenerAdapter {
             ResultBuilder result = butler.getModuleManager().execute(message);
 
             if (result.hasOutput()) {
-                try {
-                    result.produceIntoChannel(channel);
-                } catch (Exception e) {
-                    logger.error("Unexpected exception while producing " +
-                                    "the command result of \"{}\"",
-                            message.getContentRaw(), e);
-                    channel.sendMessage(String.format("%s Could not produce a response: " +
-                                    "**%s** - %s", ResultType.ERROR.emoji,
-                            e.getClass().getSimpleName(), e.getMessage())).queue();
-                }
+                sentOutput(result, message, channel);
             } else {
                 message.addReaction(result.getType().emoji).queue();
             }
@@ -83,5 +74,18 @@ public class MessageListener extends ListenerAdapter {
             logger.error("Internal message processing error", e);
         }
 
+    }
+
+    private void sentOutput(ResultBuilder result, Message message, MessageChannel channel) {
+        try {
+            result.produceIntoChannel(channel);
+        } catch (Exception e) {
+            logger.error("Unexpected exception while producing " +
+                            "the command result of \"{}\"",
+                    message.getContentRaw(), e);
+            channel.sendMessage(String.format("%s Could not produce a response: " +
+                            "**%s** - %s", ResultType.ERROR.emoji,
+                    e.getClass().getSimpleName(), e.getMessage())).queue();
+        }
     }
 }

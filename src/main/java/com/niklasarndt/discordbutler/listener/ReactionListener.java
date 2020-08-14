@@ -89,9 +89,9 @@ public class ReactionListener extends ListenerAdapter {
                             logger.debug("Executing reaction processing");
 
                             if (emoji.equals(Emojis.WASTEBASKET)) {
-                                return performDeleteAction(channel, messageId, message);
+                                return performDeleteAction(channel, message);
                             } else if (emoji.equals(Emojis.HOURGLASS)) {
-                                return performSnoozeAction(channel, messageId, message);
+                                return performSnoozeAction(message);
                             } else {
                                 throw new IllegalStateException("Unexpected value: " + emoji);
                             }
@@ -127,8 +127,7 @@ public class ReactionListener extends ListenerAdapter {
 
     }
 
-    private RestAction<Void> performSnoozeAction(MessageChannel channel,
-                                                 long messageId, Message message) {
+    private RestAction<Void> performSnoozeAction(Message message) {
         Optional<MessageEmbed.Field> field = message.getEmbeds().get(0).getFields().stream()
                 .filter(item -> Objects.equals(item.getName(), "Your Reminder")).findFirst();
 
@@ -146,10 +145,9 @@ public class ReactionListener extends ListenerAdapter {
                 .flatMap(Message::delete);
     }
 
-    private RestAction<Void> performDeleteAction(MessageChannel channel,
-                                                 long messageId, Message message) {
+    private RestAction<Void> performDeleteAction(MessageChannel channel, Message message) {
         if (channel instanceof GuildChannel) { //Try to delete original message
-            return channel.getHistoryBefore(messageId, 1)
+            return channel.getHistoryBefore(message.getIdLong(), 1)
                     .delay(100, TimeUnit.MILLISECONDS)
                     .flatMap(history -> {
 
