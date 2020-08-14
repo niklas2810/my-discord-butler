@@ -5,6 +5,7 @@ import com.niklasarndt.discordbutler.util.Emojis;
 import net.dv8tion.jda.api.entities.GuildChannel;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageChannel;
+import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
 import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionRemoveEvent;
 import net.dv8tion.jda.api.events.message.priv.react.PrivateMessageReactionAddEvent;
@@ -17,6 +18,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import javax.annotation.Nonnull;
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -24,7 +27,7 @@ import java.util.concurrent.TimeUnit;
  */
 public class ReactionListener extends ListenerAdapter {
 
-    private static final List<String> REACT_EMOJIS = List.of(Emojis.WASTEBASKET);
+    private static final List<String> REACT_EMOJIS = List.of(Emojis.WASTEBASKET, Emojis.HOURGLASS);
     private final Butler butler;
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -73,37 +76,75 @@ public class ReactionListener extends ListenerAdapter {
     private boolean passesFilter(long userIdLong, String emoji) {
         if (userIdLong != butler.getOwnerId()) return false;
 
-        if (!REACT_EMOJIS.contains(emoji)) return false;
-        logger.debug("Received emote: " + emoji);
-        return true;
+        boolean registered = REACT_EMOJIS.contains(emoji);
+        logger.debug("Received emote: {} (Registered? {})", emoji, registered);
+        return registered;
     }
 
     private void scheduleReactionProcessing(long messageId,
                                             MessageChannel channel, String emoji) {
         channel.retrieveMessageById(messageId)
                 .delay(3, TimeUnit.SECONDS)
-                .flatMap(message -> {
-                    if (message == null || !message.getAuthor().isBot()) {
-                        logger.debug("Not suitable for reaction processing");
-                        return false;
-                    }
+                .flatMap(message -> runPreprocessingChecks(message, emoji),
+                        message -> {
+                            logger.debug("Executing reaction processing");
 
-                    if (removed.containsKey(messageId) &&
-                            removed.get(messageId)
-                                    .equals(emoji)) {
-                        logger.debug("User removed reaction");
-                        return false;
-                    }
-                    return true;
-                }, message -> {
-                    logger.debug("Executing reaction processing");
+                            if (emoji.equals(Emojis.WASTEBASKET)) {
+                                return performDeleteAction(channel, messageId, message);
+                            } else if (emoji.equals(Emojis.HOURGLASS)) {
+                                return performSnoozeAction(channel, messageId, message);
+                            } else {
+                                throw new IllegalStateException("Unexpected value: " + emoji);
+                            }
+                        }).queue();
+    }
 
-                    if (emoji.equals(Emojis.WASTEBASKET)) {
-                        return performDeleteAction(channel, messageId, message);
-                    } else {
-                        throw new IllegalStateException("Unexpected value: " + emoji);
-                    }
-                }).queue();
+    private boolean runPreprocessingChecks(Message message, String emoji) {
+        if (message == null || !message.getAuthor().isBot()) {
+            logger.debug("Not suitable for reaction processing");
+            return false;
+        }
+
+        if (removed.containsKey(message.getIdLong()) &&
+                removed.get(message.getIdLong())
+                        .equals(emoji)) {
+            logger.debug("User removed reaction");
+            return false;
+        }
+
+        if (emoji.equals(Emojis.HOURGLASS)) {
+            if (message.getEmbeds().size() != 1) {
+                logger.debug("This message does not contain an embed.");
+                return false;
+            }
+            if (message.getEmbeds().get(0).getFields()
+                    .stream().noneMatch(field -> Objects.equals(field.getName(),
+                            "Your Reminder"))) {
+                logger.debug("There is no reminder field in this embed.");
+                return false;
+            }
+        }
+        return true;
+
+    }
+
+    private RestAction<Void> performSnoozeAction(MessageChannel channel,
+                                                 long messageId, Message message) {
+        Optional<MessageEmbed.Field> field = message.getEmbeds().get(0).getFields().stream()
+                .filter(item -> Objects.equals(item.getName(), "Your Reminder")).findFirst();
+
+        if (field.isEmpty()) return null;
+
+
+        //Schedule for five minutes from now
+        butler.getScheduleManager()
+                .scheduleMessage(field.get().getValue(), 300000);
+
+
+        message.suppressEmbeds(true).queue();
+        return message.editMessage("You'll be reminded again in 5 minutes.")
+                .delay(5, TimeUnit.SECONDS)
+                .flatMap(Message::delete);
     }
 
     private RestAction<Void> performDeleteAction(MessageChannel channel,

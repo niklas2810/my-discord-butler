@@ -81,7 +81,9 @@ public class ScheduleManager {
 
             butler.getJda().retrieveUserById(butler.getOwnerId())
                     .flatMap(User::openPrivateChannel)
-                    .flatMap(channel -> channel.sendMessage(intro).embed(embed)).queue();
+                    .flatMap(channel -> channel.sendMessage(intro).embed(embed))
+                    .flatMap(sent -> sent.addReaction(Emojis.HOURGLASS))
+                    .queue();
         }, waitTimeInMs);
     }
 
