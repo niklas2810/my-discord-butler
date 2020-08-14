@@ -18,7 +18,7 @@ public class Emojis {
     public static final String TABLE_TENNIS = getUnicode("table_tennis");
     public static final String WARNING = getUnicode("warning");
     public static final String HOURGLASS = getUnicode("hourglass_flowing_sand");
-    public static final String WASTEBASKET = getUnicode("wastebasket");
+    public static final String WASTEBASKET = "\uD83D\uDDD1️";
     public static final String WAVE = getUnicode("wave");
 
     private Emojis() {
@@ -42,6 +42,8 @@ public class Emojis {
     }
 
     public static boolean isOnlyEmojis(String input) {
-        return EmojiManager.isOnlyEmojis(input);
+        //This is a rather dirty workaround because the default Discord response is not recognized
+        // by emoji-java :(
+        return EmojiManager.isOnlyEmojis(input) || input.equals(Emojis.WASTEBASKET);
     }
 }
