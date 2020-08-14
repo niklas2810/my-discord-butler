@@ -9,6 +9,7 @@ import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.priv.PrivateMessageReceivedEvent;
+import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -54,20 +55,32 @@ public class MessageListener extends ListenerAdapter {
     }
 
     private void handleCommand(Message message, MessageChannel channel) {
-        ResultBuilder result = butler.getModuleManager().execute(message);
+        try {
+            ResultBuilder result = butler.getModuleManager().execute(message);
 
-        if (result.hasOutput()) {
-            try {
-                result.produceIntoChannel(channel);
-            } catch (Exception e) {
-                logger.error("Unexpected exception while producing the command result of \"{}\"",
-                        message.getContentRaw(), e);
-                channel.sendMessage(String.format("%s Could not produce a response: " +
-                                "**%s** - %s", ResultType.ERROR.emoji,
-                        e.getClass().getSimpleName(), e.getMessage())).queue();
+            if (result.hasOutput()) {
+                try {
+                    result.produceIntoChannel(channel);
+                } catch (Exception e) {
+                    logger.error("Unexpected exception while producing the command result of \"{}\"",
+                            message.getContentRaw(), e);
+                    channel.sendMessage(String.format("%s Could not produce a response: " +
+                                    "**%s** - %s", ResultType.ERROR.emoji,
+                            e.getClass().getSimpleName(), e.getMessage())).queue();
+                }
+            } else {
+                message.addReaction(result.getType().emoji).queue();
             }
-        } else {
-            message.addReaction(result.getType().emoji).queue();
+        } catch (InsufficientPermissionException permissionException) {
+            channel.sendMessage(Emojis.X + "There's a permission missing. " +
+                    "Please make sure the bot has the permission **\"" +
+                    permissionException.getPermission().getName() + "\"**.").queue();
+            logger.warn("Lack of permission " + permissionException.getPermission().getName());
+        } catch (Exception e) {
+            channel.sendMessage("Oh no! A critical internal error has occurred. **" +
+                    e.getClass().getSimpleName() + "**: " + e.getMessage()).queue();
+            logger.error("Internal message processing error", e);
         }
+
     }
 }
