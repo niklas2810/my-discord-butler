@@ -42,6 +42,8 @@ public class Emojis {
     }
 
     public static boolean isOnlyEmojis(String input) {
-        return EmojiManager.isOnlyEmojis(input);
+        //This is a rather dirty workaround because the default Discord response is not recognized
+        // by emoji-java :(
+        return EmojiManager.isOnlyEmojis(input) || input.equals(Emojis.WASTEBASKET);
     }
 }
