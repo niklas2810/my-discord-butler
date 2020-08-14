@@ -40,7 +40,7 @@ public class ScheduleManager {
     private final Butler butler;
     private final List<ScheduledTask> failedTasks = new ArrayList<>();
     private List<ScheduledTask> tasks = new ArrayList<>();
-    private AtomicInteger index = new AtomicInteger();
+    private final AtomicInteger index = new AtomicInteger();
 
     public ScheduleManager(Butler butler) {
         this.butler = butler;

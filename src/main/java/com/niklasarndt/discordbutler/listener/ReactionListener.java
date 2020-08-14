@@ -50,7 +50,6 @@ public class ReactionListener extends ListenerAdapter {
     @Override
     public void onPrivateMessageReactionRemove(@Nonnull PrivateMessageReactionRemoveEvent event) {
         if (!passesFilter(event.getUserIdLong(), event.getReactionEmote().getEmoji())) return;
-        ;
         removed.put(event.getMessageIdLong(), event.getReactionEmote().getEmoji());
     }
 
@@ -85,7 +84,7 @@ public class ReactionListener extends ListenerAdapter {
                                             MessageChannel channel, String emoji) {
         channel.retrieveMessageById(messageId)
                 .delay(3, TimeUnit.SECONDS)
-                .flatMap(message -> runPreprocessingChecks(message, emoji),
+                .flatMap(message -> runProcessingChecks(message, emoji),
                         message -> {
                             logger.debug("Executing reaction processing");
 
@@ -99,7 +98,7 @@ public class ReactionListener extends ListenerAdapter {
                         }).queue();
     }
 
-    private boolean runPreprocessingChecks(Message message, String emoji) {
+    private boolean runProcessingChecks(Message message, String emoji) {
         if (message == null || !message.getAuthor().isBot()) {
             logger.debug("Not suitable for reaction processing");
             return false;

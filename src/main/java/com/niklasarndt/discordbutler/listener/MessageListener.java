@@ -62,7 +62,8 @@ public class MessageListener extends ListenerAdapter {
                 try {
                     result.produceIntoChannel(channel);
                 } catch (Exception e) {
-                    logger.error("Unexpected exception while producing the command result of \"{}\"",
+                    logger.error("Unexpected exception while producing " +
+                                    "the command result of \"{}\"",
                             message.getContentRaw(), e);
                     channel.sendMessage(String.format("%s Could not produce a response: " +
                                     "**%s** - %s", ResultType.ERROR.emoji,
