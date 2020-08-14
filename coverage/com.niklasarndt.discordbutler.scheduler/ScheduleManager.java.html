@@ -82,7 +82,7 @@ public class ScheduleManager {
 <span class="fc" id=
 "L42">    private List&lt;ScheduledTask&gt; tasks = new ArrayList&lt;&gt;();</span>
 <span class="fc" id=
-"L43">    private AtomicInteger index = new AtomicInteger();</span>
+"L43">    private final AtomicInteger index = new AtomicInteger();</span>
 
 <span class="fc" id=
 "L45">    public ScheduleManager(Butler butler) {</span>
@@ -141,86 +141,89 @@ public class ScheduleManager {
 <span class="nc" id=
 "L83">                    .flatMap(User::openPrivateChannel)</span>
 <span class="nc" id=
-"L84">                    .flatMap(channel -&gt; channel.sendMessage(intro).embed(embed)).queue();</span>
-<span class="nc" id="L85">        }, waitTimeInMs);</span>
-<span class="nc" id="L86">    }</span>
+"L84">                    .flatMap(channel -&gt; channel.sendMessage(intro).embed(embed))</span>
+<span class="nc" id=
+"L85">                    .flatMap(sent -&gt; sent.addReaction(Emojis.HOURGLASS))</span>
+<span class="nc" id="L86">                    .queue();</span>
+<span class="nc" id="L87">        }, waitTimeInMs);</span>
+<span class="nc" id="L88">    }</span>
 
     public void shutdown() {
 <span class="fc" id=
-"L89">        executorService.shutdown();</span>
+"L91">        executorService.shutdown();</span>
         try {
-<span class="pc bpc" id="L91" title=
+<span class="pc bpc" id="L93" title=
 "1 of 2 branches missed.">            if (!executorService.awaitTermination(1, TimeUnit.SECONDS)) {</span>
 <span class="nc" id=
-"L92">                executorService.shutdownNow();</span>
+"L94">                executorService.shutdownNow();</span>
             }
 <span class="nc" id=
-"L94">        } catch (InterruptedException e) {</span>
+"L96">        } catch (InterruptedException e) {</span>
 <span class="nc" id=
-"L95">            logger.warn("Executor service did not shut down automatically, forcing shutdown", e);</span>
+"L97">            logger.warn("Executor service did not shut down automatically, forcing shutdown", e);</span>
 <span class="nc" id=
-"L96">            executorService.shutdownNow();</span>
-<span class="fc" id="L97">        }</span>
-<span class="fc" id="L98">    }</span>
+"L98">            executorService.shutdownNow();</span>
+<span class="fc" id="L99">        }</span>
+<span class="fc" id="L100">    }</span>
 
     public boolean isShutdown() {
 <span class="fc" id=
-"L101">        return executorService.isShutdown();</span>
+"L103">        return executorService.isShutdown();</span>
     }
 
     public List&lt;ScheduledTask&gt; getFailedTasks(boolean clearAfterwards) {
 <span class="fc" id=
-"L105">        List&lt;ScheduledTask&gt; result = Collections.unmodifiableList(</span>
-<span class="fc bfc" id="L106" title=
+"L107">        List&lt;ScheduledTask&gt; result = Collections.unmodifiableList(</span>
+<span class="fc bfc" id="L108" title=
 "All 2 branches covered.">                clearAfterwards ? List.copyOf(failedTasks) : failedTasks);</span>
-<span class="fc bfc" id="L107" title=
+<span class="fc bfc" id="L109" title=
 "All 2 branches covered.">        if (clearAfterwards) failedTasks.clear();</span>
-<span class="fc" id="L108">        return result;</span>
+<span class="fc" id="L110">        return result;</span>
     }
 
     public List&lt;ScheduledTask&gt; getScheduledTasks() {
-<span class="pc bpc" id="L112" title=
+<span class="pc bpc" id="L114" title=
 "1 of 2 branches missed.">        tasks = tasks.stream().filter(item -&gt; !item.shouldBeExecuted())</span>
 <span class="fc" id=
-"L113">                .collect(Collectors.toList());</span>
+"L115">                .collect(Collectors.toList());</span>
 <span class="fc" id=
-"L114">        return Collections.unmodifiableList(tasks);</span>
+"L116">        return Collections.unmodifiableList(tasks);</span>
     }
 
     public boolean hasTask(int id) {
-<span class="pc bpc" id="L118" title=
+<span class="pc bpc" id="L120" title=
 "1 of 2 branches missed.">        return tasks.stream().anyMatch(i -&gt; i.getId() == id);</span>
     }
 
     public boolean cancel(int id) {
-<span class="pc bpc" id="L122" title=
+<span class="pc bpc" id="L124" title=
 "1 of 2 branches missed.">        Optional&lt;ScheduledTask&gt; task = tasks.stream().filter(i -&gt; i.getId() == id).findFirst();</span>
 
 <span class="fc" id=
-"L124">        task.ifPresent(i -&gt; tasks.remove(i));</span>
+"L126">        task.ifPresent(i -&gt; tasks.remove(i));</span>
 
-<span class="fc" id="L126">        return task.isPresent();</span>
+<span class="fc" id="L128">        return task.isPresent();</span>
     }
 
     public int cancel(int... ids) {
 <span class="fc" id=
-"L130">        AtomicInteger result = new AtomicInteger();</span>
-<span class="fc bfc" id="L131" title=
+"L132">        AtomicInteger result = new AtomicInteger();</span>
+<span class="fc bfc" id="L133" title=
 "All 2 branches covered.">        for (int id : ids) {</span>
-<span class="pc bpc" id="L132" title=
+<span class="pc bpc" id="L134" title=
 "1 of 2 branches missed.">            if (cancel(id)) result.getAndIncrement();</span>
         }
-<span class="fc" id="L134">        return result.get();</span>
+<span class="fc" id="L136">        return result.get();</span>
     }
 
     public int cancel(List&lt;Integer&gt; taskIds) {
 <span class="fc" id=
-"L138">        AtomicInteger result = new AtomicInteger();</span>
-<span class="fc" id="L139">        taskIds.forEach(i -&gt; {</span>
-<span class="pc bpc" id="L140" title=
+"L140">        AtomicInteger result = new AtomicInteger();</span>
+<span class="fc" id="L141">        taskIds.forEach(i -&gt; {</span>
+<span class="pc bpc" id="L142" title=
 "1 of 2 branches missed.">            if (cancel(i)) result.getAndIncrement();</span>
-<span class="fc" id="L141">        });</span>
-<span class="fc" id="L142">        return result.get();</span>
+<span class="fc" id="L143">        });</span>
+<span class="fc" id="L144">        return result.get();</span>
     }
 }
 </pre>

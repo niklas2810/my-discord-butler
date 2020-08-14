@@ -61,8 +61,7 @@ public class Emojis {
 "L19">    public static final String WARNING = getUnicode("warning");</span>
 <span class="fc" id=
 "L20">    public static final String HOURGLASS = getUnicode("hourglass_flowing_sand");</span>
-<span class="fc" id=
-"L21">    public static final String WASTEBASKET = getUnicode("wastebasket");</span>
+    public static final String WASTEBASKET = "\uD83D\uDDD1️";
 <span class="fc" id=
 "L22">    public static final String WAVE = getUnicode("wave");</span>
 
@@ -92,8 +91,10 @@ public class Emojis {
     }
 
     public static boolean isOnlyEmojis(String input) {
-<span class="fc" id=
-"L45">        return EmojiManager.isOnlyEmojis(input);</span>
+        //This is a rather dirty workaround because the default Discord response is not recognized
+        // by emoji-java :(
+<span class="fc bfc" id="L47" title=
+"All 4 branches covered.">        return EmojiManager.isOnlyEmojis(input) || input.equals(Emojis.WASTEBASKET);</span>
     }
 }
 </pre>
