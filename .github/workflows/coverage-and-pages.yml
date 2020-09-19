@@ -46,7 +46,7 @@ jobs:
           rm target/site/jacoco/jacoco.xml
           cp -r target/site/jacoco pages/coverage
       - name: 🚀 Deploy to GitHub Pages
-        uses: JamesIves/github-pages-deploy-action@3.5.9
+        uses: JamesIves/github-pages-deploy-action@3.6.1
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           BRANCH: gh-pages
